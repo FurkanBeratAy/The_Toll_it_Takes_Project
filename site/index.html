@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Toll It Takes — NYC congestion pricing and air quality</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="data_bundle.js"></script>
+</head>
+<body>
+
+<header class="site-header">
+  <nav>
+    <a class="logo" href="index.html">The Toll It Takes</a>
+    <a href="index.html" class="active">Overview</a>
+    <a href="part1.html">Part I: Air quality</a>
+    <a href="part2.html">Part II: Green corridor</a>
+  </nav>
+</header>
+
+<main class="container">
+
+  <section class="index-hero">
+    <p class="kicker">NYC Congestion Pricing Datathon 2026</p>
+    <h1>The Toll<br>It Takes</h1>
+    <p class="dek">
+      New York's congestion toll went live on January 5, 2025, promising cleaner
+      air in Manhattan. Did it clean the air across the city, or push the problem
+      onto South Bronx neighborhoods already living in Asthma Alley?
+    </p>
+    <p class="byline"><strong>Analysis by Furkan Beray.</strong> Hourly PM<sub>2.5</sub> from eleven NYCCAS
+      monitors (five with a full pre/post record at the toll date), 2019–2026, with MTA crossing counts at every bridge and tunnel.</p>
+
+    <figure class="photo hero-photo wide">
+      <img src="img/major-deegan-willis-ave.jpg"
+           alt="Traffic on the Major Deegan Expressway seen from the Willis Avenue overpass in Mott Haven, the Bronx" loading="eager">
+      <figcaption class="caption">Southbound traffic on the Major Deegan Expressway at Willis Avenue, Mott Haven, a few blocks from
+        the NYCCAS monitor. <span class="credit">Photo: Famartin, Wikimedia Commons, <a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a>; shown in monochrome.</span></figcaption>
+    </figure>
+
+    <!-- The corridor strip: monitors as stops on a line, MTA-diagram style.
+         Values are wired from data/processed/its_results.json via DATA_BUNDLE. -->
+    <div class="corridor-strip">
+      <div class="strip-groups">
+        <div class="strip-group">
+          <h3>Outside the zone: South Bronx</h3>
+          <ul class="stops" id="stops-bronx">
+            <li class="stop better" data-site="Cross_Bronx_Expy"><div class="dot"></div><div class="name">Cross Bronx Expy</div><div class="value">−0.52<span class="unit">µg/m³</span></div></li>
+            <li class="stop worse"  data-site="Mott_Haven"><div class="dot"></div><div class="name">Mott Haven</div><div class="value">+0.30<span class="unit">µg/m³</span></div></li>
+          </ul>
+        </div>
+        <div class="strip-boundary">
+          <div class="bar"></div>
+          <div>Congestion Relief Zone boundary</div>
+        </div>
+        <div class="strip-group">
+          <h3>Into the zone: East River bridges</h3>
+          <ul class="stops" id="stops-bridges">
+            <li class="stop better" data-site="Queensboro_Bridge"><div class="dot"></div><div class="name">Queensboro Bridge</div><div class="value">−1.10<span class="unit">µg/m³</span></div></li>
+            <li class="stop better" data-site="Williamsburg_Bridge"><div class="dot"></div><div class="name">Williamsburg Bridge</div><div class="value">−1.04<span class="unit">µg/m³</span></div></li>
+            <li class="stop better" data-site="Manhattan_Bridge"><div class="dot"></div><div class="name">Manhattan Bridge</div><div class="value">−1.33<span class="unit">µg/m³</span></div></li>
+          </ul>
+        </div>
+      </div>
+      <p class="caption">Step-change in PM<sub>2.5</sub> at each monitor after the toll (ITS β<sub>post</sub>), relative to a
+        Queens College + Van Wyck counterfactual. <b>Green: fell. Brick: rose.</b><br>
+        <span style="font-size:0.8em;color:#555">Hunts Point is omitted: its monitor was offline Sept 2023 to March 2025, so no pre/post comparison at the toll date is possible.</span></p>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="ui" style="font-size:1.125rem;margin-bottom:1rem">What the data shows</h2>
+    <ul class="findings">
+      <li class="finding">
+        <div class="finding-figure">−0.6 to −1.6 µg/m³</div>
+        <div>
+          <p class="finding-title">Inside the zone, the air got cleaner</p>
+          <p class="finding-text">At the Manhattan landings of the Manhattan and Williamsburg Bridges — both
+            inside the CRZ — PM<sub>2.5</sub> fell 0.6–1.6 µg/m³ relative to control monitors in 2025 and
+            kept falling in 2026. Manhattan Bridge is significant in every specification tested.</p>
+        </div>
+      </li>
+      <li class="finding">
+        <div class="finding-figure">+0.87 µg/m³ vs. VW</div>
+        <div>
+          <p class="finding-title">Outside the zone, it didn't</p>
+          <p class="finding-text">Relative to Van Wyck, Mott Haven and Cross Bronx ran about 0.9–1.0 µg/m³
+            higher in 2025 than before the toll; relative to Queens College, roughly flat. Model estimates
+            for Mott Haven range from −0.65 to +0.30 because there are only nine pre-toll months,
+            and the measured traffic mechanism explains at most an eighth of any increase.</p>
+        </div>
+      </li>
+      <li class="finding">
+        <div class="finding-figure">−0.38 to +0.02 µg/m³</div>
+        <div>
+          <p class="finding-title">The EJ question can't be separated from the zone question</p>
+          <p class="finding-text">Every monitor inside the zone except Queensboro sits in a designated
+            tract, and so does every outside-zone monitor with a full pre-toll record. Panel estimates
+            of an EJ gap range from −0.38 to +0.02 µg/m³ depending on how the flag is defined, none
+            significant. What the data shows is geography: inside the zone improved; the two South Bronx
+            corridors did not. One peak-hour diversion test (Cross Bronx, weekdays) is significant;
+            Mott Haven's is not; regulatory NO<sub>2</sub> in the Bronx shows no change beyond the regional trend.</p>
+        </div>
+      </li>
+    </ul>
+  </section>
+
+  <section class="contents">
+    <div class="contents-part">
+      <div class="part-num">Part I</div>
+      <div>
+        <h2><a href="part1.html">Did congestion pricing clean the air, or move the problem?</a></h2>
+        <p>An interrupted time series at each monitor, traffic-diversion residuals at every crossing,
+          and a regression that separates environmental-justice sites from the citywide trend.</p>
+      </div>
+      <ol>
+        <li><span class="n">1</span><span>PM<sub>2.5</sub> by monitoring corridor</span></li>
+        <li><span class="n">2</span><span>Observed vs. counterfactual, site by site</span></li>
+        <li><span class="n">3</span><span>ITS regression results</span></li>
+        <li><span class="n">4</span><span>Did EJ-designated sites fare worse?</span></li>
+        <li><span class="n">5</span><span>Robustness checks</span></li>
+        <li><span class="n">6</span><span>Traffic diversion by bridge and tunnel</span></li>
+        <li><span class="n">7</span><span>Zone entries since the toll began</span></li>
+        <li><span class="n">8</span><span>Schools in the Mott Haven corridor</span></li>
+      </ol>
+    </div>
+    <div class="contents-part">
+      <div class="part-num">Part II</div>
+      <div>
+        <h2><a href="part2.html">A green corridor for the most-burdened site</a></h2>
+        <p>Street-canyon geometry and canopy gap for Mott Haven, three planting
+          typologies adjusted for the canyon, a maturation curve, and a species list.</p>
+      </div>
+      <ol>
+        <li><span class="n">1</span><span>Corridor conditions</span></li>
+        <li><span class="n">2</span><span>PM<sub>2.5</sub> removal, naïve vs. canyon-adjusted</span></li>
+        <li><span class="n">3</span><span>Removal over time as planting matures</span></li>
+        <li><span class="n">4</span><span>Recommended species</span></li>
+        <li><span class="n">5</span><span>Method and limitations</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="sources">
+    <h2>Data</h2>
+    <table>
+      <thead><tr><th>Dataset</th><th>Source</th><th>Years</th></tr></thead>
+      <tbody>
+        <tr><td>Hourly PM<sub>2.5</sub> monitors</td><td>NYC Community Air Survey</td><td>2019–2026</td></tr>
+        <tr><td>Annual PM<sub>2.5</sub> rasters</td><td>NYC Community Air Survey</td><td>2008–2024</td></tr>
+        <tr><td>Congestion Relief Zone vehicle entries</td><td>MTA</td><td>2025–2026</td></tr>
+        <tr><td>Hourly bridge and tunnel crossings</td><td>MTA Bridges &amp; Tunnels</td><td>2019–2026</td></tr>
+        <tr><td>Disadvantaged community designations</td><td>New York State</td><td>—</td></tr>
+        <tr><td>Street tree census</td><td>NYC Parks</td><td>2015</td></tr>
+        <tr><td>LION street centerlines, v24B</td><td>NYC Planning</td><td>—</td></tr>
+        <tr><td>Building footprints</td><td>NYC Open Data</td><td>—</td></tr>
+        <tr><td>MapPLUTO 26v2</td><td>NYC Planning</td><td>—</td></tr>
+        <tr><td>Truck routes</td><td>NYC DOT</td><td>—</td></tr>
+        <tr><td>311 vehicle idling complaints</td><td>NYC Open Data</td><td>2010–2026</td></tr>
+        <tr><td>School locations</td><td>NYC Department of Education</td><td>—</td></tr>
+        <tr><td>LGA ASOS weather (temp, wind, RH, precip)</td><td>Iowa Environmental Mesonet</td><td>2019–2026</td></tr>
+        <tr><td>Hourly NO<sub>2</sub> monitors</td><td>US EPA AQS</td><td>2022–2025</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    Furkan Beray, NYC Congestion Pricing Datathon 2026.
+    Maps built with <a href="https://maplibre.org" target="_blank" rel="noopener">MapLibre GL JS</a> on
+    <a href="https://openfreemap.org" target="_blank" rel="noopener">OpenFreeMap</a> tiles;
+    charts with <a href="https://plotly.com" target="_blank" rel="noopener">Plotly.js</a>.
+  </div>
+</footer>
+
+<script>
+(function() {
+  const its = window.DATA_BUNDLE?.['../data/processed/its_results.json'];
+  if (!its) return;
+  document.querySelectorAll('.stop[data-site]').forEach(el => {
+    const site = el.dataset.site;
+    const siteData = its.sites?.[site];
+    const spec = siteData?.full || siteData?.long;
+    if (!spec) { el.style.display = 'none'; return; }
+    const beta = spec.beta_post;
+    const valEl = el.querySelector('.value');
+    if (valEl) {
+      valEl.innerHTML = (beta >= 0 ? '+' : '') + beta.toFixed(2) + '<span class="unit">µg/m³</span>';
+    }
+    el.classList.remove('worse', 'better');
+    if (beta > 0) el.classList.add('worse');
+    else if (beta < 0) el.classList.add('better');
+  });
+})();
+</script>
+
+</body>
+</html>

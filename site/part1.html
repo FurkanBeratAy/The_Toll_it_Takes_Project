@@ -1,0 +1,1282 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Part I: Air quality — The Toll It Takes</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5/dist/maplibre-gl.css">
+  <script src="https://unpkg.com/maplibre-gl@5/dist/maplibre-gl.js"></script>
+  <script src="https://cdn.plot.ly/plotly-2.34.0.min.js"></script>
+  <script src="data_bundle.js"></script>
+</head>
+<body>
+
+<header class="site-header">
+  <nav>
+    <a class="logo" href="index.html">The Toll It Takes</a>
+    <a href="index.html">Overview</a>
+    <a href="part1.html" class="active">Part I: Air quality</a>
+    <a href="part2.html">Part II: Green corridor</a>
+  </nav>
+</header>
+
+<div class="hero container">
+  <p class="breadcrumb">Part I of II</p>
+  <h1>Did congestion pricing clean the air, or move the problem?</h1>
+  <p class="subtitle">
+    An interrupted time series at eleven NYCCAS PM<sub>2.5</sub> monitors, cross-referenced with
+    traffic-diversion residuals at every bridge and tunnel into Manhattan.
+    The toll began on <strong>January 5, 2025</strong>.
+  </p>
+  <p class="meta">Data: NYCCAS hourly PM<sub>2.5</sub>, 2019–2026. MTA Congestion Relief Zone entries, 2025–2026.
+    MTA Bridges &amp; Tunnels hourly crossings, 2019–2026.</p>
+</div>
+
+<div class="container">
+  <div class="stat-row" id="stat-row">
+    <div class="stat-card" id="stat-worst">
+      <div class="stat-label">Worst-affected corridor</div>
+      <div class="stat-value" id="val-worst">—</div>
+      <div class="stat-desc" id="desc-worst">Largest positive ITS β<sub>post</sub></div>
+    </div>
+    <div class="stat-card" id="stat-best">
+      <div class="stat-label">Most-improved corridor</div>
+      <div class="stat-value" id="val-best">—</div>
+      <div class="stat-desc" id="desc-best">Largest negative ITS β<sub>post</sub></div>
+    </div>
+    <div class="stat-card" id="stat-crz">
+      <div class="stat-label">Zone entries per day</div>
+      <div class="stat-value" id="val-crz">—</div>
+      <div class="stat-desc">Average vehicles entering the toll zone daily since January 2025.</div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <figure class="photo wide">
+    <img src="img/toll-readers-9th-av.jpg"
+         alt="Toll-reader cameras mounted over Ninth Avenue at the northern edge of the Congestion Relief Zone" loading="lazy">
+    <figcaption class="caption">Toll readers over Ninth Avenue, installed in 2023 ahead of the launch. Every vehicle crossing
+      60th Street southbound is read here. <span class="credit">Photo: Jim.henderson, Wikimedia Commons, <a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a>; shown in monochrome.</span></figcaption>
+  </figure>
+</div>
+
+<div class="container">
+
+<!-- ─── Section 1: PM2.5 Map ──────────────────────────────────────────────── -->
+<section class="section">
+  <div class="section-header">
+    <h2>PM<sub>2.5</sub> by monitoring corridor</h2>
+    <p>
+      Each monitor is colored by its step-change since the toll began, relative to a counterfactual
+      anchored on the Queens College and Van Wyck reference monitors. Green means the corridor improved;
+      brick means it worsened. Turn on the disadvantaged-community layer to see which corridors carry
+      the state's environmental-justice designation.
+    </p>
+  </div>
+
+  <div class="map-wrap">
+    <div id="map-aqi" class="map-container"></div>
+    <div class="map-legend" id="legend-aqi">
+      <div class="legend-title">β<sub>post</sub> (µg/m³)</div>
+      <div class="legend-row"><div class="legend-swatch" style="background:#7A2510"></div><span>Rose more than 0.5</span></div>
+      <div class="legend-row"><div class="legend-swatch" style="background:#B4391B"></div><span>Rose 0.1 to 0.5</span></div>
+      <div class="legend-row"><div class="legend-swatch" style="background:#fff;border:1px solid #ccc"></div><span>Within ±0.1</span></div>
+      <div class="legend-row"><div class="legend-swatch" style="background:#2F6B3A"></div><span>Fell 0.1 to 0.5</span></div>
+      <div class="legend-row"><div class="legend-swatch" style="background:#1B4A24"></div><span>Fell more than 0.5</span></div>
+      <hr>
+      <div class="legend-row"><div class="legend-swatch" style="background:repeating-linear-gradient(45deg,#000 0 1px,transparent 1px 4px)"></div><span>Disadvantaged-community tracts</span></div>
+      <div class="legend-row"><div class="legend-swatch" style="background:none;border:2px solid #4B2E83"></div><span>Congestion Relief Zone</span></div>
+    </div>
+    <div class="map-toggle-row">
+      <button class="map-toggle active" onclick="toggleLayer('map-aqi','ej-fill','ej-outline',this)">Disadvantaged-community tracts</button>
+      <button class="map-toggle active" onclick="toggleLayer('map-aqi','crz-fill','crz-outline',this)">Zone boundary</button>
+      <button class="map-toggle active" onclick="toggleLayer('map-aqi','raster-pm',null,this)">PM<sub>2.5</sub> raster, 2023–24</button>
+    </div>
+    <figcaption class="figure-caption"><b>Figure 1.</b> ITS step-changes after the toll at five treatment sites. The two Bronx sites (Cross Bronx, Mott Haven) are in state-designated disadvantaged-community tracts and outside the CRZ. The three East River bridge sites are inside or on the CRZ boundary; Manhattan and Williamsburg Bridges are ~800 m inside the zone.</figcaption>
+  </div>
+</section>
+
+<!-- ─── Section 2: ITS Time Series ────────────────────────────────────────── -->
+<section class="section">
+  <div class="section-header">
+    <h2>Observed vs. counterfactual, site by site</h2>
+    <p>
+      Monthly mean PM<sub>2.5</sub> at each monitor against what the pre-toll trend and the reference monitors
+      predict it would have been without the toll. The purple line is January 5, 2025.
+    </p>
+  </div>
+
+  <div class="callout">
+    <strong>Model note.</strong>
+    Two specifications per site: <em>Full model</em> uses QC + Van Wyck covariates
+    (sample Feb 22, 2024 → present); <em>Long-baseline model</em> uses QC only
+    on the full record back to 2019. Both are reported. Neither is subordinated —
+    the Van Wyck covariate specifically tests the "no diversion expected" assumption
+    for highway corridor sites (see Equity section).
+    The Hunts Point monitor was offline from September 2023 through March 2025,
+    spanning the toll-start date; it is excluded from all charts and tables — there are
+    zero pre-toll observations in the VW window, so no valid step-change can be estimated.
+  </div>
+
+  <div id="chart-its-container">
+    <div class="loading"><div class="spinner"></div>Loading…</div>
+  </div>
+</section>
+
+<!-- ─── Section 3: ITS Coefficient Table ──────────────────────────────────── -->
+<section class="section">
+  <div class="section-header">
+    <h2>ITS regression results</h2>
+    <p>
+      Coefficients from OLS with HAC standard errors (Newey-West, maxlags=30).
+      β<sub>post</sub> is the step-change at toll launch in µg/m³; significance at α=0.05
+      highlighted. γ<sub>QC</sub> and γ<sub>VW</sub> are the two control-site coefficients reported
+      side-by-side.
+    </p>
+  </div>
+  <div id="its-table-wrap">
+    <div class="loading"><div class="spinner"></div>Loading…</div>
+  </div>
+  <div class="callout">Of the five ITS treatment sites, the two Manhattan landings inside the CRZ (Manhattan Bridge and Williamsburg Bridge) showed improvements of roughly 1 µg/m³ relative to control. Manhattan Bridge is significant under both model specifications; Williamsburg Bridge is significant in the full model and borderline (p = 0.07) in a step-only model.</div>
+</section>
+
+<!-- ─── Section 3.5: School-zone exposure ──────────────────────────────────── -->
+<section class="section">
+  <div class="section-header">
+    <h2>Schools near monitored corridors</h2>
+    <p>NYC Admin Code §24-163 limits vehicle idling to 1 minute within a school zone (vs. 3 minutes citywide), enforceable by any citizen who films a violation through DEP's Idling Complaint System (Local Law 58, 2018). This law applies uniquely to schools — a policy lever the corridor-level analysis cannot surface.</p>
+    <p class="footnote" style="margin-top:.5rem">Hunts Point is omitted from this analysis: its monitor was offline Sept 2023 to March 2025, so no pre/post comparison at the toll date is possible.</p>
+  </div>
+  <div class="table-scroll">
+  <table id="school-zone-table">
+    <thead><tr>
+      <th>Corridor</th><th>EJ-designated</th>
+      <th class="num">β<sub>post</sub> (µg/m³)</th>
+      <th class="num">Schools within 400 m</th>
+    </tr></thead>
+    <tbody id="school-zone-tbody">
+      <tr><td colspan="4"><div class="loading"><div class="spinner"></div>Loading…</div></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div id="mott-haven-schools-section" style="display:none">
+    <h3 style="margin:1.5rem 0 .75rem;font-size:1.125rem">Mott Haven: schools by name</h3>
+    <p style="max-width:var(--measure);margin-bottom:1rem;font-family:var(--font-body)">Nine school entries (six physical buildings) sit within 400 m of the Mott Haven monitor. Two are directly adjacent on Brown Place, 76 m from the air quality sensor.</p>
+    <div class="table-scroll">
+    <table id="mh-schools-table">
+      <thead><tr><th>School</th><th>Address</th><th class="num">Distance (m)</th></tr></thead>
+      <tbody id="mh-schools-tbody"></tbody>
+    </table>
+    </div>
+    <div class="callout">
+      <p><strong>The school-zone 1-minute rule.</strong> Within 400 m of the Mott Haven monitor there are nine school entries — more than at any other monitored corridor. Under §24-163, every one of these locations is a school zone where idling is limited to one minute. The corridor analysis does not distinguish school frontages from residential blocks; this table makes that distinction concrete.</p>
+    </div>
+  </div>
+  <div class="callout">
+    <p><strong>311 idling complaints.</strong> Residents near these schools can file complaints through NYC's 311 system under <em>Noise - Vehicle / Engine Idling</em> or <em>Air Quality / Vehicle Idling</em> (n=25 total in the 400 m box, 2021–2026). Complaint volume reflects reporting behavior as much as actual idling. DEP Citizens Air Complaint Program filings are not in 311, so this undercounts idling complaints. The chart shows the community-reported record as an independent signal, not a pollution measure.</p>
+  </div>
+  <div class="chart-wrap">
+    <p class="chart-title">Monthly idling complaints near Mott Haven schools (400 m buffer)</p>
+    <p class="chart-sub" id="chart-idling-sub">311 "Engine Idling" (Noise - Vehicle) + "Air Quality / Vehicle Idling" reports. Source: NYC Open Data 311. Vertical line: toll launch Jan 5, 2025.</p>
+    <div id="chart-idling-complaints" class="plotly-chart" style="min-height:260px"></div>
+  </div>
+</section>
+
+<!-- ─── Section 4: Equity ──────────────────────────────────────────────────── -->
+<section class="section">
+  <div class="section-header">
+    <h2>Did EJ-designated sites fare worse?</h2>
+    <p>
+      EJ status is confounded with zone status in this data: every in-zone monitor except
+      Queensboro sits in a designated tract, and so does every outside-zone monitor with a full
+      pre-toll record. Panel estimates (site + date fixed effects, 11 sites) of an EJ gap run
+      from −0.38 to +0.02 µg/m³ depending on flag definition, none significant (p = 0.65–0.96).
+      What the data shows is geography: inside the zone improved; the two South Bronx corridors did not.
+    </p>
+  </div>
+  <div id="chart-equity-container">
+    <div class="loading"><div class="spinner"></div>Loading…</div>
+  </div>
+</section>
+
+
+
+<!-- ─── Section 5: Robustness checks ──────────────────────────────────────── -->
+<section class="section" id="section-robustness">
+  <div class="section-header">
+    <h2>Robustness checks</h2>
+    <p>
+      Five independent tests of the traffic-diversion hypothesis. The main ITS estimates
+      are underpowered (Mott Haven p&nbsp;=&nbsp;0.61; five ITS sites, eleven in the panel) and PM2.5
+      is driven largely by regional sources. The checks below probe whether the null
+      results are informative or whether a signal emerges under sharper designs.
+      Hunts Point is excluded from all checks (monitor offline Sept 2023–March 2025, no valid step-change at the toll date).
+    </p>
+    <span class="footnote">Hunts Point is omitted: its monitor was offline Sept 2023 to March 2025, so no pre/post comparison at the toll date is possible.</span>
+  </div>
+
+  <!-- ─ Check 1: Weather covariates ─ -->
+  <div class="section-header" style="margin-top:2.5rem">
+    <h3>1. Weather-adjusted estimates</h3>
+    <p>Daily wind speed, temperature, precipitation, relative humidity, and dominant
+    wind-direction sector (8 compass bins) added to the full ITS model.
+    Compares 95% CI width to the original specification.</p>
+  </div>
+  <div class="chart-wrap">
+    <p class="chart-title">Original vs. weather-adjusted β_post with 95% CI</p>
+    <div id="rb-check1" class="plotly-chart" style="min-height:320px"></div>
+<script>window.addEventListener("DOMContentLoaded",function(){if(typeof Plotly!=="undefined")Plotly.newPlot("rb-check1",[{"error_x": {"array": [0.81775, 1.1292, 1.18025, 0.9134000000000001, 1.69955, 1.4024, 0.7551999999999999, 0.9578499999999999, 0.75085, 1.0409, 1.45095], "color": "#888", "type": "data", "visible": true}, "marker": {"color": "#888", "size": 9}, "mode": "markers", "name": "Original", "x": [-0.5226, 0.2957, -1.3276, -1.0352, -1.0981, -2.6818, -1.7628, 1.1467, -0.3574, 2.842, -1.0741], "y": ["Cross Bronx Expy", "Mott Haven", "Manhattan Bridge", "Williamsburg Bridge", "Queensboro Bridge", "Broadway 35th St", "FDR", "Hamilton Bridge", "BQE", "SI Expwy", "Midtown DOT"], "type": "scatter"}, {"error_x": {"array": [0.8306, 1.12135, 0.92475, 0.76215, 1.54125, 1.2208, 0.6389500000000001, 0.8945, 0.7768999999999999, 1.08915, 1.4039000000000001], "color": "#4B2E83", "type": "data", "visible": true}, "marker": {"color": "#4B2E83", "size": 9, "symbol": "diamond"}, "mode": "markers", "name": "Weather-adjusted", "x": [-0.2903, 0.8694, -1.0961, -0.8382, -0.9135, -2.4715, -1.5756, 1.5396, -0.2561, 3.0102, -0.6216], "y": ["Cross Bronx Expy", "Mott Haven", "Manhattan Bridge", "Williamsburg Bridge", "Queensboro Bridge", "Broadway 35th St", "FDR", "Hamilton Bridge", "BQE", "SI Expwy", "Midtown DOT"], "type": "scatter"}],{"template": {"data": {"histogram2dcontour": [{"type": "histogram2dcontour", "colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}], "choropleth": [{"type": "choropleth", "colorbar": {"outlinewidth": 0, "ticks": ""}}], "histogram2d": [{"type": "histogram2d", "colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}], "heatmap": [{"type": "heatmap", "colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}], "contourcarpet": [{"type": "contourcarpet", "colorbar": {"outlinewidth": 0, "ticks": ""}}], "contour": [{"type": "contour", "colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}], "surface": [{"type": "surface", "colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}], "mesh3d": [{"type": "mesh3d", "colorbar": {"outlinewidth": 0, "ticks": ""}}], "scatter": [{"fillpattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}, "type": "scatter"}], "parcoords": [{"type": "parcoords", "line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "scatterpolargl": [{"type": "scatterpolargl", "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "bar": [{"error_x": {"color": "#2a3f5f"}, "error_y": {"color": "#2a3f5f"}, "marker": {"line": {"color": "#E5ECF6", "width": 0.5}, "pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "bar"}], "scattergeo": [{"type": "scattergeo", "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "scatterpolar": [{"type": "scatterpolar", "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "histogram": [{"marker": {"pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "histogram"}], "scattergl": [{"type": "scattergl", "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "scatter3d": [{"type": "scatter3d", "line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "scattermap": [{"type": "scattermap", "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "scatterternary": [{"type": "scatterternary", "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "scattercarpet": [{"type": "scattercarpet", "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "carpet": [{"aaxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "baxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "type": "carpet"}], "table": [{"cells": {"fill": {"color": "#EBF0F8"}, "line": {"color": "white"}}, "header": {"fill": {"color": "#C8D4E3"}, "line": {"color": "white"}}, "type": "table"}], "barpolar": [{"marker": {"line": {"color": "#E5ECF6", "width": 0.5}, "pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "barpolar"}], "pie": [{"automargin": true, "type": "pie"}]}, "layout": {"autotypenumbers": "strict", "colorway": ["#636efa", "#EF553B", "#00cc96", "#ab63fa", "#FFA15A", "#19d3f3", "#FF6692", "#B6E880", "#FF97FF", "#FECB52"], "font": {"color": "#2a3f5f"}, "hovermode": "closest", "hoverlabel": {"align": "left"}, "paper_bgcolor": "white", "plot_bgcolor": "#E5ECF6", "polar": {"bgcolor": "#E5ECF6", "angularaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "radialaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "ternary": {"bgcolor": "#E5ECF6", "aaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "baxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "caxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "coloraxis": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "colorscale": {"sequential": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "sequentialminus": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "diverging": [[0, "#8e0152"], [0.1, "#c51b7d"], [0.2, "#de77ae"], [0.3, "#f1b6da"], [0.4, "#fde0ef"], [0.5, "#f7f7f7"], [0.6, "#e6f5d0"], [0.7, "#b8e186"], [0.8, "#7fbc41"], [0.9, "#4d9221"], [1, "#276419"]]}, "xaxis": {"gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "automargin": true, "zerolinewidth": 2}, "yaxis": {"gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "automargin": true, "zerolinewidth": 2}, "scene": {"xaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white", "gridwidth": 2}, "yaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white", "gridwidth": 2}, "zaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white", "gridwidth": 2}}, "shapedefaults": {"line": {"color": "#2a3f5f"}}, "annotationdefaults": {"arrowcolor": "#2a3f5f", "arrowhead": 0, "arrowwidth": 1}, "geo": {"bgcolor": "white", "landcolor": "#E5ECF6", "subunitcolor": "white", "showland": true, "showlakes": true, "lakecolor": "white"}, "title": {"x": 0.05}}}, "shapes": [{"line": {"color": "#333", "dash": "dot", "width": 1}, "type": "line", "x0": 0, "x1": 0, "xref": "x", "y0": 0, "y1": 1, "yref": "y domain"}], "font": {"family": "Archivo, sans-serif", "color": "#2E312F"}, "legend": {"orientation": "h", "yanchor": "bottom", "y": 1.02}, "margin": {"l": 150, "r": 30, "t": 60, "b": 40}, "title": {"text": "Check 1: Weather-adjusted \u03b2_post"}, "xaxis": {"title": {"text": "\u03b2_post (\u00b5g/m\u00b3)"}}, "paper_bgcolor": "#FFFFFF", "plot_bgcolor": "#FFFFFF", "height": 550},{responsive:true});});</script>
+  </div>
+  <div class="callout">Adding five daily weather covariates (temperature, wind speed, relative humidity, precipitation, wind direction) tightened the 95% CI at 8 of 11 sites. No point estimate changed sign, indicating the baseline results are not artefacts of uncontrolled meteorology.</div>
+
+  <!-- ─ Check 2: Peak vs overnight ─ -->
+  <div class="section-header" style="margin-top:2.5rem">
+    <h3>2. Peak-vs-overnight PM2.5 difference</h3>
+    <p>The toll is 75% cheaper overnight. If diversion is toll-driven,
+    peak-hour PM2.5 should rise relative to overnight.
+    Daily outcome: mean peak PM2.5 minus mean overnight PM2.5 (≥8 peak hours, ≥5 overnight hours required).
+    QC and VW differences used as controls.</p>
+  </div>
+  <div class="chart-wrap">
+    <p class="chart-title">ITS β_post on peak-minus-overnight PM2.5 (all days and weekdays only)</p>
+    <div id="rb-check2" class="plotly-chart" style="min-height:320px"></div>
+<script>window.addEventListener("DOMContentLoaded",function(){if(typeof Plotly!=="undefined")Plotly.newPlot("rb-check2",[{"marker": {"color": ["#B4391B", "#B4391B", "#2F6B3A", "#B4391B", "#B4391B", "#2F6B3A", "#2F6B3A", "#B4391B", "#B4391B", "#B4391B", "#2F6B3A"]}, "name": "All days", "opacity": 0.85, "x": ["Cross Bronx Expy", "Mott Haven", "Manhattan Bridge", "Williamsburg Bridge", "Queensboro Bridge", "Broadway 35th St", "FDR", "Hamilton Bridge", "BQE", "SI Expwy", "Midtown DOT"], "y": [0.6024, 0.2188, -0.2616, 0.0237, 0.0697, -0.2488, -0.2358, 0.38, 1.0208, 0.1044, -0.2972], "type": "bar"}, {"marker": {"color": ["#D67A5E", "#D67A5E", "#5E9E6E", "#5E9E6E", "#5E9E6E", "#5E9E6E", "#5E9E6E", "#D67A5E", "#D67A5E", "#5E9E6E", "#5E9E6E"]}, "name": "Weekday only", "opacity": 0.85, "x": ["Cross Bronx Expy", "Mott Haven", "Manhattan Bridge", "Williamsburg Bridge", "Queensboro Bridge", "Broadway 35th St", "FDR", "Hamilton Bridge", "BQE", "SI Expwy", "Midtown DOT"], "y": [0.8996, 0.0579, -0.1566, -0.0733, -0.0066, -0.4648, -0.1896, 0.5271, 0.9605, -0.2, -0.407], "type": "bar"}],{"template": {"data": {"histogram2dcontour": [{"type": "histogram2dcontour", "colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}], "choropleth": [{"type": "choropleth", "colorbar": {"outlinewidth": 0, "ticks": ""}}], "histogram2d": [{"type": "histogram2d", "colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}], "heatmap": [{"type": "heatmap", "colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}], "contourcarpet": [{"type": "contourcarpet", "colorbar": {"outlinewidth": 0, "ticks": ""}}], "contour": [{"type": "contour", "colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}], "surface": [{"type": "surface", "colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}], "mesh3d": [{"type": "mesh3d", "colorbar": {"outlinewidth": 0, "ticks": ""}}], "scatter": [{"fillpattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}, "type": "scatter"}], "parcoords": [{"type": "parcoords", "line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "scatterpolargl": [{"type": "scatterpolargl", "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "bar": [{"error_x": {"color": "#2a3f5f"}, "error_y": {"color": "#2a3f5f"}, "marker": {"line": {"color": "#E5ECF6", "width": 0.5}, "pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "bar"}], "scattergeo": [{"type": "scattergeo", "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "scatterpolar": [{"type": "scatterpolar", "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "histogram": [{"marker": {"pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "histogram"}], "scattergl": [{"type": "scattergl", "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "scatter3d": [{"type": "scatter3d", "line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "scattermap": [{"type": "scattermap", "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "scatterternary": [{"type": "scatterternary", "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "scattercarpet": [{"type": "scattercarpet", "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "carpet": [{"aaxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "baxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "type": "carpet"}], "table": [{"cells": {"fill": {"color": "#EBF0F8"}, "line": {"color": "white"}}, "header": {"fill": {"color": "#C8D4E3"}, "line": {"color": "white"}}, "type": "table"}], "barpolar": [{"marker": {"line": {"color": "#E5ECF6", "width": 0.5}, "pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "barpolar"}], "pie": [{"automargin": true, "type": "pie"}]}, "layout": {"autotypenumbers": "strict", "colorway": ["#636efa", "#EF553B", "#00cc96", "#ab63fa", "#FFA15A", "#19d3f3", "#FF6692", "#B6E880", "#FF97FF", "#FECB52"], "font": {"color": "#2a3f5f"}, "hovermode": "closest", "hoverlabel": {"align": "left"}, "paper_bgcolor": "white", "plot_bgcolor": "#E5ECF6", "polar": {"bgcolor": "#E5ECF6", "angularaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "radialaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "ternary": {"bgcolor": "#E5ECF6", "aaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "baxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "caxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "coloraxis": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "colorscale": {"sequential": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "sequentialminus": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "diverging": [[0, "#8e0152"], [0.1, "#c51b7d"], [0.2, "#de77ae"], [0.3, "#f1b6da"], [0.4, "#fde0ef"], [0.5, "#f7f7f7"], [0.6, "#e6f5d0"], [0.7, "#b8e186"], [0.8, "#7fbc41"], [0.9, "#4d9221"], [1, "#276419"]]}, "xaxis": {"gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "automargin": true, "zerolinewidth": 2}, "yaxis": {"gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "automargin": true, "zerolinewidth": 2}, "scene": {"xaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white", "gridwidth": 2}, "yaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white", "gridwidth": 2}, "zaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white", "gridwidth": 2}}, "shapedefaults": {"line": {"color": "#2a3f5f"}}, "annotationdefaults": {"arrowcolor": "#2a3f5f", "arrowhead": 0, "arrowwidth": 1}, "geo": {"bgcolor": "white", "landcolor": "#E5ECF6", "subunitcolor": "white", "showland": true, "showlakes": true, "lakecolor": "white"}, "title": {"x": 0.05}}}, "shapes": [{"line": {"color": "#333", "width": 1}, "type": "line", "x0": 0, "x1": 1, "xref": "x domain", "y0": 0, "y1": 0, "yref": "y"}], "font": {"family": "Archivo, sans-serif", "color": "#2E312F"}, "legend": {"orientation": "h", "yanchor": "bottom", "y": 1.02}, "barmode": "group", "title": {"text": "ITS \u03b2_post on peak-minus-overnight PM2.5 difference"}, "yaxis": {"title": {"text": "\u03b2_post (\u00b5g/m\u00b3, peak\u2212overnight diff)"}}, "paper_bgcolor": "#FFFFFF", "plot_bgcolor": "#FFFFFF", "height": 380},{responsive:true});});</script>
+  </div>
+  <div class="callout">At Mott Haven, peak-hour PM2.5 was 0.219 µg/m³ higher than overnight after the toll (p=0.419). The weekday-only version gives β=+0.058 (p=0.851). Cross Bronx Expy is the one site where this test is informative: all-days β=+0.60 (p=0.089), weekday-only β=+0.90 (p=0.039) — the only significant result in 22 peak/overnight tests across 11 sites. Regional weather differences cancel in the differenced series, so this result is harder to attribute to non-traffic sources. One significant result in 22 tests is consistent with chance, but it is the Bronx EJ site closest to the Throgs Neck diversion route and therefore the most plausible candidate for a real effect. BQE and SI Expwy, each with only ~4 months of pre-toll data in a single season, should be read with caution.</div>
+
+  <!-- ─ Check 3: Placebo-in-time ─ -->
+  <div class="section-header" style="margin-top:2.5rem">
+    <h3>3. Placebo-in-time</h3>
+    <p>Using pre-toll data only, a fake intervention is placed on the 1st of each month
+    from July 2021 through June 2024 (up to 36 placebos). The long-baseline QC-only
+    spec is used for all sites. Each placebo requires ≥90 observed days on each side
+    and ≥60% data coverage in the surrounding 6-month windows.
+    Empirical p = share of |β_placebo| ≥ |β_observed|.</p>
+  </div>
+  <div class="chart-wrap">
+    <p class="chart-title">Distribution of placebo β_post by site (red line = observed long-baseline β)</p>
+    <div id="rb-check3" class="plotly-chart" style="min-height:400px"></div>
+<script>window.addEventListener("DOMContentLoaded",function(){if(typeof Plotly!=="undefined")Plotly.newPlot("rb-check3",[{"marker": {"color": "#888"}, "name": "Cross_Bronx_Expy", "opacity": 0.7, "showlegend": false, "x": [11.9917, 5.3196, -0.7805, 0.9225, 2.7942, 2.8912, -2.0862, -10.7911, -21.3287, -30.161, -45.6312], "type": "histogram", "xaxis": "x", "yaxis": "y"}, {"marker": {"color": "#888"}, "name": "Manhattan_Bridge", "opacity": 0.7, "showlegend": false, "x": [7.9637, 3.3719, -1.4375, -0.1785, 1.9563, 3.1351, 1.4874, -2.9857, -3.5392, -1.1878, -0.7553, -23.1994], "type": "histogram", "xaxis": "x2", "yaxis": "y2"}, {"marker": {"color": "#888"}, "name": "Williamsburg_Bridge", "opacity": 0.7, "showlegend": false, "x": [7.8437, 6.3741, 4.3319], "type": "histogram", "xaxis": "x3", "yaxis": "y3"}, {"marker": {"color": "#888"}, "name": "Queensboro_Bridge", "opacity": 0.7, "showlegend": false, "x": [9.6348, 9.7072, 10.2958, 11.5633, 20.5928, 14.393, 6.4905, 2.5775, 0.4916, 0.1718, 0.2592, 3.8122, 14.133, 35.6513, 55.4734, 55.4734], "type": "histogram", "xaxis": "x4", "yaxis": "y4"}, {"marker": {"color": "#888"}, "name": "Broadway_35th_St", "opacity": 0.7, "showlegend": false, "x": [-1.2276, 14.2843, 8.4349, 1.6567, 0.6255, 1.0905, 2.5016, -1.0482, -1.236, -1.5467, -1.2715, -0.1665, -13.7328], "type": "histogram", "xaxis": "x5", "yaxis": "y5"}],{"template": {"data": {"histogram2dcontour": [{"type": "histogram2dcontour", "colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}], "choropleth": [{"type": "choropleth", "colorbar": {"outlinewidth": 0, "ticks": ""}}], "histogram2d": [{"type": "histogram2d", "colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}], "heatmap": [{"type": "heatmap", "colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}], "contourcarpet": [{"type": "contourcarpet", "colorbar": {"outlinewidth": 0, "ticks": ""}}], "contour": [{"type": "contour", "colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}], "surface": [{"type": "surface", "colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}], "mesh3d": [{"type": "mesh3d", "colorbar": {"outlinewidth": 0, "ticks": ""}}], "scatter": [{"fillpattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}, "type": "scatter"}], "parcoords": [{"type": "parcoords", "line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "scatterpolargl": [{"type": "scatterpolargl", "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "bar": [{"error_x": {"color": "#2a3f5f"}, "error_y": {"color": "#2a3f5f"}, "marker": {"line": {"color": "#E5ECF6", "width": 0.5}, "pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "bar"}], "scattergeo": [{"type": "scattergeo", "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "scatterpolar": [{"type": "scatterpolar", "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "histogram": [{"marker": {"pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "histogram"}], "scattergl": [{"type": "scattergl", "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "scatter3d": [{"type": "scatter3d", "line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "scattermap": [{"type": "scattermap", "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "scatterternary": [{"type": "scatterternary", "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "scattercarpet": [{"type": "scattercarpet", "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "carpet": [{"aaxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "baxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "type": "carpet"}], "table": [{"cells": {"fill": {"color": "#EBF0F8"}, "line": {"color": "white"}}, "header": {"fill": {"color": "#C8D4E3"}, "line": {"color": "white"}}, "type": "table"}], "barpolar": [{"marker": {"line": {"color": "#E5ECF6", "width": 0.5}, "pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "barpolar"}], "pie": [{"automargin": true, "type": "pie"}]}, "layout": {"autotypenumbers": "strict", "colorway": ["#636efa", "#EF553B", "#00cc96", "#ab63fa", "#FFA15A", "#19d3f3", "#FF6692", "#B6E880", "#FF97FF", "#FECB52"], "font": {"color": "#2a3f5f"}, "hovermode": "closest", "hoverlabel": {"align": "left"}, "paper_bgcolor": "white", "plot_bgcolor": "#E5ECF6", "polar": {"bgcolor": "#E5ECF6", "angularaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "radialaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "ternary": {"bgcolor": "#E5ECF6", "aaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "baxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "caxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "coloraxis": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "colorscale": {"sequential": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "sequentialminus": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "diverging": [[0, "#8e0152"], [0.1, "#c51b7d"], [0.2, "#de77ae"], [0.3, "#f1b6da"], [0.4, "#fde0ef"], [0.5, "#f7f7f7"], [0.6, "#e6f5d0"], [0.7, "#b8e186"], [0.8, "#7fbc41"], [0.9, "#4d9221"], [1, "#276419"]]}, "xaxis": {"gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "automargin": true, "zerolinewidth": 2}, "yaxis": {"gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "automargin": true, "zerolinewidth": 2}, "scene": {"xaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white", "gridwidth": 2}, "yaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white", "gridwidth": 2}, "zaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white", "gridwidth": 2}}, "shapedefaults": {"line": {"color": "#2a3f5f"}}, "annotationdefaults": {"arrowcolor": "#2a3f5f", "arrowhead": 0, "arrowwidth": 1}, "geo": {"bgcolor": "white", "landcolor": "#E5ECF6", "subunitcolor": "white", "showland": true, "showlakes": true, "lakecolor": "white"}, "title": {"x": 0.05}}}, "xaxis": {"anchor": "y", "domain": [0.0, 0.2888888888888889]}, "yaxis": {"anchor": "x", "domain": [0.625, 1.0]}, "xaxis2": {"anchor": "y2", "domain": [0.35555555555555557, 0.6444444444444445]}, "yaxis2": {"anchor": "x2", "domain": [0.625, 1.0]}, "xaxis3": {"anchor": "y3", "domain": [0.7111111111111111, 1.0]}, "yaxis3": {"anchor": "x3", "domain": [0.625, 1.0]}, "xaxis4": {"anchor": "y4", "domain": [0.0, 0.2888888888888889]}, "yaxis4": {"anchor": "x4", "domain": [0.0, 0.375]}, "xaxis5": {"anchor": "y5", "domain": [0.35555555555555557, 0.6444444444444445]}, "yaxis5": {"anchor": "x5", "domain": [0.0, 0.375]}, "xaxis6": {"anchor": "y6", "domain": [0.7111111111111111, 1.0]}, "yaxis6": {"anchor": "x6", "domain": [0.0, 0.375]}, "annotations": [{"font": {"size": 16}, "showarrow": false, "text": "Cross Bronx Expy", "x": 0.14444444444444446, "xanchor": "center", "xref": "paper", "y": 1.0, "yanchor": "bottom", "yref": "paper"}, {"font": {"size": 16}, "showarrow": false, "text": "Manhattan Bridge", "x": 0.5, "xanchor": "center", "xref": "paper", "y": 1.0, "yanchor": "bottom", "yref": "paper"}, {"font": {"size": 16}, "showarrow": false, "text": "Williamsburg Bridge", "x": 0.8555555555555556, "xanchor": "center", "xref": "paper", "y": 1.0, "yanchor": "bottom", "yref": "paper"}, {"font": {"size": 16}, "showarrow": false, "text": "Queensboro Bridge", "x": 0.14444444444444446, "xanchor": "center", "xref": "paper", "y": 0.375, "yanchor": "bottom", "yref": "paper"}, {"font": {"size": 16}, "showarrow": false, "text": "Broadway 35th St", "x": 0.5, "xanchor": "center", "xref": "paper", "y": 0.375, "yanchor": "bottom", "yref": "paper"}], "shapes": [{"line": {"color": "#B4391B", "dash": "solid", "width": 2}, "type": "line", "x0": -0.9678, "x1": -0.9678, "xref": "x", "y0": 0, "y1": 1, "yref": "y domain"}, {"line": {"color": "#B4391B", "dash": "solid", "width": 2}, "type": "line", "x0": -3.0131, "x1": -3.0131, "xref": "x2", "y0": 0, "y1": 1, "yref": "y2 domain"}, {"line": {"color": "#B4391B", "dash": "solid", "width": 2}, "type": "line", "x0": 1.7779, "x1": 1.7779, "xref": "x3", "y0": 0, "y1": 1, "yref": "y3 domain"}, {"line": {"color": "#B4391B", "dash": "solid", "width": 2}, "type": "line", "x0": -3.7087, "x1": -3.7087, "xref": "x4", "y0": 0, "y1": 1, "yref": "y4 domain"}], "font": {"family": "Archivo, sans-serif", "color": "#2E312F"}, "title": {"text": "Placebo \u03b2_post distribution (red=observed long-baseline \u03b2)"}, "paper_bgcolor": "#FFFFFF", "plot_bgcolor": "#FFFFFF", "height": 600},{responsive:true});});</script>
+  </div>
+  <div class="callout">The placebo test is inconclusive for this dataset. The long-baseline QC-only specification is highly unstable: placebo β distributions have SD of 7–17 µg/m³ across the five sites (Queensboro placebo mean +15.7 µg/m³; Williamsburg has only 3 valid placebos), driven by large data gaps (268–791 days), the COVID period, and wildfire months. Observed effects of 1–3 µg/m³ are not exceptional against a baseline that swings ±15 µg/m³. The placebo test cannot distinguish signal from instability, so empirical p-values are not reported. The long-baseline column in the ITS table should be read as a sensitivity note, not a primary result.</div>
+
+  <!-- ─ Check 4: Pooled panel ─ -->
+  <div class="section-header" style="margin-top:2.5rem">
+    <h3>4. Pooled panel (site + date fixed effects)</h3>
+    <p>All monitoring sites with ≥30 pre-toll days in the VW window are stacked into
+    a balanced panel. Site and date fixed effects absorb site-specific baselines and
+    shared daily shocks (date FE replaces the QC covariate). Two specifications:
+    (A) post × site — per-site toll effects;
+    (B) post × EJ + post × in-CRZ — differential effect by environmental-justice status.
+    Wild cluster bootstrap with Webb weights (B=9,999, G clusters). Hunts Point
+    excluded (zero pre-toll observations in the VW window).</p>
+  </div>
+  <div class="chart-wrap">
+    <p class="chart-title">Spec A: per-site toll effect (site + date FE, cluster-robust CI)</p>
+    <div id="rb-check4a" class="plotly-chart" style="min-height:320px"></div>
+<script>window.addEventListener("DOMContentLoaded",function(){if(typeof Plotly!=="undefined")Plotly.newPlot("rb-check4a",[{"error_x": {"array": [0.30855, 0.39344999999999997, 0.26254999999999995, 0.22314999999999996, 0.3127, 0.07805000000000001, 0.34175, 0.14135, 0.04235, 0.3349], "type": "data", "visible": true}, "marker": {"color": ["#B4391B", "#B4391B", "#B4391B", "#B4391B", "#2F6B3A", "#B4391B", "#B4391B", "#2F6B3A", "#B4391B", "#2F6B3A"], "size": 10}, "mode": "markers", "x": [0.281, 0.9495, 0.4223, 2.2058, -0.356, 0.2181, 0.8985, -0.2238, 0.6861, -0.6741], "y": ["Broadway 35th St", "Cross Bronx Expy", "FDR", "Hamilton Bridge", "Manhattan Bridge", "Midtown DOT", "Mott Haven", "Queensboro Bridge", "SI Expwy", "Williamsburg Bridge"], "type": "scatter"}],{"template": {"data": {"histogram2dcontour": [{"type": "histogram2dcontour", "colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}], "choropleth": [{"type": "choropleth", "colorbar": {"outlinewidth": 0, "ticks": ""}}], "histogram2d": [{"type": "histogram2d", "colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}], "heatmap": [{"type": "heatmap", "colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}], "contourcarpet": [{"type": "contourcarpet", "colorbar": {"outlinewidth": 0, "ticks": ""}}], "contour": [{"type": "contour", "colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}], "surface": [{"type": "surface", "colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}], "mesh3d": [{"type": "mesh3d", "colorbar": {"outlinewidth": 0, "ticks": ""}}], "scatter": [{"fillpattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}, "type": "scatter"}], "parcoords": [{"type": "parcoords", "line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "scatterpolargl": [{"type": "scatterpolargl", "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "bar": [{"error_x": {"color": "#2a3f5f"}, "error_y": {"color": "#2a3f5f"}, "marker": {"line": {"color": "#E5ECF6", "width": 0.5}, "pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "bar"}], "scattergeo": [{"type": "scattergeo", "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "scatterpolar": [{"type": "scatterpolar", "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "histogram": [{"marker": {"pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "histogram"}], "scattergl": [{"type": "scattergl", "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "scatter3d": [{"type": "scatter3d", "line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "scattermap": [{"type": "scattermap", "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "scatterternary": [{"type": "scatterternary", "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "scattercarpet": [{"type": "scattercarpet", "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "carpet": [{"aaxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "baxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "type": "carpet"}], "table": [{"cells": {"fill": {"color": "#EBF0F8"}, "line": {"color": "white"}}, "header": {"fill": {"color": "#C8D4E3"}, "line": {"color": "white"}}, "type": "table"}], "barpolar": [{"marker": {"line": {"color": "#E5ECF6", "width": 0.5}, "pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "barpolar"}], "pie": [{"automargin": true, "type": "pie"}]}, "layout": {"autotypenumbers": "strict", "colorway": ["#636efa", "#EF553B", "#00cc96", "#ab63fa", "#FFA15A", "#19d3f3", "#FF6692", "#B6E880", "#FF97FF", "#FECB52"], "font": {"color": "#2a3f5f"}, "hovermode": "closest", "hoverlabel": {"align": "left"}, "paper_bgcolor": "white", "plot_bgcolor": "#E5ECF6", "polar": {"bgcolor": "#E5ECF6", "angularaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "radialaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "ternary": {"bgcolor": "#E5ECF6", "aaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "baxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "caxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "coloraxis": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "colorscale": {"sequential": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "sequentialminus": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "diverging": [[0, "#8e0152"], [0.1, "#c51b7d"], [0.2, "#de77ae"], [0.3, "#f1b6da"], [0.4, "#fde0ef"], [0.5, "#f7f7f7"], [0.6, "#e6f5d0"], [0.7, "#b8e186"], [0.8, "#7fbc41"], [0.9, "#4d9221"], [1, "#276419"]]}, "xaxis": {"gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "automargin": true, "zerolinewidth": 2}, "yaxis": {"gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "automargin": true, "zerolinewidth": 2}, "scene": {"xaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white", "gridwidth": 2}, "yaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white", "gridwidth": 2}, "zaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white", "gridwidth": 2}}, "shapedefaults": {"line": {"color": "#2a3f5f"}}, "annotationdefaults": {"arrowcolor": "#2a3f5f", "arrowhead": 0, "arrowwidth": 1}, "geo": {"bgcolor": "white", "landcolor": "#E5ECF6", "subunitcolor": "white", "showland": true, "showlakes": true, "lakecolor": "white"}, "title": {"x": 0.05}}}, "shapes": [{"line": {"color": "#333", "dash": "dot", "width": 1}, "type": "line", "x0": 0, "x1": 0, "xref": "x", "y0": 0, "y1": 1, "yref": "y domain"}], "font": {"family": "Archivo, sans-serif", "color": "#2E312F"}, "margin": {"l": 160, "r": 30, "t": 60, "b": 40}, "title": {"text": "Pooled panel: per-site toll effect (site+date FE, cluster-robust SE)"}, "xaxis": {"title": {"text": "\u03b2_post (\u00b5g/m\u00b3)"}}, "paper_bgcolor": "#FFFFFF", "plot_bgcolor": "#FFFFFF", "height": 500},{responsive:true});});</script>
+  </div>
+  <div class="callout">Panel estimates of an EJ gap range from −0.38 to +0.02 µg/m³ depending on how the flag is defined (B1: −0.07, p=0.77; B2: −0.38, p=0.65; B3: +0.02, p=0.96), none significant. EJ status is confounded with zone status in this data: every in-zone monitor except Queensboro sits in a designated tract, and so does every outside-zone monitor with a full pre-toll record. The panel cannot separate the zone effect from the EJ effect with the current monitoring network.</div>
+
+  <!-- ─ Check 5: Mechanism ─ -->
+  <div class="section-header" style="margin-top:2.5rem">
+    <h3>5. Mechanism check</h3>
+    <p>In the pre-toll period (2022–2024), Mott Haven daily PM2.5 is regressed on
+    Throgs Neck Bridge daily crossings (per 1,000 vehicles), Queens College, seasonal
+    terms, day-of-week dummies, and weather covariates (HAC SE, maxlags=30).
+    The estimated slope is multiplied by the post-toll Throgs Neck residual
+    (+2,041 veh/day) to produce an implied PM2.5 change, then compared to the
+    observed ITS step-change.</p>
+  </div>
+  <div class="chart-wrap">
+    <p class="chart-title">Mott Haven PM2.5 vs Throgs Neck volume (pre-toll, regression line shown)</p>
+    <div id="rb-check5" class="plotly-chart" style="min-height:320px"></div>
+<script>window.addEventListener("DOMContentLoaded",function(){if(typeof Plotly!=="undefined")Plotly.newPlot("rb-check5",[{"marker": {"color": "#888", "opacity": 0.5, "size": 5}, "mode": "markers", "name": "Daily obs (pre-toll)", "x": [124.822, 123.762, 133.01, 127.742, 107.243, 119.618, 119.59, 126.354, 119.146, 129.414, 125.317, 118.044, 117.432, 115.97, 124.125, 129.82, 130.183, 124.314, 112.397, 111.706, 122.635, 125.732, 134.003, 129.517, 123.623, 118.284, 123.358, 126.336, 134.049, 135.204, 133.255, 132.477, 129.075, 113.73, 123.328, 129.48, 123.547, 131.544, 137.092, 124.971, 121.111, 124.166, 136.003, 140.617, 134.272, 121.823, 126.79, 126.022, 130.916, 137.024, 138.591, 140.505, 142.638, 122.854, 123.084, 127.439, 131.79, 133.531, 132.806, 133.189, 122.781, 126.119, 125.684, 123.152, 126.949, 121.707, 128.9, 121.733, 122.32, 123.727, 131.047, 133.774, 133.451, 135.705, 120.554, 116.451, 124.02, 128.16, 130.592, 140.431, 137.374, 122.976, 123.3, 126.967, 137.121, 136.728, 128.958, 130.803, 120.424, 119.648, 124.203, 130.455, 133.245, 134.554, 120.335, 113.923, 119.553, 118.603, 129.315, 137.033, 131.166, 120.917, 116.483, 121.64, 117.879, 127.372, 129.492, 128.522, 117.359, 111.59, 120.42, 127.236, 128.574, 125.422, 122.058, 118.122, 120.188, 122.951, 130.277, 132.718, 125.282, 132.667, 135.511, 132.122, 121.308, 117.26, 119.283, 124.492, 126.22, 128.319, 119.222, 111.998, 123.604, 125.011, 121.258, 123.165, 128.379, 118.993, 109.777, 119.836, 94.362, 111.184, 112.664, 108.984], "y": [10.197, 5.828, 2.923, 3.86, 6.477, 4.943, 5.465, 4.063, 4.891, 8.32, 3.72, 4.46, 6.558, 5.145, 3.85, 6.235, 4.09, 7.389, 13.533, 11.573, 11.623, 12.573, 6.139, 4.493, 4.462, 15.089, 15.689, 8.493, 11.799, 19.459, 8.238, 8.079, 11.295, 14.418, 4.875, 5.58, 5.47, 7.032, 6.426, 5.753, 4.985, 16.007, 12.928, 19.015, 21.422, 19.022, 7.032, 3.431, 3.991, 5.257, 7.758, 10.676, 12.727, 15.08, 12.233, 13.463, 5.994, 3.897, 4.346, 7.194, 7.513, 3.962, 5.803, 6.073, 5.46, 3.918, 3.524, 4.352, 5.281, 4.028, 9.222, 7.62, 9.018, 8.558, 4.168, 5.57, 5.987, 7.826, 5.967, 5.379, 4.17, 3.627, 3.851, 3.512, 4.588, 4.791, 3.735, 3.928, 4.865, 4.383, 4.426, 3.73, 5.413, 7.394, 8.975, 11.113, 12.853, 5.866, 3.679, 4.794, 3.217, 4.588, 5.19, 9.352, 12.807, 5.949, 3.064, 3.532, 5.111, 9.51, 6.082, 6.095, 4.225, 16.5, 5.34, 5.855, 3.458, 3.44, 3.644, 5.797, 8.283, 4.946, 4.668, 4.239, 5.488, 5.414, 6.928, 7.295, 6.584, 4.205, 4.641, 3.405, 5.037, 8.165, 10.077, 8.162, 12.882, 13.955, 8.67, 4.763, 7.63, 3.491, 4.78, 3.979], "type": "scatter"}, {"line": {"color": "#4B2E83", "width": 2}, "mode": "lines", "name": "Regression slope: +0.0181 \u00b5g/m\u00b3 per 1k veh", "x": [94.362, 107.243, 108.984, 109.777, 111.184, 111.59, 111.706, 111.998, 112.397, 112.664, 113.73, 113.923, 115.97, 116.451, 116.483, 117.26, 117.359, 117.432, 117.879, 118.044, 118.122, 118.284, 118.603, 118.993, 119.146, 119.222, 119.283, 119.553, 119.59, 119.618, 119.648, 119.836, 120.188, 120.335, 120.42, 120.424, 120.554, 120.917, 121.111, 121.258, 121.308, 121.64, 121.707, 121.733, 121.823, 122.058, 122.32, 122.635, 122.781, 122.854, 122.951, 122.976, 123.084, 123.152, 123.165, 123.3, 123.328, 123.358, 123.547, 123.604, 123.623, 123.727, 123.762, 124.02, 124.125, 124.166, 124.203, 124.314, 124.492, 124.822, 124.971, 125.011, 125.282, 125.317, 125.422, 125.684, 125.732, 126.022, 126.119, 126.22, 126.336, 126.354, 126.79, 126.949, 126.967, 127.236, 127.372, 127.439, 127.742, 128.16, 128.319, 128.379, 128.522, 128.574, 128.9, 128.958, 129.075, 129.315, 129.414, 129.48, 129.492, 129.517, 129.82, 130.183, 130.277, 130.455, 130.592, 130.803, 130.916, 131.047, 131.166, 131.544, 131.79, 132.122, 132.477, 132.667, 132.718, 132.806, 133.01, 133.189, 133.245, 133.255, 133.451, 133.531, 133.774, 134.003, 134.049, 134.272, 134.554, 135.204, 135.511, 135.705, 136.003, 136.728, 137.024, 137.033, 137.092, 137.121, 137.374, 138.591, 140.431, 140.505, 140.617, 142.638], "y": [6.565127726388887, 6.798273826388888, 6.8297859263888885, 6.844139226388888, 6.869605926388887, 6.876954526388888, 6.879054126388889, 6.884339326388888, 6.8915612263888875, 6.896393926388887, 6.915688526388887, 6.919181826388888, 6.956232526388888, 6.9649386263888875, 6.965517826388888, 6.979581526388888, 6.981373426388888, 6.982694726388887, 6.990785426388888, 6.993771926388888, 6.995183726388888, 6.998115926388888, 7.003889826388887, 7.010948826388889, 7.013718126388888, 7.015093726388889, 7.016197826388888, 7.021084826388888, 7.021754526388888, 7.022261326388888, 7.022804326388888, 7.026207126388888, 7.032578326388888, 7.035239026388888, 7.036777526388887, 7.0368499263888875, 7.039202926388889, 7.045773226388889, 7.0492846263888875, 7.051945326388887, 7.052850326388889, 7.058859526388888, 7.060072226388888, 7.060542826388888, 7.062171826388887, 7.066425326388888, 7.071167526388889, 7.076869026388888, 7.0795116263888875, 7.080832926388888, 7.082588626388889, 7.083041126388888, 7.084995926388888, 7.0862267263888885, 7.0864620263888884, 7.0889055263888885, 7.089412326388889, 7.089955326388887, 7.093376226388887, 7.094407926388888, 7.0947518263888885, 7.096634226388888, 7.097267726388887, 7.1019375263888875, 7.103838026388887, 7.104580126388887, 7.105249826388889, 7.107258926388887, 7.110480726388888, 7.1164537263888885, 7.119150626388889, 7.119874626388889, 7.124779726388889, 7.125413226388888, 7.127313726388888, 7.1320559263888885, 7.132924726388888, 7.138173726388889, 7.139929426388887, 7.141757526388888, 7.1438571263888875, 7.144182926388888, 7.152074526388889, 7.154952426388888, 7.155278226388889, 7.160147126388887, 7.162608726388887, 7.163821426388887, 7.169305726388888, 7.176871526388888, 7.179749426388888, 7.180835426388887, 7.183423726388888, 7.184364926388888, 7.190265526388888, 7.191315326388887, 7.193433026388888, 7.197777026388888, 7.1995689263888885, 7.200763526388888, 7.200980726388888, 7.201433226388888, 7.206917526388887, 7.213487826388887, 7.215189226388889, 7.218411026388887, 7.220890726388889, 7.224709826388887, 7.226755126388888, 7.229126226388887, 7.231280126388889, 7.238121926388889, 7.242574526388887, 7.248583726388889, 7.2550092263888875, 7.258448226388888, 7.259371326388887, 7.260964126388888, 7.2646565263888885, 7.267896426388889, 7.2689100263888875, 7.269091026388887, 7.272638626388888, 7.274086626388888, 7.278484926388888, 7.282629826388888, 7.283462426388889, 7.287498726388888, 7.292602926388888, 7.304367926388888, 7.309924626388888, 7.313436026388889, 7.318829826388887, 7.331952326388889, 7.337309926388889, 7.337472826388888, 7.338540726388889, 7.339065626388889, 7.3436449263888885, 7.365672626388887, 7.3989766263888885, 7.400316026388888, 7.402343226388888, 7.438923326388888], "type": "scatter"}],{"template": {"data": {"histogram2dcontour": [{"type": "histogram2dcontour", "colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}], "choropleth": [{"type": "choropleth", "colorbar": {"outlinewidth": 0, "ticks": ""}}], "histogram2d": [{"type": "histogram2d", "colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}], "heatmap": [{"type": "heatmap", "colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}], "contourcarpet": [{"type": "contourcarpet", "colorbar": {"outlinewidth": 0, "ticks": ""}}], "contour": [{"type": "contour", "colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}], "surface": [{"type": "surface", "colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}], "mesh3d": [{"type": "mesh3d", "colorbar": {"outlinewidth": 0, "ticks": ""}}], "scatter": [{"fillpattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}, "type": "scatter"}], "parcoords": [{"type": "parcoords", "line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "scatterpolargl": [{"type": "scatterpolargl", "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "bar": [{"error_x": {"color": "#2a3f5f"}, "error_y": {"color": "#2a3f5f"}, "marker": {"line": {"color": "#E5ECF6", "width": 0.5}, "pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "bar"}], "scattergeo": [{"type": "scattergeo", "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "scatterpolar": [{"type": "scatterpolar", "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "histogram": [{"marker": {"pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "histogram"}], "scattergl": [{"type": "scattergl", "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "scatter3d": [{"type": "scatter3d", "line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "scattermap": [{"type": "scattermap", "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "scatterternary": [{"type": "scatterternary", "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "scattercarpet": [{"type": "scattercarpet", "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "carpet": [{"aaxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "baxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "type": "carpet"}], "table": [{"cells": {"fill": {"color": "#EBF0F8"}, "line": {"color": "white"}}, "header": {"fill": {"color": "#C8D4E3"}, "line": {"color": "white"}}, "type": "table"}], "barpolar": [{"marker": {"line": {"color": "#E5ECF6", "width": 0.5}, "pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "barpolar"}], "pie": [{"automargin": true, "type": "pie"}]}, "layout": {"autotypenumbers": "strict", "colorway": ["#636efa", "#EF553B", "#00cc96", "#ab63fa", "#FFA15A", "#19d3f3", "#FF6692", "#B6E880", "#FF97FF", "#FECB52"], "font": {"color": "#2a3f5f"}, "hovermode": "closest", "hoverlabel": {"align": "left"}, "paper_bgcolor": "white", "plot_bgcolor": "#E5ECF6", "polar": {"bgcolor": "#E5ECF6", "angularaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "radialaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "ternary": {"bgcolor": "#E5ECF6", "aaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "baxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "caxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "coloraxis": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "colorscale": {"sequential": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "sequentialminus": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "diverging": [[0, "#8e0152"], [0.1, "#c51b7d"], [0.2, "#de77ae"], [0.3, "#f1b6da"], [0.4, "#fde0ef"], [0.5, "#f7f7f7"], [0.6, "#e6f5d0"], [0.7, "#b8e186"], [0.8, "#7fbc41"], [0.9, "#4d9221"], [1, "#276419"]]}, "xaxis": {"gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "automargin": true, "zerolinewidth": 2}, "yaxis": {"gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "automargin": true, "zerolinewidth": 2}, "scene": {"xaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white", "gridwidth": 2}, "yaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white", "gridwidth": 2}, "zaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white", "gridwidth": 2}}, "shapedefaults": {"line": {"color": "#2a3f5f"}}, "annotationdefaults": {"arrowcolor": "#2a3f5f", "arrowhead": 0, "arrowwidth": 1}, "geo": {"bgcolor": "white", "landcolor": "#E5ECF6", "subunitcolor": "white", "showland": true, "showlakes": true, "lakecolor": "white"}, "title": {"x": 0.05}}}, "font": {"family": "Archivo, sans-serif", "color": "#2E312F"}, "title": {"text": "Mott Haven PM2.5 vs Throgs Neck Bridge daily volume (pre-toll 2022\u20132024)"}, "xaxis": {"title": {"text": "Throgs Neck Bridge (thousands of vehicles/day)"}}, "yaxis": {"title": {"text": "Mott Haven PM2.5 (\u00b5g/m\u00b3)"}}, "paper_bgcolor": "#FFFFFF", "plot_bgcolor": "#FFFFFF", "height": 380},{responsive:true});});</script>
+  </div>
+  <div class="callout">In the pre-toll period (2022–2024), each additional 1,000 vehicles/day at Throgs Neck Bridge is associated with β=+0.0181 µg/m³ at Mott Haven (p=0.272, HAC SE, n=144). Multiplying by the post-toll Throgs Neck residual of +2041 veh/day implies +0.04 µg/m³ — about one-eighth of the observed ITS step-change of +0.30 µg/m³, so traffic diversion via Throgs Neck cannot account for most of the Mott Haven increase. However, consistency of magnitudes alone does not establish causation; unmeasured confounders could produce the same pattern.</div>
+
+  <!-- ─ Check 6: Bronx NO2 ─ -->
+  <div class="section-header" style="margin-top:2.5rem">
+    <h3>6. Bronx NO2 (EPA AQS hourly, 2022–2025)</h3>
+    <p>Hourly NO2 from two EPA AQS SLAMS monitors in the Bronx — IS 52 (681 Kelly St,
+    South Bronx; Site 110) and Pfizer Lab Site (Southern Blvd &amp; 200th St, North Bronx;
+    Site 133) — aggregated to daily means and compared before and after the toll.
+    Background control: daily mean of Queens EPA sites 124 and 125.
+    Longer baseline ITS uses 2022-01-01 start with HAC SE (maxlags=30). Note: neither
+    monitor is on the Bruckner Expressway or the Major Deegan corridor.</p>
+  </div>
+  <div class="callout">Raw 2024-vs-2025 calendar-year comparison: IS 52 fell −0.43 ppb (from 14.70 to 14.27); Pfizer Lab fell −0.38 ppb (from 12.48 to 12.10). The Queens control sites changed +0.21 ppb (Site 124) and −0.68 ppb (Site 125) over the same period — changes of comparable magnitude and direction. The longer-baseline ITS (2022-01-01 to present) gives β = −5.99 ppb at IS 52 (p = 0.079, n_pre = 1,089) and β = −3.68 ppb at Pfizer Lab (p = 0.240, n_pre = 1,097), neither significant at α = 0.05. Placebo tests (pre-toll data only, 24 placebo dates July 2022 – June 2024) give empirical p = 0.29 for IS 52 and 0.50 for Pfizer Lab, meaning betas this large arise routinely from seasonal variation in the pre-toll record. No toll effect on Bronx NO2 is detectable.</div>
+
+  <!-- ─ Check A: Raw DiD ─ -->
+  <div class="section-header" style="margin-top:2.5rem">
+    <h3>7. Model-free difference in differences (matched day-of-year)</h3>
+    <p>For each site, the 2025 mean minus the 2024 mean on days matched by (month, day). The −VW and −QC columns subtract the same control's change on matching days. The 2026 columns use Jan 1–Sep 4, 2026 vs matched 2024 days. Units: µg/m³.</p>
+  </div>
+  <div id="check7-table-wrap" style="overflow-x:auto;margin:1rem 0">
+    <div class="loading"><div class="spinner"></div>Loading…</div>
+  </div>
+  <div class="callout" id="check7-callout">Matched day-of-year DiD (2025 vs 2024). Van Wyck fell 0.48 µg/m³ and Queens College 0.24 µg/m³ on matched days vs 2024, so site-minus-control estimates shift by about 0.2 µg/m³ depending on which control is used. After removing the VW trend, the East River bridge sites (Manhattan −0.60, Williamsburg −0.81, Queensboro −0.14) all show improvement; the Bronx sites (Cross Bronx +0.97, Mott Haven +0.87) do not. The 2026 columns are shown for trend direction only; both controls also fell substantially from 2024 to 2026, which inflates site-minus-control improvements in that column.</div>
+
+  <!-- ─ Check B: Step-only ITS ─ -->
+  <div class="section-header" style="margin-top:2.5rem">
+    <h3>8. Step-only ITS — post×t term removed</h3>
+    <p>The main ITS includes a post-toll drift term (post×t) that allows a gradual ramp
+    after the toll in addition to the immediate step. Removing it forces all toll-related
+    change into a single permanent level shift. Same window (2024-02-22 to present),
+    same covariates (QC, VW, seasonal terms, trend, covid). HAC SE, maxlags=30.</p>
+  </div>
+  <div style="overflow-x:auto;margin:1rem 0">
+  <table style="width:100%;border-collapse:collapse;font-size:0.82rem;font-family:inherit">
+    <thead>
+      <tr style="border-bottom:2px solid #2E312F">
+        <th style="text-align:left;padding:4px 8px">Site</th>
+        <th style="text-align:right;padding:4px 8px">Full β</th>
+        <th style="text-align:right;padding:4px 8px">Full p</th>
+        <th style="text-align:right;padding:4px 8px">Step β</th>
+        <th style="text-align:left;padding:4px 8px">Step 95% CI</th>
+        <th style="text-align:right;padding:4px 8px">Step p</th>
+        <th style="text-align:left;padding:4px 8px">Note</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="border-bottom:1px solid #eee">
+        <td style="padding:4px 8px">Cross Bronx Expy</td>
+        <td style="text-align:right;padding:4px 8px">−0.5226</td>
+        <td style="text-align:right;padding:4px 8px">0.210</td>
+        <td style="text-align:right;padding:4px 8px">−0.019</td>
+        <td style="padding:4px 8px">(−0.567, +0.529)</td>
+        <td style="text-align:right;padding:4px 8px">0.947</td>
+        <td style="padding:4px 8px"></td>
+      </tr>
+      <tr style="border-bottom:1px solid #eee">
+        <td style="padding:4px 8px">Mott Haven</td>
+        <td style="text-align:right;padding:4px 8px">+0.2957</td>
+        <td style="text-align:right;padding:4px 8px">0.608</td>
+        <td style="text-align:right;padding:4px 8px">−0.645</td>
+        <td style="padding:4px 8px">(−1.147, −0.143)</td>
+        <td style="text-align:right;padding:4px 8px">0.012</td>
+        <td style="padding:4px 8px">Sign reverses</td>
+      </tr>
+      <tr style="border-bottom:1px solid #eee">
+        <td style="padding:4px 8px">Manhattan Bridge</td>
+        <td style="text-align:right;padding:4px 8px">−1.3276</td>
+        <td style="text-align:right;padding:4px 8px">0.028</td>
+        <td style="text-align:right;padding:4px 8px">−0.858</td>
+        <td style="padding:4px 8px">(−1.417, −0.299)</td>
+        <td style="text-align:right;padding:4px 8px">0.003</td>
+        <td style="padding:4px 8px"></td>
+      </tr>
+      <tr style="border-bottom:1px solid #eee">
+        <td style="padding:4px 8px">Williamsburg Bridge</td>
+        <td style="text-align:right;padding:4px 8px">−1.0352</td>
+        <td style="text-align:right;padding:4px 8px">0.026</td>
+        <td style="text-align:right;padding:4px 8px">−0.473</td>
+        <td style="padding:4px 8px">(−0.974, +0.029)</td>
+        <td style="text-align:right;padding:4px 8px">0.065</td>
+        <td style="padding:4px 8px"><strong>Model-dependent</strong></td>
+      </tr>
+      <tr style="border-bottom:1px solid #eee">
+        <td style="padding:4px 8px">Queensboro Bridge</td>
+        <td style="text-align:right;padding:4px 8px">−1.0981</td>
+        <td style="text-align:right;padding:4px 8px">0.205</td>
+        <td style="text-align:right;padding:4px 8px">−0.767</td>
+        <td style="padding:4px 8px">(−1.443, −0.090)</td>
+        <td style="text-align:right;padding:4px 8px">0.026</td>
+        <td style="padding:4px 8px"></td>
+      </tr>
+      <tr>
+        <td style="padding:4px 8px">Broadway 35th St</td>
+        <td style="text-align:right;padding:4px 8px">−2.6818</td>
+        <td style="text-align:right;padding:4px 8px">0.000</td>
+        <td style="text-align:right;padding:4px 8px">−1.595</td>
+        <td style="padding:4px 8px">(−2.734, −0.455)</td>
+        <td style="text-align:right;padding:4px 8px">0.006</td>
+        <td style="padding:4px 8px"></td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="callout">Manhattan Bridge remains significant in both specifications (full p=0.028, step-only p=0.003); the direction and approximate magnitude are stable. Williamsburg Bridge is significant in the full model (p=0.026) but not in the step-only model (p=0.065, 95% CI crosses zero): its result is <strong>model-dependent</strong>. Mott Haven shows a sign reversal (full β=+0.30, step-only β=−0.65): in the full model a positive drift term after the toll is capturing most of the post-period variation; removing it flips the sign. The direction of the Mott Haven result is therefore model-dependent: full β=+0.30 (p=0.61), step-only β=−0.65 (p=0.01). The sign depends on whether the post-toll drift term is included.</div>
+
+</section>
+
+<!-- ─── Section 6: Traffic Diversion ──────────────────────────────────────── -->
+<section class="section">
+  <div class="section-header">
+    <h2>Traffic diversion by bridge &amp; tunnel</h2>
+    <p>
+      OLS baseline model (time trend + month + day-of-week fixed effects) trained
+      on 2019–2024 daily volumes. Residual = actual − forecast. Positive residual
+      means more traffic than expected — consistent with diversion to avoid the toll.
+    </p>
+  </div>
+
+  <div class="map-wrap" style="margin-bottom:1.25rem">
+    <div id="map-traffic" class="map-container" style="height:420px"></div>
+    <div class="map-legend">
+      <div class="legend-title">Volume change vs. forecast</div>
+      <div class="legend-row"><div class="legend-swatch" style="background:#7A2510"></div><span>&gt; +10% more traffic</span></div>
+      <div class="legend-row"><div class="legend-swatch" style="background:#B4391B"></div><span>+3% to +10%</span></div>
+      <div class="legend-row"><div class="legend-swatch" style="background:#fff;border:1px solid #ccc"></div><span>−3% to +3%</span></div>
+      <div class="legend-row"><div class="legend-swatch" style="background:#2F6B3A"></div><span>−10% to −3%</span></div>
+      <div class="legend-row"><div class="legend-swatch" style="background:#1B4A24"></div><span>&lt; −10% less traffic</span></div>
+    </div>
+  </div>
+
+  <div id="chart-traffic-container">
+    <div class="loading"><div class="spinner"></div>Loading…</div>
+  </div>
+</section>
+
+<!-- ─── Section 7: CRZ entries ────────────────────────────────────────────── -->
+<section class="section">
+  <div class="section-header">
+    <h2>CRZ vehicle entries since toll launch</h2>
+    <p>
+      Daily total entries into the Congestion Relief Zone by detection group,
+      Jan 5, 2025 → present.
+    </p>
+  </div>
+  <div class="chart-wrap">
+    <div class="chart-title">Daily CRZ entries — total &amp; by detection group</div>
+    <div class="chart-sub">Source: MTA CRZ Vehicle Entries dataset</div>
+    <div id="chart-crz" class="plotly-chart"></div>
+  </div>
+</section>
+
+</div><!-- /container -->
+
+<footer class="site-footer">
+  <div class="container">
+    <a href="part2.html">Continue to Part II: Design a Green Corridor →</a>
+    &nbsp;·&nbsp;
+    <a href="index.html">← Back to Overview</a>
+  </div>
+</footer>
+
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<script>
+// ─── Colour constants ─────────────────────────────────────────────────── //
+const PLOT_BG   = '#FFFFFF';
+const GRID_CLR  = '#E4E7E4';
+const TICK_CLR  = '#4A4E4B';
+const FONT_FAM  = 'Archivo, "Helvetica Neue", Helvetica, Arial, sans-serif';
+
+const SITE_COLOR = {
+  Cross_Bronx_Expy: '#7A2510',
+  Hunts_Point: '#B4391B',
+  Mott_Haven: '#D67A5E',
+  Manhattan_Bridge: '#1F3A5F',
+  Williamsburg_Bridge: '#3E6A9E',
+  Queensboro_Bridge: '#8FB3D9',
+};
+
+function divColor(v) {
+  if (v === null || isNaN(v)) return '#FFFFFF';
+  if (v < -0.5) return '#1B4A24';
+  if (v < -0.1) return '#2F6B3A';
+  if (v <  0.1) return '#FFFFFF';
+  if (v <  0.5) return '#B4391B';
+  return '#7A2510';
+}
+
+function trafficColor(pct) {
+  if (pct < -10) return '#1B4A24';
+  if (pct <  -3) return '#2F6B3A';
+  if (pct <   3) return '#FFFFFF';
+  if (pct <  10) return '#B4391B';
+  return '#7A2510';
+}
+
+function sign(v) { return v >= 0 ? '+' : ''; }
+
+// ─── Load all data ────────────────────────────────────────────────────── //
+async function loadJSON(path) {
+  if (window.DATA_BUNDLE && path in window.DATA_BUNDLE) {
+    return window.DATA_BUNDLE[path];
+  }
+  const r = await fetch(path);
+  if (!r.ok) throw new Error(`${r.status} ${path}`);
+  return r.json();
+}
+
+const DATA = {};
+const PATHS = {
+  its:        '../data/processed/its_results.json',
+  stations:   '../data/processed/monitor_stations.geojson',
+  crz_bnd:    '../data/processed/crz_boundary.geojson',
+  dac:        '../data/processed/dac_tracts_nyc.geojson',
+  traffic:    '../data/processed/traffic_diversion.json',
+  crz:        '../data/processed/crz_daily.json',
+  raster:     '../data/processed/nyccas_raster_points.geojson',
+  headline:   '../data/processed/headline_stats.json',
+  bt_geo:     '../data/processed/bt_facilities.geojson',
+  school_zone:  '../data/processed/school_zone.json',
+  robustness:   '../data/processed/robustness.json',
+};
+
+// ─── Maps ─────────────────────────────────────────────────────────────── //
+const MAP_STYLE = 'https://tiles.openfreemap.org/styles/positron';
+let mapAQI, mapTraffic;
+
+function initMapAQI() {
+  mapAQI = new maplibregl.Map({
+    container: 'map-aqi',
+    style: MAP_STYLE,
+    center: [-73.95, 40.76],
+    zoom: 10.5,
+    attributionControl: false,
+  });
+  mapAQI.addControl(new maplibregl.AttributionControl({ compact: true }));
+  mapAQI.addControl(new maplibregl.NavigationControl(), 'top-left');
+  mapAQI._name = 'map-aqi';
+  mapAQI.on('error', e => { if (e.error?.status !== 404) console.warn('map-aqi error', e.error); });
+  return mapAQI;
+}
+
+function initMapTraffic() {
+  mapTraffic = new maplibregl.Map({
+    container: 'map-traffic',
+    style: MAP_STYLE,
+    center: [-73.97, 40.73],
+    zoom: 10.5,
+    attributionControl: false,
+  });
+  mapTraffic.addControl(new maplibregl.NavigationControl(), 'top-left');
+  mapTraffic._name = 'map-traffic';
+  mapTraffic.on('error', e => { if (e.error?.status !== 404) console.warn('map-traffic error', e.error); });
+  return mapTraffic;
+}
+
+function toggleLayer(mapId, layerId1, layerId2, btn) {
+  const map = mapId === 'map-aqi' ? mapAQI : mapTraffic;
+  const vis = map.getLayoutProperty(layerId1, 'visibility');
+  const next = (vis === 'none') ? 'visible' : 'none';
+  map.setLayoutProperty(layerId1, 'visibility', next);
+  if (layerId2 && map.getLayer(layerId2)) {
+    map.setLayoutProperty(layerId2, 'visibility', next);
+  }
+  btn.classList.toggle('active', next === 'visible');
+}
+
+function addAQILayers(map, stations, crz, dac, raster) {
+  // ── PM2.5 raster points (background) ──
+  if (raster && raster.features && raster.features.length > 0) {
+    map.addSource('raster-src', { type: 'geojson', data: raster });
+    map.addLayer({
+      id: 'raster-pm',
+      type: 'circle',
+      source: 'raster-src',
+      paint: {
+        'circle-radius': 4,
+        'circle-color': [
+          'interpolate', ['linear'],
+          ['get', 'pm25_aa16'],
+          5,  '#F2F3F1',
+          9,  '#D67A5E',
+          15, '#7A2510',
+        ],
+        'circle-opacity': 0.55,
+        'circle-blur': 0.4,
+      },
+    });
+  }
+
+  // ── EJ/DAC fill ──
+  if (dac) {
+    map.addSource('dac-src', { type: 'geojson', data: dac });
+    map.addLayer({
+      id: 'ej-fill',
+      type: 'fill',
+      source: 'dac-src',
+      filter: ['==', ['get', 'dac_designation'], 'Designated as DAC'],
+      paint: {
+        'fill-color': '#000',
+        'fill-opacity': 0.08,
+      },
+    });
+    map.addLayer({
+      id: 'ej-outline',
+      type: 'line',
+      source: 'dac-src',
+      filter: ['==', ['get', 'dac_designation'], 'Designated as DAC'],
+      paint: { 'line-color': '#000', 'line-width': 0.75, 'line-opacity': 1 },
+    });
+  }
+
+  // ── CRZ boundary ──
+  if (crz) {
+    map.addSource('crz-src', { type: 'geojson', data: crz });
+    map.addLayer({
+      id: 'crz-fill',
+      type: 'fill',
+      source: 'crz-src',
+      paint: { 'fill-color': '#4B2E83', 'fill-opacity': 0.06 },
+    });
+    map.addLayer({
+      id: 'crz-outline',
+      type: 'line',
+      source: 'crz-src',
+      paint: { 'line-color': '#4B2E83', 'line-width': 2 },
+    });
+  }
+
+  // ── Monitor station circles ──
+  if (stations) {
+    map.addSource('stations-src', { type: 'geojson', data: stations });
+    map.addLayer({
+      id: 'stations-circle',
+      type: 'circle',
+      source: 'stations-src',
+      paint: {
+        'circle-radius': [
+          'interpolate', ['linear'], ['zoom'], 9, 10, 14, 18
+        ],
+        'circle-color': [
+          'case',
+          ['==', ['get', 'beta_post'], null], '#FFFFFF',
+          ['<', ['get', 'beta_post'], -0.5], '#1B4A24',
+          ['<', ['get', 'beta_post'], -0.1], '#2F6B3A',
+          ['<', ['get', 'beta_post'],  0.1], '#FFFFFF',
+          ['<', ['get', 'beta_post'],  0.5], '#B4391B',
+          '#7A2510'
+        ],
+        'circle-stroke-width': 1.5,
+        'circle-stroke-color': '#000',
+      },
+    });
+
+    // Station labels
+    map.addLayer({
+      id: 'stations-label',
+      type: 'symbol',
+      source: 'stations-src',
+      layout: {
+        'text-field': ['get', 'name'],
+        'text-font': ['Open Sans Bold', 'Arial Unicode MS Bold'],
+        'text-size': 11,
+        'text-anchor': 'top',
+        'text-offset': [0, 1],
+        'text-max-width': 8,
+      },
+      paint: {
+        'text-color': '#000',
+        'text-halo-color': '#FFFFFF',
+        'text-halo-width': 1.5,
+      },
+    });
+
+    // Popup on click
+    const popup = new maplibregl.Popup({ closeButton: false, maxWidth: '260px' });
+    map.on('click', 'stations-circle', (e) => {
+      const p = e.features[0].properties;
+      const beta = p.beta_post != null ? `${sign(p.beta_post)}${Number(p.beta_post).toFixed(3)}` : 'n/a';
+      const pval = p.p_value != null ? Number(p.p_value).toFixed(3) : 'n/a';
+      const sig  = p.significant ? '✓ p<0.05' : 'n.s.';
+      popup.setLngLat(e.lngLat).setHTML(`
+        <div class="popup-title">${p.name.replace(/_/g,' ')}</div>
+        <div class="popup-row"><span class="popup-key">β_post</span>
+          <span class="popup-val">${beta} µg/m³</span></div>
+        <div class="popup-row"><span class="popup-key">p-value</span>
+          <span class="popup-val">${pval} (${sig})</span></div>
+        <div class="popup-row"><span class="popup-key">Pre-mean</span>
+          <span class="popup-val">${p.pre_mean != null ? Number(p.pre_mean).toFixed(2) : '—'} µg/m³</span></div>
+        <div class="popup-row"><span class="popup-key">EJ-designated</span>
+          <span class="popup-val">${p.ej_designated ? 'Yes' : 'No'}</span></div>
+        <div class="popup-row"><span class="popup-key">Spec</span>
+          <span class="popup-val" style="font-size:.75rem;font-weight:400">${p.label||'—'}</span></div>
+      `).addTo(map);
+    });
+    map.on('mouseenter', 'stations-circle', () => { map.getCanvas().style.cursor = 'pointer'; });
+    map.on('mouseleave', 'stations-circle', () => { map.getCanvas().style.cursor = ''; });
+  }
+}
+
+function addTrafficLayers(map, btGeo, crz) {
+  if (crz) {
+    map.addSource('crz-traffic', { type: 'geojson', data: crz });
+    map.addLayer({ id: 'crz-traffic-fill', type: 'fill', source: 'crz-traffic',
+      paint: { 'fill-color': '#4B2E83', 'fill-opacity': 0.05 } });
+    map.addLayer({ id: 'crz-traffic-outline', type: 'line', source: 'crz-traffic',
+      paint: { 'line-color': '#4B2E83', 'line-width': 1.5 } });
+  }
+
+  if (btGeo) {
+    map.addSource('bt-src', { type: 'geojson', data: btGeo });
+    map.addLayer({
+      id: 'bt-circle',
+      type: 'circle',
+      source: 'bt-src',
+      paint: {
+        'circle-radius': ['interpolate', ['linear'], ['zoom'], 9, 10, 14, 20],
+        'circle-color': [
+          'case',
+          ['<', ['get', 'diversion_pct'], -10], '#1B4A24',
+          ['<', ['get', 'diversion_pct'],  -3], '#2F6B3A',
+          ['<', ['get', 'diversion_pct'],   3], '#000',
+          ['<', ['get', 'diversion_pct'],  10], '#B4391B',
+          '#7A2510'
+        ],
+        'circle-stroke-width': 2,
+        'circle-stroke-color': '#fff',
+      },
+    });
+    map.addLayer({
+      id: 'bt-label',
+      type: 'symbol',
+      source: 'bt-src',
+      layout: {
+        'text-field': [
+          'concat',
+          ['slice', ['get', 'name'], 0, 12],
+          '\n',
+          ['case', ['>=', ['get', 'diversion_pct'], 0], '+', ''],
+          ['to-string', ['round', ['get', 'diversion_pct']]],
+          '%'
+        ],
+        'text-font': ['Open Sans Bold', 'Arial Unicode MS Bold'],
+        'text-size': 10,
+        'text-anchor': 'top',
+        'text-offset': [0, 1.2],
+      },
+      paint: { 'text-color': '#000', 'text-halo-color': '#FFFFFF', 'text-halo-width': 1.5 },
+    });
+
+    const popup2 = new maplibregl.Popup({ closeButton: false, maxWidth: '260px' });
+    map.on('click', 'bt-circle', (e) => {
+      const p = e.features[0].properties;
+      popup2.setLngLat(e.lngLat).setHTML(`
+        <div class="popup-title">${p.name}</div>
+        <div class="popup-row"><span class="popup-key">Avg residual</span>
+          <span class="popup-val">${sign(p.diversion_residual)}${Math.round(p.diversion_residual)} veh/day</span></div>
+        <div class="popup-row"><span class="popup-key">% vs forecast</span>
+          <span class="popup-val">${sign(p.diversion_pct)}${Number(p.diversion_pct).toFixed(1)}%</span></div>
+        <div class="popup-row"><span class="popup-key">Pre-toll avg</span>
+          <span class="popup-val">${Number(p.pre_avg).toLocaleString()} veh/day</span></div>
+        <div class="popup-row"><span class="popup-key">Post-toll avg</span>
+          <span class="popup-val">${Number(p.post_avg).toLocaleString()} veh/day</span></div>
+        <div class="popup-row"><span class="popup-key">Bronx-relevant</span>
+          <span class="popup-val">${p.bronx_relevant ? '⚠ Yes' : 'No'}</span></div>
+      `).addTo(map);
+    });
+    map.on('mouseenter', 'bt-circle', () => { map.getCanvas().style.cursor = 'pointer'; });
+    map.on('mouseleave', 'bt-circle', () => { map.getCanvas().style.cursor = ''; });
+  }
+}
+
+// ─── ITS Charts ───────────────────────────────────────────────────────── //
+const TOLL_DATE = '2025-01-05';
+const SITE_LABELS = {
+  Cross_Bronx_Expy: 'Cross Bronx Expy',
+  Hunts_Point: 'Hunts Point',
+  Mott_Haven: 'Mott Haven',
+  Manhattan_Bridge: 'Manhattan Bridge',
+  Williamsburg_Bridge: 'Williamsburg Bridge',
+  Queensboro_Bridge: 'Queensboro Bridge',
+};
+
+function buildITSCharts(its) {
+  const container = document.getElementById('chart-its-container');
+  container.innerHTML = '';
+  const sites = Object.keys(its.sites).filter(s => s in SITE_LABELS);
+
+  for (const site of sites) {
+    const res = its.sites[site];
+    const spec = res.full || res.long;
+    if (!spec) continue;
+
+    const wrap = document.createElement('div');
+    wrap.className = 'chart-wrap';
+    wrap.style.marginBottom = '1.25rem';
+    const specLabel = res.full ? 'Full model (QC + VW covariates)' : 'Long-baseline (QC only)';
+    wrap.innerHTML = `
+      <div class="chart-title">${SITE_LABELS[site]}</div>
+      <div class="chart-sub">${specLabel} · β<sub>post</sub> = ${sign(spec.beta_post)}${spec.beta_post} µg/m³
+        (p=${spec.beta_post_p}) · ${spec.significant ? '✓ significant' : 'n.s.'}</div>
+      <div id="chart-its-${site}" class="plotly-chart"></div>
+    `;
+    container.appendChild(wrap);
+
+    const dates = spec.dates;
+    const shapes = [{
+      type: 'rect', x0: TOLL_DATE, x1: dates[dates.length - 1],
+      y0: 0, y1: 1, yref: 'paper',
+      fillcolor: '#E9E3F3', opacity: 0.5, line: { width: 0 },
+    }, {
+      type: 'line', x0: TOLL_DATE, x1: TOLL_DATE,
+      y0: 0, y1: 1, yref: 'paper',
+      line: { color: '#4B2E83', width: 2, dash: 'solid' },
+    }];
+    const annotations = [{
+      x: TOLL_DATE, y: 1, yref: 'paper', xanchor: 'left', yanchor: 'top',
+      text: 'Toll begins', showarrow: false,
+      font: { size: 11, color: '#4B2E83', family: FONT_FAM, weight: 600 },
+      bgcolor: 'rgba(0,0,0,0)',
+      xshift: 4,
+    }];
+
+    const traces = [
+      {
+        x: [...dates, ...dates.slice().reverse()],
+        y: [...spec.cf_ci_high, ...spec.cf_ci_low.slice().reverse()],
+        fill: 'toself', fillcolor: 'rgba(0,0,0,0.07)',
+        line: { width: 0 }, hoverinfo: 'skip',
+        name: '95% CI (counterfactual)', showlegend: true,
+        legendrank: 3,
+      },
+      {
+        x: dates, y: spec.counterfactual,
+        mode: 'lines', name: 'Counterfactual',
+        line: { color: '#6B706C', width: 1.5, dash: 'dash' },
+        legendrank: 2,
+      },
+      {
+        x: dates, y: spec.observed,
+        mode: 'lines', name: 'Observed',
+        line: { color: '#000', width: 2 },
+        legendrank: 1,
+      },
+    ];
+
+    Plotly.newPlot(`chart-its-${site}`, traces, {
+      height: 280, margin: { t: 10, b: 40, l: 55, r: 20 },
+      xaxis: { title: '', tickfont: { size: 10, color: TICK_CLR, family: FONT_FAM }, gridcolor: GRID_CLR, color: TICK_CLR, showline: true, linecolor: '#000', ticks: 'outside', zerolinecolor: '#000' },
+      yaxis: { title: 'PM₂.₅ (µg/m³)', titlefont: { color: TICK_CLR, size: 11, family: FONT_FAM }, tickfont: { size: 10, color: TICK_CLR, family: FONT_FAM }, gridcolor: GRID_CLR, color: TICK_CLR, showline: true, linecolor: '#000', ticks: 'outside', zerolinecolor: '#000' },
+      legend: { orientation: 'h', y: -0.32, x: 0, font: { size: 10, color: TICK_CLR, family: FONT_FAM }, bgcolor: 'transparent' },
+      shapes, annotations,
+      plot_bgcolor: PLOT_BG, paper_bgcolor: PLOT_BG,
+      hoverlabel: { bgcolor: '#FFFFFF', bordercolor: '#000', font: { family: FONT_FAM, color: '#000' } },
+    }, { responsive: true, displayModeBar: false });
+  }
+
+  for (const site of sites) {
+    const res = its.sites[site];
+    if (!res.full || !res.long) continue;
+
+    const spec = res.long;
+    const wrap = document.createElement('div');
+    wrap.className = 'chart-wrap';
+    wrap.style.marginBottom = '1.25rem';
+    wrap.style.borderLeft = '3px solid #B7BBB7';
+    wrap.innerHTML = `
+      <div class="chart-title">${SITE_LABELS[site]} — Long-Baseline (QC only)</div>
+      <div class="chart-sub">Full history since monitor start · β<sub>post</sub> = ${sign(spec.beta_post)}${spec.beta_post} µg/m³
+        (p=${spec.beta_post_p})</div>
+      <div id="chart-its-long-${site}" class="plotly-chart"></div>
+    `;
+    container.appendChild(wrap);
+
+    const dates = spec.dates;
+    const traces2 = [
+      { x: [...dates, ...dates.slice().reverse()],
+        y: [...spec.cf_ci_high, ...spec.cf_ci_low.slice().reverse()],
+        fill: 'toself', fillcolor: 'rgba(0,0,0,0.07)', line: { width: 0 },
+        hoverinfo: 'skip', name: '95% CI', showlegend: false },
+      { x: dates, y: spec.counterfactual, mode: 'lines', name: 'Counterfactual',
+        line: { color: '#6B706C', width: 1.5, dash: 'dash' }, showlegend: false },
+      { x: dates, y: spec.observed, mode: 'lines', name: 'Observed',
+        line: { color: '#000', width: 1.5, dash: 'dashdot' }, showlegend: false },
+    ];
+    const shapes2 = [{ type: 'line', x0: TOLL_DATE, x1: TOLL_DATE, y0: 0, y1: 1, yref: 'paper',
+      line: { color: '#4B2E83', width: 2 } }];
+    Plotly.newPlot(`chart-its-long-${site}`, traces2, {
+      height: 220, margin: { t: 10, b: 40, l: 55, r: 20 },
+      xaxis: { tickfont: { size: 10, color: TICK_CLR, family: FONT_FAM }, gridcolor: GRID_CLR, color: TICK_CLR, showline: true, linecolor: '#000', ticks: 'outside', zerolinecolor: '#000' },
+      yaxis: { title: 'µg/m³', titlefont: { color: TICK_CLR, size: 11, family: FONT_FAM }, tickfont: { size: 10, color: TICK_CLR, family: FONT_FAM }, gridcolor: GRID_CLR, color: TICK_CLR, showline: true, linecolor: '#000', ticks: 'outside', zerolinecolor: '#000' },
+      shapes: shapes2,
+      plot_bgcolor: PLOT_BG, paper_bgcolor: PLOT_BG,
+      hoverlabel: { bgcolor: '#FFFFFF', bordercolor: '#000', font: { family: FONT_FAM, color: '#000' } },
+    }, { responsive: true, displayModeBar: false });
+  }
+}
+
+// ─── ITS coefficient table ─────────────────────────────────────────────── //
+function buildITSTable(its) {
+  const wrap = document.getElementById('its-table-wrap');
+  const sites = Object.keys(its.sites);
+  let html = `
+    <div class="table-scroll">
+    <table>
+      <thead><tr>
+        <th>Site</th>
+        <th>Spec</th>
+        <th class="num">β<sub>post</sub> (µg/m³)</th>
+        <th class="num">95% CI</th>
+        <th class="num">p-value</th>
+        <th class="num">γ<sub>QC</sub></th>
+        <th class="num">γ<sub>VW</sub></th>
+        <th class="num">R²</th>
+        <th class="num">n</th>
+        <th>EJ?</th>
+      </tr></thead><tbody>`;
+
+  for (const site of sites) {
+    const res = its.sites[site];
+    const ejFlag = res.ej_designated;
+    const siteLabel = site.replace(/_/g,' ');
+    for (const [key, spec] of [['full', res.full], ['long', res.long]]) {
+      if (!spec) continue;
+      const sig = spec.significant;
+      const beta = spec.beta_post;
+      html += `<tr>
+        <td>${siteLabel}</td>
+        <td class="pos">${key === 'full' ? 'QC+VW' : 'QC only'}</td>
+        <td class="num">${sign(beta)}${beta.toFixed(3)}${sig ? ' *' : ''}</td>
+        <td class="num">[${spec.ci95_low.toFixed(3)}, ${spec.ci95_high.toFixed(3)}]</td>
+        <td class="num">${spec.beta_post_p < 0.001 ? '<0.001' : spec.beta_post_p.toFixed(3)}</td>
+        <td class="num">${spec.beta_qc != null ? spec.beta_qc.toFixed(3) : '—'}</td>
+        <td class="num">${spec.beta_vw != null ? spec.beta_vw.toFixed(3) : '—'}</td>
+        <td class="num">${spec.r2.toFixed(3)}</td>
+        <td class="num">${spec.n}</td>
+        <td>${ejFlag ? '<span class="tag">EJ</span>' : '—'}</td>
+      </tr>`;
+    }
+  }
+  html += `</tbody></table>
+    <p class="caption">* p&lt;0.05. γ<sub>VW</sub> reported only for Full (QC+VW) specs. HAC standard errors (Newey-West, maxlags=30).</p></div>`;
+  wrap.innerHTML = html;
+}
+
+// ─── Equity chart (from robustness.json CS1) ────────────────────────────── //
+function buildEquityChart(its, robustness) {
+  const container = document.getElementById('chart-equity-container');
+
+  const cs1 = robustness?.equity?.CS1;
+  if (!cs1 || !cs1.values || cs1.values.length === 0) {
+    container.innerHTML = '<div class="data-error">Equity data not available — run analysis/robustness.py first.</div>';
+    return;
+  }
+
+  const panelNote = `Panel estimates of EJ gap (site + date FE, 11 sites): −0.38 to +0.02 µg/m³, none significant (p = 0.65–0.96).`;
+
+  const LABEL = {
+    Cross_Bronx_Expy: 'Cross Bronx Expy', Mott_Haven: 'Mott Haven',
+    Manhattan_Bridge: 'Manhattan Bridge', Williamsburg_Bridge: 'Williamsburg Bridge',
+    Queensboro_Bridge: 'Queensboro Bridge',
+  };
+
+  const ejOut=[], ejIn=[], nonEjOut=[], nonEjIn=[];
+  for (const v of cs1.values) {
+    const siteData = its.sites?.[v.site];
+    const spec = siteData?.full || siteData?.long;
+    if (!spec) continue;
+    const pt = { x: spec.pre_mean, y: v.beta, text: LABEL[v.site] || v.site.replace(/_/g,' ') };
+    if (v.ej && !v.in_crz)      ejOut.push(pt);
+    else if (v.ej && v.in_crz)  ejIn.push(pt);
+    else if (!v.ej && !v.in_crz) nonEjOut.push(pt);
+    else                          nonEjIn.push(pt);
+  }
+
+  const mkTrace = (pts, name, color, symbol) => ({
+    x: pts.map(p=>p.x), y: pts.map(p=>p.y), text: pts.map(p=>p.text),
+    mode: 'markers+text', type: 'scatter', name,
+    marker: { color, size: 13, symbol, line: { color: '#fff', width: 1.5 } },
+    textposition: 'top right', textfont: { size: 10, color: TICK_CLR, family: FONT_FAM },
+  });
+
+  const traces = [];
+  if (ejOut.length)    traces.push(mkTrace(ejOut,    'EJ-designated, outside zone', '#B4391B', 'circle'));
+  if (ejIn.length)     traces.push(mkTrace(ejIn,     'EJ-designated, inside zone',  '#B4391B', 'square'));
+  if (nonEjOut.length) traces.push(mkTrace(nonEjOut, 'Non-EJ, outside zone',        '#2F6B3A', 'circle'));
+  if (nonEjIn.length)  traces.push(mkTrace(nonEjIn,  'Non-EJ, inside zone',         '#2F6B3A', 'square'));
+
+  const div = document.createElement('div');
+  div.className = 'chart-wrap';
+  div.innerHTML = `
+    <div class="chart-title">Site PM₂.₅ change vs. baseline level, by EJ designation (5 ITS sites, corrected spatial-join flags)</div>
+    <div class="chart-sub">Cross-sectional OLS: ${panelNote}<br>
+      Hunts Point excluded (monitor offline Sept 2023–March 2025). Circle = outside CRZ; Square = inside CRZ.
+    </div>
+    <div id="chart-equity" class="plotly-chart"></div>
+    <p class="caption" style="margin-top:.5rem">No site-level regression line is shown; with five points a cross-sectional line is not informative.</p>`;
+  container.innerHTML = '';
+  container.appendChild(div);
+
+  Plotly.newPlot('chart-equity', traces, {
+    height: 420,
+    margin: { t: 20, b: 60, l: 70, r: 30 },
+    xaxis: { title: 'Pre-toll mean PM₂.₅ (µg/m³)', titlefont: { color: TICK_CLR, family: FONT_FAM }, gridcolor: GRID_CLR, tickfont: { size: 11, color: TICK_CLR, family: FONT_FAM }, color: TICK_CLR, showline: true, linecolor: '#000', ticks: 'outside', zerolinecolor: '#000' },
+    yaxis: { title: 'ITS β_post (µg/m³)', titlefont: { color: TICK_CLR, family: FONT_FAM }, zeroline: true, zerolinecolor: '#000', gridcolor: GRID_CLR, tickfont: { size: 11, color: TICK_CLR, family: FONT_FAM }, color: TICK_CLR, showline: true, linecolor: '#000', ticks: 'outside' },
+    shapes: [{ type: 'line', x0: 0, x1: 1, xref: 'paper', y0: 0, y1: 0,
+      line: { color: '#6B706C', width: 1, dash: 'dot' } }],
+    legend: { x: 0.01, y: 0.99, bgcolor: 'transparent', bordercolor: GRID_CLR, borderwidth: 1, font: { color: TICK_CLR, family: FONT_FAM, size: 11 } },
+    plot_bgcolor: PLOT_BG, paper_bgcolor: PLOT_BG,
+    hoverlabel: { bgcolor: '#FFFFFF', bordercolor: '#000', font: { family: FONT_FAM, color: '#000' } },
+  }, { responsive: true, displayModeBar: false });
+}
+
+// ─── Check 7 table (from robustness.json check7) ──────────────────────── //
+function buildCheck7Table(robustness) {
+  const wrap = document.getElementById('check7-table-wrap');
+  if (!wrap) return;
+  const c7 = robustness?.check7;
+  if (!c7 || !c7.sites) {
+    wrap.innerHTML = '<div class="data-error">Check 7 data not available.</div>';
+    return;
+  }
+  const LABEL = {
+    Manhattan_Bridge:'Manhattan Bridge', Williamsburg_Bridge:'Williamsburg Bridge',
+    Queensboro_Bridge:'Queensboro Bridge', FDR:'FDR', Broadway_35th_St:'Broadway 35th St',
+    Cross_Bronx_Expy:'Cross Bronx Expy', Mott_Haven:'Mott Haven',
+  };
+  const fmt = v => v === null || v === undefined ? '—' : (v >= 0 ? '+' : '') + v.toFixed(2);
+  const ORDER = ['Manhattan_Bridge','Williamsburg_Bridge','Queensboro_Bridge','FDR','Broadway_35th_St','Cross_Bronx_Expy','Mott_Haven'];
+  let rows = ORDER.map(site => {
+    const d = c7.sites[site];
+    if (!d) return '';
+    return `<tr style="border-bottom:1px solid #eee">
+      <td style="padding:4px 8px">${LABEL[site]||site}</td>
+      <td style="text-align:right;padding:4px 8px">${fmt(d.raw_delta_25)}</td>
+      <td style="text-align:right;padding:4px 8px">${fmt(d.minus_vw_25)}</td>
+      <td style="text-align:right;padding:4px 8px">${fmt(d.minus_vw_26)}</td>
+      <td style="text-align:right;padding:4px 8px">${fmt(d.minus_qc_25)}</td>
+      <td style="text-align:right;padding:4px 8px">${fmt(d.minus_qc_26)}</td>
+    </tr>`;
+  }).join('');
+  const cc = c7.control_changes || {};
+  wrap.innerHTML = `<table style="width:100%;border-collapse:collapse;font-size:0.82rem;font-family:inherit">
+    <thead><tr style="border-bottom:2px solid #2E312F">
+      <th style="text-align:left;padding:4px 8px">Site</th>
+      <th style="text-align:right;padding:4px 8px">raw Δ 2025</th>
+      <th style="text-align:right;padding:4px 8px">−VW 2025</th>
+      <th style="text-align:right;padding:4px 8px">−VW 2026</th>
+      <th style="text-align:right;padding:4px 8px">−QC 2025</th>
+      <th style="text-align:right;padding:4px 8px">−QC 2026</th>
+    </tr>
+    <tr style="border-bottom:1px solid #ccc;font-style:italic;color:#555">
+      <td style="padding:4px 8px">Van Wyck (control baseline)</td>
+      <td style="text-align:right;padding:4px 8px">${fmt(cc.vw_delta_25)}</td><td colspan="4" style="padding:4px 8px;color:#888;font-size:0.85em">change vs matched 2024 days</td>
+    </tr>
+    <tr style="border-bottom:1px solid #ccc;font-style:italic;color:#555">
+      <td style="padding:4px 8px">Queens College (control baseline)</td>
+      <td style="text-align:right;padding:4px 8px">${fmt(cc.qc_delta_25)}</td><td colspan="4"></td>
+    </tr></thead>
+    <tbody>${rows}</tbody>
+  </table>`;
+}
+
+// ─── Traffic charts ────────────────────────────────────────────────────── //
+function buildTrafficChart(traffic) {
+  const facs = traffic.facilities;
+  const names = Object.keys(facs).sort((a, b) =>
+    facs[b].diversion_residual - facs[a].diversion_residual);
+
+  const container = document.getElementById('chart-traffic-container');
+  const div = document.createElement('div');
+  div.className = 'chart-wrap';
+  div.innerHTML = `
+    <div class="chart-title">Average daily traffic residual (actual − OLS forecast) by facility</div>
+    <div class="chart-sub">Positive = more traffic than baseline forecast (consistent with diversion). Jan 2025 – Aug 2026.</div>
+    <div id="chart-traffic-bar" class="plotly-chart"></div>`;
+  container.innerHTML = '';
+  container.appendChild(div);
+
+  const colors = names.map(() => '#000');
+  Plotly.newPlot('chart-traffic-bar', [{
+    type: 'bar',
+    x: names.map(n => Math.round(facs[n].diversion_residual)),
+    y: names.map(n => n),
+    orientation: 'h',
+    marker: { color: colors, line: { color: PLOT_BG, width: 1 } },
+    text: names.map(n => `${sign(facs[n].diversion_residual)}${Math.round(facs[n].diversion_residual)} (${sign(facs[n].diversion_pct)}${facs[n].diversion_pct.toFixed(1)}%)`),
+    textposition: 'outside',
+    textfont: { color: TICK_CLR, size: 10, family: FONT_FAM },
+    hovertemplate: '<b>%{y}</b><br>Residual: %{x} veh/day<extra></extra>',
+  }], {
+    height: 420, margin: { t: 10, b: 50, l: 220, r: 110 },
+    xaxis: { title: 'Avg daily residual (veh/day)', titlefont: { color: TICK_CLR, family: FONT_FAM }, gridcolor: GRID_CLR, zeroline: true, zerolinecolor: '#000', tickfont: { size: 10, color: TICK_CLR, family: FONT_FAM }, color: TICK_CLR, showline: true, linecolor: '#000', ticks: 'outside' },
+    yaxis: { tickfont: { size: 10, color: TICK_CLR, family: FONT_FAM }, color: TICK_CLR, showline: true, linecolor: '#000', ticks: 'outside' },
+    plot_bgcolor: PLOT_BG, paper_bgcolor: PLOT_BG,
+    hoverlabel: { bgcolor: '#FFFFFF', bordercolor: '#000', font: { family: FONT_FAM, color: '#000' } },
+  }, { responsive: true, displayModeBar: false });
+}
+
+// ─── CRZ daily chart ───────────────────────────────────────────────────── //
+function buildCRZChart(crz) {
+  const traces = [{
+    x: crz.dates,
+    y: crz.total,
+    mode: 'lines',
+    name: 'Total CRZ entries',
+    line: { color: '#4B2E83', width: 2 },
+    fill: 'tozeroy',
+    fillcolor: 'rgba(75,46,131,0.07)',
+  }];
+
+  const rolling = crz.total.map((_, i, arr) => {
+    const slice = arr.slice(Math.max(0, i-6), i+1);
+    return Math.round(slice.reduce((a, b) => a + b, 0) / slice.length);
+  });
+  traces.push({
+    x: crz.dates, y: rolling,
+    mode: 'lines', name: '7-day avg',
+    line: { color: '#000', width: 2 },
+  });
+
+  Plotly.newPlot('chart-crz', traces, {
+    height: 300, margin: { t: 10, b: 50, l: 70, r: 20 },
+    xaxis: { title: '', gridcolor: GRID_CLR, tickfont: { size: 10, color: TICK_CLR, family: FONT_FAM }, color: TICK_CLR, showline: true, linecolor: '#000', ticks: 'outside', zerolinecolor: '#000' },
+    yaxis: { title: 'Vehicle entries/day', titlefont: { color: TICK_CLR, family: FONT_FAM }, gridcolor: GRID_CLR, tickformat: ',d', tickfont: { size: 10, color: TICK_CLR, family: FONT_FAM }, color: TICK_CLR, showline: true, linecolor: '#000', ticks: 'outside', zerolinecolor: '#000' },
+    legend: { orientation: 'h', y: -0.32, x: 0, font: { color: TICK_CLR, family: FONT_FAM, size: 11 }, bgcolor: 'transparent' },
+    plot_bgcolor: PLOT_BG, paper_bgcolor: PLOT_BG,
+    shapes: [{ type: 'line', x0: '2025-01-05', x1: '2025-01-05', y0: 0, y1: 1,
+      yref: 'paper', line: { color: '#4B2E83', width: 2 } }],
+    hoverlabel: { bgcolor: '#FFFFFF', bordercolor: '#000', font: { family: FONT_FAM, color: '#000' } },
+  }, { responsive: true, displayModeBar: false });
+}
+
+// ─── Headline stats ────────────────────────────────────────────────────── //
+function fillHeadlines(its, headline) {
+  const hl = headline.headline || {};
+  const val = (id, text) => { const el = document.getElementById(id); if (el) el.textContent = text; };
+
+  const worst = hl.worst_corridor || {};
+  if (worst.name) {
+    const bw = worst.beta_post_ug_m3 || 0;
+    val('val-worst', (bw >= 0 ? '+' : '') + bw.toFixed(2) + ' µg/m³');
+    val('desc-worst', worst.name.replace(/_/g,' '));
+  }
+
+  const best = hl.best_corridor || {};
+  if (best.name) {
+    const bb = best.beta_post_ug_m3 || 0;
+    val('val-best', (bb >= 0 ? '+' : '') + bb.toFixed(2) + ' µg/m³');
+    val('desc-best', best.name.replace(/_/g,' '));
+  }
+
+  const crz_avg = hl.crz_avg_daily_entries;
+  if (crz_avg) val('val-crz', Number(crz_avg).toLocaleString());
+}
+
+// ─── School-zone section ──────────────────────────────────────────────── //
+function buildSchoolZoneSection(its, schoolZone) {
+  const tbody = document.getElementById('school-zone-tbody');
+  if (!tbody || !schoolZone) return;
+
+  const SITE_LABELS_SZ = { Cross_Bronx_Expy:'Cross Bronx Expy', Mott_Haven:'Mott Haven', Manhattan_Bridge:'Manhattan Bridge', Williamsburg_Bridge:'Williamsburg Bridge', Queensboro_Bridge:'Queensboro Bridge' };
+  const EJ = { Cross_Bronx_Expy:true, Mott_Haven:true, Manhattan_Bridge:true, Williamsburg_Bridge:true, Queensboro_Bridge:false };
+  const ORDER = ['Mott_Haven','Cross_Bronx_Expy','Williamsburg_Bridge','Manhattan_Bridge','Queensboro_Bridge'];
+
+  tbody.innerHTML = ORDER.map(site => {
+    const siteData = its.sites?.[site];
+    const spec = siteData?.full || siteData?.long;
+    const beta = spec ? spec.beta_post : null;
+    const count = schoolZone.schools_by_site?.[site]?.count ?? '—';
+    const ej = EJ[site] ? 'Disadvantaged community' : '—';
+    const betaStr = beta !== null ? `${beta >= 0 ? '+' : ''}${beta.toFixed(3)}` : '—';
+    const rowStyle = beta > 0 ? ' style="font-weight:600"' : '';
+    return `<tr>
+      <td${rowStyle}>${SITE_LABELS_SZ[site]}</td>
+      <td>${ej}</td>
+      <td class="num">${betaStr}</td>
+      <td class="num"><strong>${count}</strong></td>
+    </tr>`;
+  }).join('');
+
+  const schools = schoolZone.mott_haven_schools;
+  if (schools && schools.length) {
+    document.getElementById('mott-haven-schools-section').style.display = '';
+    const mhTbody = document.getElementById('mh-schools-tbody');
+    mhTbody.innerHTML = schools.map(s => `<tr>
+      <td>${s.name}</td>
+      <td>${s.address}</td>
+      <td class="num">${s.dist_m}</td>
+    </tr>`).join('');
+  }
+
+  buildIdlingChart(schoolZone);
+}
+
+function buildIdlingChart(schoolZone) {
+  const el = document.getElementById('chart-idling-complaints');
+  if (!el) return;
+
+  const TOLL_DATE_STR = '2025-01-05';
+  const c311 = schoolZone?.complaints_311_engine_idling;
+  const monthly = c311?.combined_monthly_counts || c311?.monthly_counts;
+  const total = c311?.total_combined ?? c311?.total_records ?? 0;
+
+  if (!monthly || Object.keys(monthly).length === 0) {
+    el.innerHTML = '<p class="data-error" style="padding:1rem 0">311 data not available in bundle.</p>';
+    return;
+  }
+
+  const sub = document.getElementById('chart-idling-sub');
+  if (sub) sub.textContent = `311 "Engine Idling" (Noise - Vehicle) + "Air Quality / Vehicle Idling" — ${total} total reports in 400 m buffer. Source: NYC Open Data 311. Vertical line: toll launch Jan 5, 2025.`;
+
+  const months = Object.keys(monthly).sort();
+  const counts = months.map(m => monthly[m]);
+  const colors = months.map(m => m >= '2025-01' ? '#B4391B' : '#6B706C');
+
+  Plotly.newPlot(el, [{
+    x: months, y: counts, type: 'bar',
+    marker: { color: colors },
+    name: 'Monthly complaints',
+  }], {
+    height: 260,
+    margin: { l: 56, r: 16, t: 24, b: 44 },
+    paper_bgcolor: '#FFFFFF', plot_bgcolor: '#FFFFFF',
+    xaxis: { gridcolor: GRID_CLR, showline: true, linecolor: '#000', tickcolor: '#000', ticks: 'outside', tickfont: { family: FONT_FAM, color: TICK_CLR, size: 11 } },
+    yaxis: { title: 'Complaints', gridcolor: GRID_CLR, showline: true, linecolor: '#000', tickcolor: '#000', ticks: 'outside', tickfont: { family: FONT_FAM, color: TICK_CLR, size: 11 }, titlefont: { family: FONT_FAM, color: TICK_CLR, size: 12 } },
+    shapes: [{ type: 'line', x0: TOLL_DATE_STR, x1: TOLL_DATE_STR, y0: 0, y1: 1, yref: 'paper', line: { color: '#4B2E83', width: 2 } }],
+    annotations: [{ x: TOLL_DATE_STR, y: 1, yref: 'paper', xanchor: 'left', text: 'Toll begins', showarrow: false, font: { color: '#4B2E83', size: 11, family: FONT_FAM, weight: 600 }, xshift: 4 }],
+    hoverlabel: { bgcolor: '#FFFFFF', bordercolor: '#000', font: { family: FONT_FAM, color: '#000' } },
+  }, { responsive: true, displayModeBar: false });
+}
+
+// ─── Bootstrap ────────────────────────────────────────────────────────── //
+async function main() {
+  const [mAQI, mTraffic] = [initMapAQI(), initMapTraffic()];
+
+  DATA.school_zone = await loadJSON(PATHS.school_zone).catch(() => null);
+
+  const results = await Promise.allSettled([
+    loadJSON(PATHS.its),
+    loadJSON(PATHS.stations),
+    loadJSON(PATHS.crz_bnd),
+    loadJSON(PATHS.dac),
+    loadJSON(PATHS.traffic),
+    loadJSON(PATHS.crz),
+    loadJSON(PATHS.raster).catch(() => null),
+    loadJSON(PATHS.headline),
+    loadJSON(PATHS.bt_geo),
+    loadJSON(PATHS.robustness).catch(() => null),
+  ]);
+
+  const [its, stations, crz_bnd, dac, traffic, crz, raster, headline, bt_geo, robustness] =
+    results.map(r => r.status === 'fulfilled' ? r.value : null);
+
+  if (its && headline) fillHeadlines(its, headline);
+
+  mAQI.on('load', () => {
+    addAQILayers(mAQI, stations, crz_bnd, dac, raster);
+  });
+
+  mTraffic.on('load', () => {
+    addTrafficLayers(mTraffic, bt_geo, crz_bnd);
+  });
+
+  if (its) {
+    buildITSCharts(its);
+    buildITSTable(its);
+    buildEquityChart(its, robustness);
+    buildCheck7Table(robustness);
+    const schoolZone = DATA.school_zone;
+    buildSchoolZoneSection(its, schoolZone);
+  } else {
+    ['chart-its-container','its-table-wrap','chart-equity-container'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.innerHTML = '<div class="data-error">Data not yet processed — run <code>python scripts/run_all.py</code> first.</div>';
+    });
+  }
+
+  if (traffic) buildTrafficChart(traffic);
+  if (crz) buildCRZChart(crz);
+}
+
+main();
+</script>
+</body>
+</html>

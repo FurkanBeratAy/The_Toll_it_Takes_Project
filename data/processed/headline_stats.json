@@ -1,0 +1,44 @@
+{
+  "headline": {
+    "citywide_pm25_change_pct": null,
+    "worst_corridor": {
+      "name": "Mott_Haven",
+      "beta_post_ug_m3": 0.296
+    },
+    "best_corridor": {
+      "name": "Manhattan_Bridge",
+      "beta_post_ug_m3": -1.328
+    },
+    "part2_site": "Mott_Haven",
+    "bronx_bridges_avg_change_pct": 0.02,
+    "most_diverted_facility": {
+      "name": "Throgs Neck Bridge",
+      "diversion_residual": 2040.8,
+      "diversion_pct": 1.82
+    },
+    "crz_avg_daily_entries": 484283,
+    "toll_date": "2025-01-05"
+  },
+  "canyon_summary": {
+    "site": "Mott_Haven",
+    "hw_ratio": 1.022,
+    "discount": 0.13,
+    "best_typology": "dense_street_trees"
+  },
+  "data_files": [
+    "crz_boundary.geojson",
+    "monitor_stations.geojson",
+    "bt_facilities.geojson",
+    "dac_tracts_nyc.geojson",
+    "pollution_daily.json",
+    "its_results.json",
+    "traffic_diversion.json",
+    "crz_daily.json",
+    "canyon_analysis.json",
+    "corridor_trees.geojson",
+    "corridor_buildings.geojson",
+    "nyccas_raster_points.geojson",
+    "corridor_streets.geojson"
+  ],
+  "missing_files": []
+}

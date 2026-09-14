@@ -1,0 +1,99 @@
+{
+  "site": "Mott_Haven",
+  "lat": 40.80649,
+  "lon": -73.92249,
+  "corridor_length_ft": 297280.79818787804,
+  "hw_ratio": 1.022,
+  "mean_building_height_ft": 32.7,
+  "street_width_ft": 32.0,
+  "canyon_discount": 0.13,
+  "mean_existing_dbh": 8.1,
+  "canopy": {
+    "n_trees_existing": 1445,
+    "trees_per_linear_ft": 0.0049,
+    "trees_per_mile": 25.7,
+    "citywide_trees_per_mile": 142,
+    "estimated_canopy_pct": 4.0,
+    "citywide_canopy_pct": 22.1,
+    "canopy_gap_pct": 18.1
+  },
+  "typologies": {
+    "dense_street_trees": {
+      "description": "Street trees at 20-ft spacing (continuous canopy)",
+      "proposed_trees": 14864,
+      "spacing_ft": 20,
+      "canyon_discount": 0.13,
+      "removal_naive_kg_yr": 6934.32,
+      "removal_adjusted_kg_yr": 6029.61,
+      "projection": {
+        "1": 602.96,
+        "10": 3316.28,
+        "20": 5426.65
+      }
+    },
+    "spaced_street_trees": {
+      "description": "Street trees at 40-ft spacing (porous canopy)",
+      "proposed_trees": 7432,
+      "spacing_ft": 40,
+      "canyon_discount": 0.05,
+      "removal_naive_kg_yr": 3467.16,
+      "removal_adjusted_kg_yr": 3286.22,
+      "projection": {
+        "1": 328.62,
+        "10": 1807.42,
+        "20": 2957.6
+      }
+    },
+    "green_wall": {
+      "description": "Green wall on south-facing building faces, 2 m height",
+      "leaf_area_m2": 16570.4,
+      "canyon_discount": 0.05,
+      "removal_naive_kg_yr": 14.913,
+      "removal_adjusted_kg_yr": 14.168,
+      "projection": {
+        "1": 14.168,
+        "10": 14.168,
+        "20": 14.168
+      }
+    }
+  },
+  "species": [
+    {
+      "spc_latin": "Gleditsia triacanthos var. inermis",
+      "spc_common": "Thornless Honeylocust",
+      "form": "High-branching, fine-textured, dappled shade",
+      "pollution_tolerance": "High",
+      "salt_tolerance": "High",
+      "dbh_at_20yr_in": 12,
+      "rationale": "NYC's most-planted street tree for a reason: tolerates compacted soil, road salt, and air pollution; high canopy avoids over-closing the canyon (H/W=1.0); fast early growth maximises removal in yr 1\u201310."
+    },
+    {
+      "spc_latin": "Quercus bicolor",
+      "spc_common": "Swamp White Oak",
+      "form": "Broadly rounded, dense at maturity",
+      "pollution_tolerance": "High",
+      "salt_tolerance": "Moderate",
+      "dbh_at_20yr_in": 14,
+      "rationale": "Long-lived (200+ yr); large eventual crown delivers highest per-tree PM2.5 removal at maturity (DBH scaling). Moderate salt tolerance \u2014 suitable for non-primary plow routes. Avoid curb-side planting near winter de-icing unless protected."
+    },
+    {
+      "spc_latin": "Ulmus parvifolia",
+      "spc_common": "Lacebark Elm",
+      "form": "Vase-shaped, semi-evergreen in mild winters",
+      "pollution_tolerance": "Very High",
+      "salt_tolerance": "High",
+      "dbh_at_20yr_in": 11,
+      "rationale": "Extremely pollution- and salt-tolerant; vase form allows truck clearance while providing lateral canopy; resistant to Dutch Elm Disease. Good second-species diversity pairing with Honeylocust."
+    },
+    {
+      "spc_latin": "Ginkgo biloba (female-free cultivar 'Autumn Gold')",
+      "spc_common": "Maidenhair Tree",
+      "form": "Columnar-conical, very high branching",
+      "pollution_tolerance": "Very High",
+      "salt_tolerance": "High",
+      "dbh_at_20yr_in": 8,
+      "rationale": "The most pollution-tolerant tree in the NYC palette; columnar form minimises wind-shadow on truck lanes. Use only male cultivars \u2014 female Ginkgo fruits create a maintenance burden."
+    }
+  ],
+  "methodology_note": "PM2.5 removal rates from Nowak et al. (2006, 2018). DBH scaling: removal \u221d (DBH/10)^1.5 (Hirabayashi 2012). Canyon discount: linear ramp from H/W=0.5 to H/W=2.5, max 60%, based on Li et al. (2019) LES simulations and Morakinyo & Lam (2016) review. Projection maturation curve: 10% yr1, 55% yr10, 90% yr20 of full-size removal."
+}

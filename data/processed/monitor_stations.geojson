@@ -1,0 +1,120 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Cross_Bronx_Expy",
+        "ej_designated": true,
+        "lat": 40.84517,
+        "lon": -73.90614,
+        "beta_post": -0.5226,
+        "p_value": 0.2103,
+        "significant": false,
+        "direction": "decrease",
+        "pre_mean": 8.299,
+        "post_mean": 9.127,
+        "label": "full (QC+VW, Feb 2024\u2013present)"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.90614,
+          40.84517
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Mott_Haven",
+        "ej_designated": true,
+        "lat": 40.80649,
+        "lon": -73.92249,
+        "beta_post": 0.2957,
+        "p_value": 0.6078,
+        "significant": false,
+        "direction": "increase",
+        "pre_mean": 7.451,
+        "post_mean": 7.877,
+        "label": "full (QC+VW, Feb 2024\u2013present)"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.92249,
+          40.80649
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Manhattan_Bridge",
+        "ej_designated": true,
+        "lat": 40.71651,
+        "lon": -73.997,
+        "beta_post": -1.3276,
+        "p_value": 0.0275,
+        "significant": true,
+        "direction": "decrease",
+        "pre_mean": 8.67,
+        "post_mean": 8.738,
+        "label": "full (QC+VW, Feb 2024\u2013present)"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.997,
+          40.71651
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Williamsburg_Bridge",
+        "ej_designated": true,
+        "lat": 40.71807,
+        "lon": -73.98606,
+        "beta_post": -1.0352,
+        "p_value": 0.0263,
+        "significant": true,
+        "direction": "decrease",
+        "pre_mean": 8.159,
+        "post_mean": 7.882,
+        "label": "full (QC+VW, Feb 2024\u2013present)"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.98606,
+          40.71807
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Queensboro_Bridge",
+        "ej_designated": false,
+        "lat": 40.76123,
+        "lon": -73.96389,
+        "beta_post": -1.0981,
+        "p_value": 0.2054,
+        "significant": false,
+        "direction": "decrease",
+        "pre_mean": 7.344,
+        "post_mean": 7.557,
+        "label": "full (QC+VW, Feb 2024\u2013present)"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.96389,
+          40.76123
+        ]
+      }
+    }
+  ]
+}

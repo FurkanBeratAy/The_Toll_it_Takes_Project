@@ -1,0 +1,268 @@
+{
+  "schools_by_site": {
+    "Mott_Haven": {
+      "count": 9,
+      "physical_locations": 6
+    },
+    "Cross_Bronx_Expy": {
+      "count": 2,
+      "physical_locations": 2
+    },
+    "Hunts_Point": {
+      "count": 2,
+      "physical_locations": 2
+    },
+    "Manhattan_Bridge": {
+      "count": 2,
+      "physical_locations": 2
+    },
+    "Williamsburg_Bridge": {
+      "count": 5,
+      "physical_locations": 5
+    },
+    "Queensboro_Bridge": {
+      "count": 0,
+      "physical_locations": 0
+    }
+  },
+  "mott_haven_schools": [
+    {
+      "name": "P.S. 043 Jonas Bronck",
+      "address": "165 Brown Place, Bronx 10454",
+      "dist_m": 76,
+      "lat": 40.80645,
+      "lon": -73.92159
+    },
+    {
+      "name": "Mott Haven Academy Charter School",
+      "address": "170 Brown Place, Bronx 10454",
+      "dist_m": 114,
+      "lat": 40.80638,
+      "lon": -73.92115
+    },
+    {
+      "name": "NYC Montessori Charter School",
+      "address": "423 E 138th St, Bronx",
+      "dist_m": 250,
+      "lat": 40.80869,
+      "lon": -73.92189
+    },
+    {
+      "name": "AECI II: NYC Charter HS for Computer Engineering and Innovation",
+      "address": "423 E 138th St, Bronx",
+      "dist_m": 250,
+      "lat": 40.80869,
+      "lon": -73.92189
+    },
+    {
+      "name": "P.S. 154 Jonathan D. Hyatt",
+      "address": "333 E 135th St, Bronx",
+      "dist_m": 314,
+      "lat": 40.80819,
+      "lon": -73.92546
+    },
+    {
+      "name": "South Bronx Classical Charter School II",
+      "address": "333 E 135th St, Bronx",
+      "dist_m": 314,
+      "lat": 40.80819,
+      "lon": -73.92546
+    },
+    {
+      "name": "Young Leaders Elementary School",
+      "address": "468 E 140th St, Bronx",
+      "dist_m": 368,
+      "lat": 40.80908,
+      "lon": -73.91977
+    },
+    {
+      "name": "P.S. 179",
+      "address": "468 E 140th St, Bronx",
+      "dist_m": 368,
+      "lat": 40.80908,
+      "lon": -73.91977
+    },
+    {
+      "name": "Zeta Charter Schools – NYC 2",
+      "address": "222 Alexander Ave, Bronx",
+      "dist_m": 386,
+      "lat": 40.80946,
+      "lon": -73.92485
+    }
+  ],
+  "mott_haven_schools_geojson": {
+    "type": "FeatureCollection",
+    "features": [
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            -73.92159,
+            40.80645
+          ]
+        },
+        "properties": {
+          "name": "P.S. 043 Jonas Bronck",
+          "address": "165 Brown Place",
+          "dist_m": 76
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            -73.92115,
+            40.80638
+          ]
+        },
+        "properties": {
+          "name": "Mott Haven Academy Charter School",
+          "address": "170 Brown Place",
+          "dist_m": 114
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            -73.92189,
+            40.80869
+          ]
+        },
+        "properties": {
+          "name": "NYC Montessori Charter School",
+          "address": "423 E 138th St",
+          "dist_m": 250
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            -73.92546,
+            40.80819
+          ]
+        },
+        "properties": {
+          "name": "P.S. 154 Jonathan D. Hyatt",
+          "address": "333 E 135th St",
+          "dist_m": 314
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            -73.91977,
+            40.80908
+          ]
+        },
+        "properties": {
+          "name": "Young Leaders Elementary School",
+          "address": "468 E 140th St",
+          "dist_m": 368
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            -73.92485,
+            40.80946
+          ]
+        },
+        "properties": {
+          "name": "Zeta Charter Schools – NYC 2",
+          "address": "222 Alexander Ave",
+          "dist_m": 386
+        }
+      }
+    ]
+  },
+  "green_screen_typology": {
+    "description": "Dense vegetative barrier at school playground/entrance frontages facing truck routes. Sized to actual school frontages of the 2 closest schools (PS 043 Jonas Bronck and Mott Haven Academy Charter School) on Brown Place.",
+    "frontage_ft": 180,
+    "height_ft": 20,
+    "surface_area_m2": 334,
+    "removal_rate_g_m2_yr": 0.04,
+    "removal_naive_kg_yr": 13.36,
+    "canyon_discount": 0.08,
+    "removal_adjusted_kg_yr": 12.29,
+    "projection": {
+      "1": 12.29,
+      "10": 12.29,
+      "20": 12.29
+    },
+    "note": "Green screens do not mature; removal rate is stable from year 1. Lower total than corridor-wide planting but concentrated at locations where children spend 6+ hours/day."
+  },
+  "complaints_311_engine_idling": {
+    "noise_vehicle": {
+      "monthly_counts": {
+        "2021-05": 1,
+        "2021-07": 1,
+        "2021-08": 1,
+        "2022-08": 1,
+        "2022-09": 1,
+        "2022-10": 1,
+        "2023-03": 1,
+        "2024-03": 5,
+        "2025-01": 1,
+        "2025-02": 1,
+        "2026-02": 1,
+        "2026-04": 1,
+        "2026-07": 1
+      },
+      "total_records": 17,
+      "fetched_records": 17
+    },
+    "air_quality": {
+      "monthly_counts": {
+        "2022-03": 1,
+        "2022-07": 1,
+        "2023-01": 1,
+        "2023-07": 1,
+        "2023-08": 1,
+        "2024-04": 2,
+        "2025-03": 1
+      },
+      "total_records": 8,
+      "fetched_records": 8
+    },
+    "combined_monthly_counts": {
+      "2021-05": 1,
+      "2021-07": 1,
+      "2021-08": 1,
+      "2022-03": 1,
+      "2022-07": 1,
+      "2022-08": 1,
+      "2022-09": 1,
+      "2022-10": 1,
+      "2023-01": 1,
+      "2023-03": 1,
+      "2023-07": 1,
+      "2023-08": 1,
+      "2024-03": 5,
+      "2024-04": 2,
+      "2025-01": 1,
+      "2025-02": 1,
+      "2025-03": 1,
+      "2026-02": 1,
+      "2026-04": 1,
+      "2026-07": 1
+    },
+    "total_combined": 25,
+    "bbox": {
+      "latMin": 40.8029,
+      "latMax": 40.8101,
+      "lonMin": -73.9273,
+      "lonMax": -73.9178
+    },
+    "source": "NYC Open Data 311 (erm2-nwe9)"
+  }
+}

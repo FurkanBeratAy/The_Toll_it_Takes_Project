@@ -1,0 +1,131 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Henry Hudson Bridge",
+        "diversion_pct": -2.44,
+        "diversion_residual": -1593.7,
+        "pre_avg": 65445.9,
+        "post_avg": 68766.9,
+        "bronx_relevant": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.9299,
+          40.877
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Hugh L. Carey Tunnel",
+        "diversion_pct": -14.22,
+        "diversion_residual": -7881.7,
+        "pre_avg": 55424.1,
+        "post_avg": 59282.9,
+        "bronx_relevant": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.0112,
+          40.6943
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Marine Parkway Bridge",
+        "diversion_pct": 1.42,
+        "diversion_residual": 303.6,
+        "pre_avg": 21396.7,
+        "post_avg": 22183.1,
+        "bronx_relevant": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.8947,
+          40.5727
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Queens Midtown Tunnel",
+        "diversion_pct": -6.83,
+        "diversion_residual": -5226.6,
+        "pre_avg": 76473.2,
+        "post_avg": 81016.4,
+        "bronx_relevant": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.9688,
+          40.7452
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Robert F. Kennedy Bridge Bronx",
+        "diversion_pct": -1.78,
+        "diversion_residual": -2380.3,
+        "pre_avg": 133997.0,
+        "post_avg": 143074.3,
+        "bronx_relevant": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.9225,
+          40.7979
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Throgs Neck Bridge",
+        "diversion_pct": 1.82,
+        "diversion_residual": 2040.8,
+        "pre_avg": 111943.7,
+        "post_avg": 123370.9,
+        "bronx_relevant": true
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -73.7963,
+          40.8044
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Verrazzano - Narrows Bridge",
+        "diversion_pct": -35.25,
+        "diversion_residual": -62571.4,
+        "pre_avg": 177513.3,
+        "post_avg": 221034.6,
+        "bronx_relevant": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.0444,
+          40.6067
+        ]
+      }
+    }
+  ]
+}

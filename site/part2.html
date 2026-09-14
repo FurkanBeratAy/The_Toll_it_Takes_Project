@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Part II: Green corridor — The Toll It Takes</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5/dist/maplibre-gl.css">
+  <script src="https://unpkg.com/maplibre-gl@5/dist/maplibre-gl.js"></script>
+  <script src="https://cdn.plot.ly/plotly-2.34.0.min.js"></script>
+  <script src="data_bundle.js"></script>
+</head>
+<body>
+
+<header class="site-header">
+  <nav>
+    <a class="logo" href="index.html">The Toll It Takes</a>
+    <a href="index.html">Overview</a>
+    <a href="part1.html">Part I: Air quality</a>
+    <a href="part2.html" class="active">Part II: Green corridor</a>
+  </nav>
+</header>
+
+<div class="hero">
+  <div class="container">
+    <p class="breadcrumb">Part II of II</p>
+    <h1>A green corridor for the most-burdened site</h1>
+    <p class="subtitle">
+      The monitored site with the largest PM<sub>2.5</sub> rise inside a state-designated disadvantaged
+      community, chosen automatically from Part I, gets a planting response sized to its street canyon.
+    </p>
+    <p class="meta">Data: Street Tree Census 2015. LION centerlines. NYC building footprints. MapPLUTO 26v2. NYC truck routes.</p>
+  </div>
+</div>
+
+<div class="container">
+  <div class="stat-row" id="site-stats">
+    <div class="stat-card">
+      <div class="stat-label">Selected corridor</div>
+      <div class="stat-value" id="val-site">—</div>
+      <div class="stat-desc" id="desc-site">Largest positive step-change in a disadvantaged-community tract.</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">PM<sub>2.5</sub> step-change</div>
+      <div class="stat-value" id="val-beta">—</div>
+      <div class="stat-desc">ITS β<sub>post</sub> (µg/m³) after toll launch</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Canyon height to width</div>
+      <div class="stat-value" id="val-hw">—</div>
+      <div class="stat-desc">Mean building height over street width. Above 0.5, a deep canyon.</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Canopy gap</div>
+      <div class="stat-value" id="val-gap">—</div>
+      <div class="stat-desc">Percentage points below citywide 22.1% canopy average</div>
+    </div>
+  </div>
+
+  <div class="callout" id="site-selection-rationale">
+    <p><strong>Why Mott Haven.</strong> Mott Haven carries the highest pre-existing environmental burden of any monitored corridor: one of the highest pediatric asthma rates in New York State, a 4.0% tree canopy against a 22.1% citywide average, nine school entries (six physical buildings) within 400 m of the monitor, and direct adjacency to major truck routes and the Major Deegan and Cross Bronx expressways. The toll's signal at this site is directionally uncertain: full-model β = +0.30 µg/m³ (p = 0.61), step-only β = −0.65 µg/m³ (p = 0.01); the sign depends on the trend assumption. The case for intervention rests on the pre-existing conditions, not on a proven toll impact.</p>
+  </div>
+
+  <figure class="photo">
+    <img src="img/alexander-av-140-st.jpg"
+         alt="Alexander Avenue at East 140th Street in Mott Haven, with rowhouses, the branch library and street trees" loading="lazy">
+    <figcaption class="caption">Alexander Avenue at East 140th Street, inside the Mott Haven corridor: nineteenth-century rowhouses,
+      the branch library, and the kind of street trees the plan would add. <span class="credit">Photo: Jim.henderson, Wikimedia Commons, <a href="https://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>; shown in monochrome.</span></figcaption>
+  </figure>
+
+<!-- ─── Section 1: Corridor Map ──────────────────────────────────────── -->
+<section class="section">
+  <div class="section-header">
+    <h2>Corridor conditions</h2>
+    <p>
+      Existing street trees sized by trunk diameter, building footprints
+      coloured by height, and the computed height-to-width ratio.
+      The monitor is the black cross.
+    </p>
+  </div>
+
+  <div class="map-wrap">
+    <div id="map-corridor" class="map-container" style="height:500px"></div>
+    <div class="map-legend" id="legend-corridor">
+      <div class="legend-title">Layers</div>
+      <div class="legend-row"><div class="legend-swatch" style="background:#2F6B3A"></div><span>Street trees (alive)</span></div>
+      <div class="legend-row"><div class="legend-swatch" style="background:#B7BBB7"></div><span>Buildings, by height</span></div>
+      <div class="legend-row"><div class="legend-swatch" style="background:#000"></div><span>Monitor</span></div>
+    </div>
+    <div class="map-annotation" id="hw-annotation" style="top:1rem;left:1rem;display:none">
+      <strong>H/W =</strong> <span id="hw-val">—</span><br>
+      <small>Mean bldg height / street width</small>
+    </div>
+    <div class="map-toggle-row">
+      <button class="map-toggle active" onclick="toggleCorrLayer('trees-cluster,trees-cluster-count,trees-circle',this)">Street trees</button>
+      <button class="map-toggle active" onclick="toggleCorrLayer('buildings-fill,buildings-outline',this)">Buildings</button>
+      <button class="map-toggle active" onclick="toggleCorrLayer('streets-line',this)">Streets</button>
+    </div>
+  </div>
+
+  <div style="margin-top:.75rem" id="hw-callout"></div>
+</section>
+
+<!-- ─── Section 2: Removal typology chart ────────────────────────────── -->
+<section class="section">
+  <div class="section-header">
+    <h2>Three ways to plant a deep canyon</h2>
+    <p>
+      A continuous canopy over a narrow street can trap air beneath it, so the removal each typology earns in the
+      open is discounted by the canyon's height-to-width ratio: no discount at 0.5, 60% at 2.5. This is why the
+      answer is a particular typology and not simply more trees.
+    </p>
+  </div>
+
+  <div class="grid-2" style="margin-bottom:1.25rem">
+    <div class="chart-wrap">
+      <div class="chart-title">Naïve vs. canyon-adjusted annual removal</div>
+      <div class="chart-sub">kg PM<sub>2.5</sub> per year; the canyon discount applies to the two tree typologies.</div>
+      <div id="chart-removal" class="plotly-chart"></div>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">Canyon discount by height-to-width ratio</div>
+      <div class="chart-sub">Linear ramp from 0% at H/W=0.5 to 60% at H/W=2.5 (Li et al. 2019).</div>
+      <div id="chart-discount" class="plotly-chart"></div>
+    </div>
+  </div>
+
+  <div class="callout" id="typology-rationale">
+    <strong>Why this typology?</strong>
+    <span id="typology-text">Loading…</span>
+  </div>
+</section>
+
+<!-- ─── Section 3: Maturation projection ─────────────────────────────── -->
+<section class="section">
+  <div class="section-header">
+    <h2>Removal over time as planting matures</h2>
+    <p>
+      A sapling removes almost nothing. The model credits each typology with 10% of its mature removal in year one,
+      55% by year ten and 90% by year twenty, following trunk-growth rates for New York street trees.
+    </p>
+  </div>
+  <div class="chart-wrap">
+    <div class="chart-title">Projected removal at years 1, 10 and 20</div>
+    <div class="chart-sub">kg PM<sub>2.5</sub> per year, all four typologies, canyon-adjusted.</div>
+    <div id="chart-projection" class="plotly-chart"></div>
+  </div>
+</section>
+
+<!-- ─── Section 4: Species table ──────────────────────────────────────── -->
+<section class="section">
+  <div class="section-header">
+    <h2>Recommended species</h2>
+    <p>
+      Selected for tolerance of road salt, compacted soil and the pollution load of a truck corridor, with a mature
+      crown that fits under the expressway's clearance where the street runs beneath it.
+    </p>
+  </div>
+  <div id="species-table-wrap">
+    <div class="loading"><div class="spinner"></div>Loading…</div>
+  </div>
+</section>
+
+<!-- ─── School-zone green screen ─────────────────────────────────────── -->
+<section class="section">
+  <div class="section-header">
+    <h2>A fourth typology: the school-frontage green screen</h2>
+    <p>The three corridor-wide typologies treat the street uniformly. This fourth addresses a specific question: what about the exact locations where children are present for six or more hours a day?</p>
+  </div>
+  <div class="callout">
+    <p><strong>Typology 4: Green screen.</strong> A dense vegetative barrier — modular living wall panels or a wire-and-vine trellis — installed at school playground and entrance frontages directly facing the truck corridor. Sized to the actual street frontage of the two closest schools: P.S. 043 Jonas Bronck and Mott Haven Academy Charter School, both on Brown Place, 76–114 m from the NYCCAS monitor. Estimated frontage: 180 ft (55 m). The same canyon-geometry discount and i-Tree-derived removal rate methodology as the other typologies.</p>
+    <p>Compared with the three corridor-wide typologies, the green screen removes less PM<sub>2.5</sub> in absolute terms — its surface area is a small fraction of the full corridor. But it is placed where it matters most: at the breathing level of children during school hours, at the buildings the monitor cannot distinguish from the rest of the block.</p>
+    <p>NYC Admin Code §24-163 limits idling to one minute in school zones. The green screen and the idling law are complementary instruments: the law limits new emissions at school frontages; the green screen intercepts what arrives from the corridor regardless of source.</p>
+  </div>
+  <div class="table-scroll">
+  <table>
+    <thead><tr>
+      <th>Typology</th>
+      <th class="num">Naive removal (kg/yr)</th>
+      <th class="num">Canyon-adjusted (kg/yr)</th>
+      <th>Scope</th>
+    </tr></thead>
+    <tbody id="typology-comparison-tbody">
+      <tr><td colspan="4"><div class="loading"><div class="spinner"></div>Loading…</div></td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<!-- ─── Section 5: Methodology note ──────────────────────────────────── -->
+<section class="section">
+  <div class="section-header">
+    <h2>Methodology &amp; limitations</h2>
+  </div>
+  <div class="callout">
+    <strong>i-Tree approximation.</strong>
+    PM<sub>2.5</sub> removal estimated using per-tree rates from Nowak et al. (2006, 2018)
+    and DBH-based scaling (Hirabayashi 2012). The i-Tree Eco desktop tool would
+    produce more precise results at the individual-tree level; this analysis
+    uses published citywide averages as a documented approximation.
+  </div>
+  <div class="callout">
+    <strong>Canyon discount.</strong>
+    The discount factor (linear ramp, max 60%) is derived from Li et al. (2019)
+    LES simulations and the Morakinyo &amp; Lam (2016) review. It applies to
+    on-street tree-based removal only; the green wall estimate uses a separate
+    (lower) discount because vertical surfaces in a canyon flush more directly
+    with mean flow. Both numbers are shown — the gap between naïve and adjusted
+    is the argument for typology selection.
+  </div>
+  <div class="callout">
+    <strong>Canopy gap.</strong>
+    Canopy percentage estimated from trees-per-linear-foot relative to citywide
+    average (2015 Street Tree Census), scaled to the 22.1% citywide canopy
+    cover figure. This is a rough proxy — actual canopy coverage requires
+    LiDAR or aerial image analysis, neither of which is in this dataset.
+  </div>
+  <div class="callout">
+    <strong>Complaint counts and reporting behavior.</strong>
+    311 Engine Idling complaints are a community-reported signal, not a pollution measurement. A rise in complaints after the toll began could reflect an increase in actual idling, or an increase in residents aware of the Citizens Air Complaint Program under Local Law 58 (2018), which entitles complainants to a share of any fine. The chart in Part I reports this distinction explicitly.
+  </div>
+  <div id="method-note" style="font-size:.9375rem;color:var(--ink-muted);margin-top:1rem"></div>
+</section>
+
+</div><!-- /container -->
+
+<footer class="site-footer">
+  <div class="container">
+    <a href="part1.html">← Back to Part I: Air quality analysis</a>
+    &nbsp;·&nbsp;
+    <a href="index.html">← Overview</a>
+  </div>
+</footer>
+
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<script>
+const MAP_STYLE = 'https://tiles.openfreemap.org/styles/positron';
+const PLOT_BG  = '#FFFFFF';
+const GRID_CLR = '#E4E7E4';
+const TICK_CLR = '#4A4E4B';
+const FONT_FAM = 'Archivo, "Helvetica Neue", Helvetica, Arial, sans-serif';
+
+async function loadJSON(path) {
+  if (window.DATA_BUNDLE && path in window.DATA_BUNDLE) {
+    return window.DATA_BUNDLE[path];
+  }
+  const r = await fetch(path);
+  if (!r.ok) throw new Error(`${r.status} ${path}`);
+  return r.json();
+}
+
+const PATHS = {
+  canyon:      '../data/processed/canyon_analysis.json',
+  trees:       '../data/processed/corridor_trees.geojson',
+  buildings:   '../data/processed/corridor_buildings.geojson',
+  streets:     '../data/processed/corridor_streets.geojson',
+  meta:        '../data/processed/corridor_meta.json',
+  its:         '../data/processed/its_results.json',
+  school_zone: '../data/processed/school_zone.json',
+};
+
+let mapCorr;
+
+function sign(v) { return v >= 0 ? '+' : ''; }
+
+// ─── Corridor map ─────────────────────────────────────────────────────── //
+function initCorrMap(meta) {
+  mapCorr = new maplibregl.Map({
+    container: 'map-corridor',
+    style: MAP_STYLE,
+    center: [meta.lon, meta.lat],
+    zoom: 15,
+    attributionControl: false,
+  });
+  mapCorr.addControl(new maplibregl.NavigationControl(), 'top-right');
+  mapCorr.on('error', e => { if (e.error?.status !== 404) console.warn('map-corridor error', e.error); });
+  return mapCorr;
+}
+
+window.toggleCorrLayer = function(ids, btn) {
+  if (!mapCorr) return;
+  const layerIds = ids.split(',');
+  let vis;
+  for (const id of layerIds) {
+    if (mapCorr.getLayer(id)) { vis = mapCorr.getLayoutProperty(id, 'visibility'); break; }
+  }
+  const next = (vis === 'none') ? 'visible' : 'none';
+  layerIds.forEach(id => { if (mapCorr.getLayer(id)) mapCorr.setLayoutProperty(id, 'visibility', next); });
+  btn.classList.toggle('active', next === 'visible');
+};
+
+function addCorrLayers(map, trees, buildings, streets, meta, canyon) {
+  // Streets
+  if (streets && streets.features && streets.features.length > 0) {
+    map.addSource('streets-src', { type: 'geojson', data: streets });
+    map.addLayer({
+      id: 'streets-line',
+      type: 'line',
+      source: 'streets-src',
+      paint: { 'line-color': '#000', 'line-width': 3 },
+    });
+  }
+
+  // Buildings coloured by height
+  if (buildings && buildings.features && buildings.features.length > 0) {
+    map.addSource('bldg-src', { type: 'geojson', data: buildings });
+    map.addLayer({
+      id: 'buildings-fill',
+      type: 'fill-extrusion',
+      source: 'bldg-src',
+      paint: {
+        'fill-extrusion-color': [
+          'interpolate', ['linear'], ['get', 'height_roof'],
+          0,   '#D8DBD8',
+          40,  '#B7BBB7',
+          100, '#6B706C',
+        ],
+        'fill-extrusion-height': ['/', ['get', 'height_roof'], 3.281],
+        'fill-extrusion-base': 0,
+        'fill-extrusion-opacity': 0.75,
+      },
+    });
+    map.addLayer({
+      id: 'buildings-outline',
+      type: 'line',
+      source: 'bldg-src',
+      paint: { 'line-color': '#B7BBB7', 'line-width': 0.5, 'line-opacity': 0.6 },
+    });
+  }
+
+  // Street trees
+  if (trees && trees.features && trees.features.length > 0) {
+    map.addSource('trees-src', {
+      type: 'geojson',
+      data: trees,
+      cluster: trees.features.length > 500,
+      clusterMaxZoom: 15,
+      clusterRadius: 30,
+    });
+    if (trees.features.length > 500) {
+      map.addLayer({
+        id: 'trees-cluster',
+        type: 'circle',
+        source: 'trees-src',
+        filter: ['has', 'point_count'],
+        paint: {
+          'circle-color': '#2F6B3A',
+          'circle-radius': ['step', ['get', 'point_count'], 14, 10, 18, 50, 22],
+          'circle-opacity': 0.7,
+        },
+      });
+      map.addLayer({
+        id: 'trees-cluster-count',
+        type: 'symbol',
+        source: 'trees-src',
+        filter: ['has', 'point_count'],
+        layout: {
+          'text-field': ['get', 'point_count_abbreviated'],
+          'text-font': ['Open Sans Bold', 'Arial Unicode MS Bold'],
+          'text-size': 11,
+        },
+        paint: { 'text-color': '#fff' },
+      });
+    }
+    map.addLayer({
+      id: 'trees-circle',
+      type: 'circle',
+      source: 'trees-src',
+      filter: trees.features.length > 500 ? ['!', ['has', 'point_count']] : ['all'],
+      paint: {
+        'circle-radius': [
+          'interpolate', ['linear'],
+          ['coalesce', ['get', 'dbh'], 8],
+          0, 4, 30, 12
+        ],
+        'circle-color': '#2F6B3A',
+        'circle-opacity': 0.8,
+        'circle-stroke-color': '#fff',
+        'circle-stroke-width': 1,
+      },
+    });
+
+    const treePop = new maplibregl.Popup({ closeButton: false });
+    map.on('click', 'trees-circle', (e) => {
+      const p = e.features[0].properties;
+      treePop.setLngLat(e.lngLat).setHTML(`
+        <div class="popup-title">${p.species || 'Unknown'}</div>
+        <div class="popup-row"><span class="popup-key">DBH</span><span class="popup-val">${p.dbh}" inches</span></div>
+        <div class="popup-row"><span class="popup-key">Health</span><span class="popup-val">${p.health}</span></div>
+        <div class="popup-row"><span class="popup-key">Latin</span><span class="popup-val" style="font-style:italic;font-size:.78rem">${p.spc_latin || '—'}</span></div>
+      `).addTo(map);
+    });
+    map.on('mouseenter', 'trees-circle', () => { map.getCanvas().style.cursor = 'pointer'; });
+    map.on('mouseleave', 'trees-circle', () => { map.getCanvas().style.cursor = ''; });
+  }
+
+  // Monitor station marker
+  const el = document.createElement('div');
+  el.style.cssText = 'width:18px;height:18px;background:#000;border:3px solid #fff;border-radius:50%;box-shadow:0 2px 8px rgba(0,0,0,.3)';
+  new maplibregl.Marker({ element: el })
+    .setLngLat([meta.lon, meta.lat])
+    .setPopup(new maplibregl.Popup().setHTML(`<b>NYCCAS Monitor</b><br>${meta.site.replace(/_/g,' ')}`))
+    .addTo(map);
+
+  // H/W annotation
+  if (canyon) {
+    const ann = document.getElementById('hw-annotation');
+    document.getElementById('hw-val').textContent = canyon.hw_ratio.toFixed(2);
+    ann.style.display = 'block';
+  }
+}
+
+// ─── Removal chart ────────────────────────────────────────────────────── //
+function buildRemovalChart(canyon, schoolZone) {
+  const t = canyon.typologies;
+  const gs = schoolZone?.green_screen_typology;
+  const names = [
+    'Dense street trees (20 ft)',
+    'Spaced street trees (40 ft)',
+    'Green wall',
+    'Green screen (school frontage)',
+  ];
+  const keys = ['dense_street_trees', 'spaced_street_trees', 'green_wall'];
+
+  const naive    = [...keys.map(k => t[k].removal_naive_kg_yr), gs?.removal_naive_kg_yr ?? 13.36];
+  const adjusted = [...keys.map(k => t[k].removal_adjusted_kg_yr), gs?.removal_adjusted_kg_yr ?? 12.29];
+  const discounts = [...keys.map(k => t[k].canyon_discount * 100), (gs?.canyon_discount ?? 0.08) * 100];
+
+  Plotly.newPlot('chart-removal', [
+    {
+      name: 'Naïve (no canyon discount)',
+      x: naive, y: names, type: 'bar', orientation: 'h',
+      marker: { color: 'rgba(0,0,0,0.1)', line: { color: GRID_CLR, width: 1 } },
+      text: naive.map(v => `${v.toFixed(2)} kg/yr`),
+      textfont: { color: TICK_CLR, size: 10, family: FONT_FAM },
+      textposition: 'inside', insidetextanchor: 'start',
+    },
+    {
+      name: 'Canyon-adjusted',
+      x: adjusted, y: names, type: 'bar', orientation: 'h',
+      marker: { color: ['#000','#6B706C','#2F6B3A','#4B2E83'] },
+      text: adjusted.map((v, i) => `${v.toFixed(2)} kg/yr (−${discounts[i].toFixed(0)}%)`),
+      textfont: { color: '#fff', size: 10, family: FONT_FAM },
+      textposition: 'outside',
+    },
+  ], {
+    barmode: 'overlay',
+    height: 320,
+    margin: { t: 10, b: 50, l: 220, r: 150 },
+    xaxis: { title: 'Annual PM₂.₅ removal (kg/yr)', titlefont: { color: TICK_CLR, family: FONT_FAM }, gridcolor: GRID_CLR, tickfont: { size: 11, color: TICK_CLR, family: FONT_FAM }, color: TICK_CLR, showline: true, linecolor: '#000', ticks: 'outside', zerolinecolor: '#000' },
+    yaxis: { tickfont: { size: 11, color: TICK_CLR, family: FONT_FAM }, color: TICK_CLR, showline: true, linecolor: '#000', ticks: 'outside' },
+    legend: { orientation: 'h', y: -0.3, font: { color: TICK_CLR, family: FONT_FAM, size: 11 }, bgcolor: 'transparent' },
+    plot_bgcolor: PLOT_BG, paper_bgcolor: PLOT_BG,
+    hoverlabel: { bgcolor: '#FFFFFF', bordercolor: '#000', font: { family: FONT_FAM, color: '#000' } },
+  }, { responsive: true, displayModeBar: false });
+
+  // Canyon discount curve
+  const hwVals = Array.from({ length: 100 }, (_, i) => i * 3 / 99);
+  const discVals = hwVals.map(h => Math.min(60, Math.max(0, (h - 0.5) * 25)));
+  Plotly.newPlot('chart-discount', [{
+    x: hwVals, y: discVals, mode: 'lines',
+    line: { color: '#B4391B', width: 2.5 },
+    fill: 'tozeroy', fillcolor: 'rgba(180,57,27,0.08)',
+    name: 'Tree typology discount',
+  }, {
+    x: [canyon.hw_ratio, canyon.hw_ratio],
+    y: [0, Math.min(60, Math.max(0, (canyon.hw_ratio - 0.5) * 25))],
+    mode: 'lines', line: { color: '#4B2E83', width: 2, dash: 'dot' },
+    name: 'This corridor',
+  }], {
+    height: 280,
+    margin: { t: 10, b: 50, l: 60, r: 20 },
+    xaxis: { title: 'H/W ratio', titlefont: { color: TICK_CLR, family: FONT_FAM }, gridcolor: GRID_CLR, tickfont: { size: 11, color: TICK_CLR, family: FONT_FAM }, color: TICK_CLR, showline: true, linecolor: '#000', ticks: 'outside', zerolinecolor: '#000' },
+    yaxis: { title: 'Canyon discount (%)', titlefont: { color: TICK_CLR, family: FONT_FAM }, range: [0, 65], gridcolor: GRID_CLR, tickfont: { size: 11, color: TICK_CLR, family: FONT_FAM }, color: TICK_CLR, showline: true, linecolor: '#000', ticks: 'outside', zerolinecolor: '#000' },
+    shapes: [{
+      type: 'line', x0: canyon.hw_ratio, x1: canyon.hw_ratio, y0: 0, y1: 1,
+      yref: 'paper', line: { color: '#4B2E83', width: 1.5, dash: 'dot' },
+    }],
+    annotations: [{
+      x: canyon.hw_ratio, y: 1, yref: 'paper', xanchor: 'left',
+      text: `H/W=${canyon.hw_ratio.toFixed(2)}`, showarrow: false,
+      font: { size: 10, color: '#4B2E83', family: FONT_FAM }, xshift: 4,
+    }],
+    legend: { x: 0.01, y: 0.99, font: { color: TICK_CLR, family: FONT_FAM, size: 11 }, bgcolor: 'transparent' },
+    plot_bgcolor: PLOT_BG, paper_bgcolor: PLOT_BG,
+    hoverlabel: { bgcolor: '#FFFFFF', bordercolor: '#000', font: { family: FONT_FAM, color: '#000' } },
+  }, { responsive: true, displayModeBar: false });
+}
+
+// ─── Maturation projection ────────────────────────────────────────────── //
+function buildProjectionChart(canyon, schoolZone) {
+  const t = canyon.typologies;
+  const gs = schoolZone?.green_screen_typology;
+  const years = [1, 10, 20];
+  const typologyDefs = [
+    { key: 'dense_street_trees', label: 'Dense street trees', color: '#000' },
+    { key: 'spaced_street_trees', label: 'Spaced street trees', color: '#6B706C' },
+    { key: 'green_wall', label: 'Green wall', color: '#2F6B3A' },
+  ];
+
+  const traces = typologyDefs.map(td => ({
+    x: years,
+    y: years.map(y => t[td.key].projection[String(y)]),
+    mode: 'lines+markers',
+    name: td.label,
+    line: { color: td.color, width: 2.5 },
+    marker: { size: 8, color: td.color },
+  }));
+
+  // Add green screen (flat, no maturation)
+  if (gs) {
+    traces.push({
+      x: years,
+      y: years.map(() => gs.removal_adjusted_kg_yr),
+      mode: 'lines+markers',
+      name: 'Green screen (school frontage)',
+      line: { color: '#4B2E83', width: 2, dash: 'dot' },
+      marker: { size: 8, color: '#4B2E83', symbol: 'diamond' },
+    });
+  }
+
+  Plotly.newPlot('chart-projection', traces, {
+    height: 320,
+    margin: { t: 20, b: 60, l: 70, r: 30 },
+    xaxis: { title: 'Years after planting', titlefont: { color: TICK_CLR, family: FONT_FAM }, tickvals: years, ticktext: ['Year 1', 'Year 10', 'Year 20'],
+             gridcolor: GRID_CLR, tickfont: { size: 11, color: TICK_CLR, family: FONT_FAM }, color: TICK_CLR, showline: true, linecolor: '#000', ticks: 'outside', zerolinecolor: '#000' },
+    yaxis: { title: 'PM₂.₅ removal (kg/yr)', titlefont: { color: TICK_CLR, family: FONT_FAM }, gridcolor: GRID_CLR, tickfont: { size: 11, color: TICK_CLR, family: FONT_FAM }, color: TICK_CLR, showline: true, linecolor: '#000', ticks: 'outside', zerolinecolor: '#000' },
+    legend: { orientation: 'h', y: -0.28, x: 0, font: { color: TICK_CLR, family: FONT_FAM, size: 11 }, bgcolor: 'transparent' },
+    plot_bgcolor: PLOT_BG, paper_bgcolor: PLOT_BG,
+    hoverlabel: { bgcolor: '#FFFFFF', bordercolor: '#000', font: { family: FONT_FAM, color: '#000' } },
+  }, { responsive: true, displayModeBar: false });
+}
+
+// ─── Typology comparison table ────────────────────────────────────────── //
+function buildTypologyTable(canyon, schoolZone) {
+  const tbody = document.getElementById('typology-comparison-tbody');
+  if (!tbody || !canyon) return;
+  const t = canyon.typologies;
+  const gs = schoolZone?.green_screen_typology;
+  const rows = [
+    ['Dense street trees (20 ft spacing)', t.dense_street_trees?.removal_naive_kg_yr, t.dense_street_trees?.removal_adjusted_kg_yr, 'Full corridor (~56 miles of street network)'],
+    ['Spaced street trees (40 ft spacing)', t.spaced_street_trees?.removal_naive_kg_yr, t.spaced_street_trees?.removal_adjusted_kg_yr, 'Full corridor, lower density'],
+    ['Green wall (south-facing facades)', t.green_wall?.removal_naive_kg_yr, t.green_wall?.removal_adjusted_kg_yr, '16,570 m² leaf area, structural'],
+    ['Green screen — school frontage', gs?.removal_naive_kg_yr ?? 13.36, gs?.removal_adjusted_kg_yr ?? 12.29, '2 school frontages, Brown Place (180 ft × 20 ft)'],
+  ];
+  tbody.innerHTML = rows.map(([name, naive, adj, scope]) => `<tr>
+    <td>${name}</td>
+    <td class="num">${naive != null ? naive.toFixed(2) : '—'}</td>
+    <td class="num">${adj != null ? adj.toFixed(2) : '—'}</td>
+    <td>${scope}</td>
+  </tr>`).join('');
+}
+
+// ─── Species table ────────────────────────────────────────────────────── //
+function buildSpeciesTable(canyon) {
+  const wrap = document.getElementById('species-table-wrap');
+  const sp = canyon.species;
+
+  const tolTag = (val) => {
+    const cls = val.toLowerCase().includes('very') ? 'tag' : val.toLowerCase() === 'high' ? 'tag' : 'tag ns';
+    return `<span class="${cls}">${val}</span>`;
+  };
+
+  let html = `<div class="table-scroll">
+    <table>
+      <thead><tr>
+        <th>Species</th>
+        <th>Form</th>
+        <th>Pollution tolerance</th>
+        <th>Salt tolerance</th>
+        <th class="num">DBH @ 20yr</th>
+        <th>Rationale</th>
+      </tr></thead><tbody>`;
+
+  for (const s of sp) {
+    html += `<tr>
+      <td>
+        <div>${s.spc_common}</div>
+        <span class="spc-latin">${s.spc_latin}</span>
+        ${s.canyon_note ? `<div style="font-size:.8rem;color:var(--ink-muted);margin-top:.25rem">${s.canyon_note}</div>` : ''}
+      </td>
+      <td style="font-size:.875rem">${s.form}</td>
+      <td>${tolTag(s.pollution_tolerance)}</td>
+      <td>${tolTag(s.salt_tolerance)}</td>
+      <td class="num">${s.dbh_at_20yr_in}"</td>
+      <td style="font-size:.875rem;color:var(--ink-muted)">${s.rationale}</td>
+    </tr>`;
+  }
+  html += '</tbody></table></div>';
+  wrap.innerHTML = html;
+}
+
+// ─── Typology rationale ───────────────────────────────────────────────── //
+function setTypologyRationale(canyon) {
+  const best = Object.entries(canyon.typologies)
+    .sort((a, b) => b[1].removal_adjusted_kg_yr - a[1].removal_adjusted_kg_yr)[0];
+  const [bestKey] = best;
+  const names = {
+    dense_street_trees: 'Dense Street Trees (20 ft spacing)',
+    spaced_street_trees: 'Spaced Street Trees (40 ft spacing)',
+    green_wall: 'Green Wall',
+  };
+  const hw = canyon.hw_ratio;
+  let rationale = '';
+  if (hw > 1.5) {
+    rationale = `At H/W = ${hw.toFixed(2)}, this is a deep street canyon. Continuous canopy (dense trees) traps
+    pollutants inside the canyon — the canyon discount reaches ${(canyon.typologies.dense_street_trees.canyon_discount*100).toFixed(0)}%.
+    Spaced trees reduce this by allowing lateral ventilation, while a green wall avoids the canyon-trapping effect entirely
+    because vertical deposition bypasses the horizontal recirculation zone.`;
+  } else if (hw > 0.5) {
+    rationale = `At H/W = ${hw.toFixed(2)}, the canyon effect is moderate. Dense street trees still carry the
+    highest adjusted removal (${canyon.typologies.dense_street_trees.removal_adjusted_kg_yr.toFixed(2)} kg/yr)
+    despite the ${(canyon.typologies.dense_street_trees.canyon_discount*100).toFixed(0)}% discount, because
+    their sheer number outweighs the per-tree efficiency loss from canyon recirculation.`;
+  } else {
+    rationale = `H/W = ${hw.toFixed(2)} is below 0.5 — no canyon discount applies. Dense street trees
+    maximise removal with no ventilation penalty.`;
+  }
+  document.getElementById('typology-text').textContent = rationale;
+}
+
+// ─── Stat cards ───────────────────────────────────────────────────────── //
+function fillStats(canyon, its, meta) {
+  const val = (id, text) => { const el = document.getElementById(id); if (el) el.textContent = text; };
+
+  val('val-site', (meta.site || 'Unknown').replace(/_/g,' '));
+  val('val-hw', canyon.hw_ratio.toFixed(2));
+  val('val-gap', canyon.canopy.canopy_gap_pct + '%');
+
+  const part2site = meta.site;
+  if (its && its.sites && its.sites[part2site]) {
+    const res = its.sites[part2site];
+    const spec = res.full || res.long;
+    if (spec) val('val-beta', `${sign(spec.beta_post)}${spec.beta_post.toFixed(3)} µg/m³`);
+  }
+
+  document.getElementById('method-note').textContent = canyon.methodology_note;
+}
+
+// ─── Bootstrap ────────────────────────────────────────────────────────── //
+async function main() {
+  let meta = { lat: 40.845, lon: -73.906, site: 'Cross_Bronx_Expy' };
+  try { meta = await loadJSON(PATHS.meta); } catch (e) {}
+
+  initCorrMap(meta);
+
+  const results = await Promise.allSettled([
+    loadJSON(PATHS.canyon),
+    loadJSON(PATHS.trees).catch(() => null),
+    loadJSON(PATHS.buildings).catch(() => null),
+    loadJSON(PATHS.streets).catch(() => null),
+    loadJSON(PATHS.its).catch(() => null),
+    loadJSON(PATHS.school_zone).catch(() => null),
+  ]);
+
+  const [canyon, trees, buildings, streets, its, schoolZone] =
+    results.map(r => r.status === 'fulfilled' ? r.value : null);
+
+  if (!canyon) {
+    ['chart-removal','chart-discount','chart-projection','species-table-wrap'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.innerHTML = '<div class="data-error">Run <code>python scripts/run_all.py</code> first.</div>';
+    });
+    return;
+  }
+
+  fillStats(canyon, its, meta);
+  setTypologyRationale(canyon);
+
+  mapCorr.on('load', () => {
+    addCorrLayers(mapCorr, trees, buildings, streets, meta, canyon);
+  });
+
+  buildRemovalChart(canyon, schoolZone);
+  buildProjectionChart(canyon, schoolZone);
+  buildTypologyTable(canyon, schoolZone);
+  buildSpeciesTable(canyon);
+}
+
+main();
+</script>
+</body>
+</html>

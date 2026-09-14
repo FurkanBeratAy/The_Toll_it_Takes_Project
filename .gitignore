@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+env/
+
+# Raw data (too large — download instructions in PRODUCT.md)
+data/raw/
+nyccas_hourly/
+
+# Large source downloads (re-download from original sources)
+*.zip
+MTA_Bridges_and_Tunnels_*.csv
+MTA_Congestion_Relief_Zone_*.csv
+MTA_Central_Business_District_*.csv
+Automated_Traffic_Volume_Counts_*.csv
+2015_Street_Tree_Census_*.csv
+New_York_City_Truck_Routes_*.csv
+nyc_pluto_*.zip
+nyclion.zip
+building_footprints_sbx.json
+dac_ny_state.json
+AnnAvg_1_16_300m.zip
+
+# Claude Code internal
+.agents/
+.claude/
+.extract-design-system/
+design-system/
+skills-lock.json
+
+# OS
+.DS_Store
+Thumbs.db

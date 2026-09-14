@@ -1,0 +1,3178 @@
+{
+  "metadata": {
+    "toll_date": "2025-01-05",
+    "vw_start": "2024-02-22",
+    "panel_sites": [
+      "Cross_Bronx_Expy",
+      "Mott_Haven",
+      "Manhattan_Bridge",
+      "Williamsburg_Bridge",
+      "Queensboro_Bridge",
+      "Broadway_35th_St",
+      "FDR",
+      "Hamilton_Bridge",
+      "BQE",
+      "SI_Expwy",
+      "Midtown_DOT"
+    ],
+    "crz_sites": [
+      "Midtown_DOT",
+      "Broadway_35th_St"
+    ],
+    "note_crz_sites": "CRZ membership in panel/equity uses geofence-derived in_crz flag from compute_ej_flags(), not this list"
+  },
+  "ej_flags": {
+    "Cross_Bronx_Expy": {
+      "ej_point": true,
+      "ej_buffer": 0.9007,
+      "ej_buf_flag": true,
+      "in_crz": false,
+      "disagree": false
+    },
+    "Hunts_Point": {
+      "ej_point": true,
+      "ej_buffer": 1.0,
+      "ej_buf_flag": true,
+      "in_crz": false,
+      "disagree": false
+    },
+    "Mott_Haven": {
+      "ej_point": true,
+      "ej_buffer": 1.0,
+      "ej_buf_flag": true,
+      "in_crz": false,
+      "disagree": false
+    },
+    "BQE": {
+      "ej_point": true,
+      "ej_buffer": 1.0,
+      "ej_buf_flag": true,
+      "in_crz": false,
+      "disagree": false
+    },
+    "Manhattan_Bridge": {
+      "ej_point": true,
+      "ej_buffer": 0.6005,
+      "ej_buf_flag": true,
+      "in_crz": true,
+      "disagree": false
+    },
+    "Williamsburg_Bridge": {
+      "ej_point": true,
+      "ej_buffer": 0.735,
+      "ej_buf_flag": true,
+      "in_crz": true,
+      "disagree": false
+    },
+    "Queensboro_Bridge": {
+      "ej_point": false,
+      "ej_buffer": 0.0,
+      "ej_buf_flag": false,
+      "in_crz": true,
+      "disagree": false
+    },
+    "Hamilton_Bridge": {
+      "ej_point": true,
+      "ej_buffer": 0.6434,
+      "ej_buf_flag": true,
+      "in_crz": false,
+      "disagree": false
+    },
+    "Broadway_35th_St": {
+      "ej_point": true,
+      "ej_buffer": 0.2189,
+      "ej_buf_flag": false,
+      "in_crz": true,
+      "disagree": true
+    },
+    "Midtown_DOT": {
+      "ej_point": false,
+      "ej_buffer": 0.4119,
+      "ej_buf_flag": false,
+      "in_crz": true,
+      "disagree": false
+    },
+    "FDR": {
+      "ej_point": true,
+      "ej_buffer": 1.0,
+      "ej_buf_flag": true,
+      "in_crz": false,
+      "disagree": false
+    },
+    "Queens_College": {
+      "ej_point": false,
+      "ej_buffer": 0.0,
+      "ej_buf_flag": false,
+      "in_crz": false,
+      "disagree": false
+    },
+    "Van_Wyck": {
+      "ej_point": true,
+      "ej_buffer": 0.9671,
+      "ej_buf_flag": true,
+      "in_crz": false,
+      "disagree": false
+    },
+    "SI_Expwy": {
+      "ej_point": false,
+      "ej_buffer": 0.0063,
+      "ej_buf_flag": false,
+      "in_crz": false,
+      "disagree": false
+    }
+  },
+  "check1": {
+    "status": "ok",
+    "sites": {
+      "Cross_Bronx_Expy": {
+        "original": {
+          "beta_post": -0.5226,
+          "se": 0.4172,
+          "p": 0.2103,
+          "ci_low": -1.3404,
+          "ci_high": 0.2951,
+          "n": 562,
+          "r2": 0.9556,
+          "significant": false
+        },
+        "weather": {
+          "beta_post": -0.2903,
+          "se": 0.4238,
+          "p": 0.4934,
+          "ci_low": -1.1209,
+          "ci_high": 0.5403,
+          "n": 561,
+          "r2": 0.9587,
+          "significant": false
+        },
+        "wx_n_overlap": 561,
+        "ci_tightened": false
+      },
+      "Mott_Haven": {
+        "original": {
+          "beta_post": 0.2957,
+          "se": 0.5761,
+          "p": 0.6078,
+          "ci_low": -0.8335,
+          "ci_high": 1.4249,
+          "n": 541,
+          "r2": 0.9634,
+          "significant": false
+        },
+        "weather": {
+          "beta_post": 0.8694,
+          "se": 0.5721,
+          "p": 0.1286,
+          "ci_low": -0.252,
+          "ci_high": 1.9907,
+          "n": 540,
+          "r2": 0.968,
+          "significant": false
+        },
+        "wx_n_overlap": 540,
+        "ci_tightened": true
+      },
+      "Manhattan_Bridge": {
+        "original": {
+          "beta_post": -1.3276,
+          "se": 0.6022,
+          "p": 0.0275,
+          "ci_low": -2.5078,
+          "ci_high": -0.1473,
+          "n": 599,
+          "r2": 0.9486,
+          "significant": true
+        },
+        "weather": {
+          "beta_post": -1.0961,
+          "se": 0.4718,
+          "p": 0.0202,
+          "ci_low": -2.0208,
+          "ci_high": -0.1713,
+          "n": 598,
+          "r2": 0.9552,
+          "significant": true
+        },
+        "wx_n_overlap": 598,
+        "ci_tightened": true
+      },
+      "Williamsburg_Bridge": {
+        "original": {
+          "beta_post": -1.0352,
+          "se": 0.466,
+          "p": 0.0263,
+          "ci_low": -1.9486,
+          "ci_high": -0.1218,
+          "n": 551,
+          "r2": 0.9613,
+          "significant": true
+        },
+        "weather": {
+          "beta_post": -0.8382,
+          "se": 0.3889,
+          "p": 0.0311,
+          "ci_low": -1.6004,
+          "ci_high": -0.0761,
+          "n": 550,
+          "r2": 0.9688,
+          "significant": true
+        },
+        "wx_n_overlap": 550,
+        "ci_tightened": true
+      },
+      "Queensboro_Bridge": {
+        "original": {
+          "beta_post": -1.0981,
+          "se": 0.8671,
+          "p": 0.2054,
+          "ci_low": -2.7977,
+          "ci_high": 0.6014,
+          "n": 600,
+          "r2": 0.9314,
+          "significant": false
+        },
+        "weather": {
+          "beta_post": -0.9135,
+          "se": 0.7864,
+          "p": 0.2453,
+          "ci_low": -2.4548,
+          "ci_high": 0.6277,
+          "n": 599,
+          "r2": 0.944,
+          "significant": false
+        },
+        "wx_n_overlap": 599,
+        "ci_tightened": true
+      },
+      "Broadway_35th_St": {
+        "original": {
+          "beta_post": -2.6818,
+          "se": 0.7155,
+          "p": 0.0002,
+          "ci_low": -4.0842,
+          "ci_high": -1.2794,
+          "n": 610,
+          "r2": 0.9324,
+          "significant": true
+        },
+        "weather": {
+          "beta_post": -2.4715,
+          "se": 0.6229,
+          "p": 0.0001,
+          "ci_low": -3.6923,
+          "ci_high": -1.2507,
+          "n": 609,
+          "r2": 0.9432,
+          "significant": true
+        },
+        "wx_n_overlap": 609,
+        "ci_tightened": true
+      },
+      "FDR": {
+        "original": {
+          "beta_post": -1.7628,
+          "se": 0.3853,
+          "p": 0.0,
+          "ci_low": -2.518,
+          "ci_high": -1.0076,
+          "n": 559,
+          "r2": 0.8797,
+          "significant": true
+        },
+        "weather": {
+          "beta_post": -1.5756,
+          "se": 0.326,
+          "p": 0.0,
+          "ci_low": -2.2145,
+          "ci_high": -0.9366,
+          "n": 558,
+          "r2": 0.8971,
+          "significant": true
+        },
+        "wx_n_overlap": 558,
+        "ci_tightened": true
+      },
+      "Hamilton_Bridge": {
+        "original": {
+          "beta_post": 1.1467,
+          "se": 0.4887,
+          "p": 0.019,
+          "ci_low": 0.1888,
+          "ci_high": 2.1045,
+          "n": 506,
+          "r2": 0.9502,
+          "significant": true
+        },
+        "weather": {
+          "beta_post": 1.5396,
+          "se": 0.4564,
+          "p": 0.0007,
+          "ci_low": 0.6451,
+          "ci_high": 2.4341,
+          "n": 506,
+          "r2": 0.9576,
+          "significant": true
+        },
+        "wx_n_overlap": 506,
+        "ci_tightened": true
+      },
+      "BQE": {
+        "original": {
+          "beta_post": -0.3574,
+          "se": 0.3831,
+          "p": 0.3509,
+          "ci_low": -1.1082,
+          "ci_high": 0.3935,
+          "n": 524,
+          "r2": 0.9673,
+          "significant": false
+        },
+        "weather": {
+          "beta_post": -0.2561,
+          "se": 0.3964,
+          "p": 0.5182,
+          "ci_low": -1.033,
+          "ci_high": 0.5208,
+          "n": 523,
+          "r2": 0.9708,
+          "significant": false
+        },
+        "wx_n_overlap": 523,
+        "ci_tightened": false
+      },
+      "SI_Expwy": {
+        "original": {
+          "beta_post": 2.842,
+          "se": 0.5311,
+          "p": 0.0,
+          "ci_low": 1.8011,
+          "ci_high": 3.8829,
+          "n": 501,
+          "r2": 0.9223,
+          "significant": true
+        },
+        "weather": {
+          "beta_post": 3.0102,
+          "se": 0.5557,
+          "p": 0.0,
+          "ci_low": 1.921,
+          "ci_high": 4.0993,
+          "n": 500,
+          "r2": 0.9408,
+          "significant": true
+        },
+        "wx_n_overlap": 500,
+        "ci_tightened": false
+      },
+      "Midtown_DOT": {
+        "original": {
+          "beta_post": -1.0741,
+          "se": 0.7403,
+          "p": 0.1468,
+          "ci_low": -2.525,
+          "ci_high": 0.3769,
+          "n": 462,
+          "r2": 0.9659,
+          "significant": false
+        },
+        "weather": {
+          "beta_post": -0.6216,
+          "se": 0.7163,
+          "p": 0.3855,
+          "ci_low": -2.0255,
+          "ci_high": 0.7823,
+          "n": 461,
+          "r2": 0.9695,
+          "significant": false
+        },
+        "wx_n_overlap": 461,
+        "ci_tightened": true
+      },
+      "Hunts_Point": {
+        "status": "insufficient_data"
+      }
+    }
+  },
+  "check2": {
+    "status": "ok",
+    "all_days": {
+      "Cross_Bronx_Expy": {
+        "beta_post": 0.6024,
+        "se": 0.3538,
+        "p": 0.0887,
+        "ci_low": -0.0911,
+        "ci_high": 1.2958,
+        "n": 562,
+        "r2": 0.8097,
+        "significant": false
+      },
+      "Mott_Haven": {
+        "beta_post": 0.2188,
+        "se": 0.2706,
+        "p": 0.4187,
+        "ci_low": -0.3115,
+        "ci_high": 0.7491,
+        "n": 541,
+        "r2": 0.8369,
+        "significant": false
+      },
+      "Manhattan_Bridge": {
+        "beta_post": -0.2616,
+        "se": 0.4204,
+        "p": 0.5339,
+        "ci_low": -1.0856,
+        "ci_high": 0.5625,
+        "n": 599,
+        "r2": 0.7758,
+        "significant": false
+      },
+      "Williamsburg_Bridge": {
+        "beta_post": 0.0237,
+        "se": 0.3178,
+        "p": 0.9405,
+        "ci_low": -0.5991,
+        "ci_high": 0.6466,
+        "n": 550,
+        "r2": 0.7809,
+        "significant": false
+      },
+      "Queensboro_Bridge": {
+        "beta_post": 0.0697,
+        "se": 0.2621,
+        "p": 0.7902,
+        "ci_low": -0.444,
+        "ci_high": 0.5834,
+        "n": 601,
+        "r2": 0.8229,
+        "significant": false
+      },
+      "Broadway_35th_St": {
+        "beta_post": -0.2488,
+        "se": 0.5622,
+        "p": 0.6581,
+        "ci_low": -1.3506,
+        "ci_high": 0.8531,
+        "n": 610,
+        "r2": 0.6733,
+        "significant": false
+      },
+      "FDR": {
+        "beta_post": -0.2358,
+        "se": 0.3876,
+        "p": 0.5429,
+        "ci_low": -0.9954,
+        "ci_high": 0.5238,
+        "n": 558,
+        "r2": 0.5619,
+        "significant": false
+      },
+      "Hamilton_Bridge": {
+        "beta_post": 0.38,
+        "se": 0.4676,
+        "p": 0.4164,
+        "ci_low": -0.5364,
+        "ci_high": 1.2964,
+        "n": 506,
+        "r2": 0.6764,
+        "significant": false
+      },
+      "BQE": {
+        "beta_post": 1.0208,
+        "se": 0.2375,
+        "p": 0.0,
+        "ci_low": 0.5553,
+        "ci_high": 1.4863,
+        "n": 523,
+        "r2": 0.826,
+        "significant": true
+      },
+      "SI_Expwy": {
+        "beta_post": 0.1044,
+        "se": 0.5319,
+        "p": 0.8444,
+        "ci_low": -0.9381,
+        "ci_high": 1.1469,
+        "n": 500,
+        "r2": 0.5383,
+        "significant": false
+      },
+      "Midtown_DOT": {
+        "beta_post": -0.2972,
+        "se": 0.5784,
+        "p": 0.6073,
+        "ci_low": -1.4309,
+        "ci_high": 0.8364,
+        "n": 463,
+        "r2": 0.756,
+        "significant": false
+      }
+    },
+    "weekday_only": {
+      "Cross_Bronx_Expy": {
+        "beta_post": 0.8996,
+        "se": 0.4363,
+        "p": 0.0392,
+        "ci_low": 0.0444,
+        "ci_high": 1.7548,
+        "n": 401,
+        "r2": 0.815,
+        "significant": true
+      },
+      "Mott_Haven": {
+        "beta_post": 0.0579,
+        "se": 0.3079,
+        "p": 0.851,
+        "ci_low": -0.5456,
+        "ci_high": 0.6613,
+        "n": 387,
+        "r2": 0.8632,
+        "significant": false
+      },
+      "Manhattan_Bridge": {
+        "beta_post": -0.1566,
+        "se": 0.5124,
+        "p": 0.7598,
+        "ci_low": -1.161,
+        "ci_high": 0.8477,
+        "n": 429,
+        "r2": 0.7802,
+        "significant": false
+      },
+      "Williamsburg_Bridge": {
+        "beta_post": -0.0733,
+        "se": 0.4099,
+        "p": 0.8581,
+        "ci_low": -0.8766,
+        "ci_high": 0.73,
+        "n": 393,
+        "r2": 0.7757,
+        "significant": false
+      },
+      "Queensboro_Bridge": {
+        "beta_post": -0.0066,
+        "se": 0.3122,
+        "p": 0.983,
+        "ci_low": -0.6186,
+        "ci_high": 0.6053,
+        "n": 429,
+        "r2": 0.8305,
+        "significant": false
+      },
+      "Broadway_35th_St": {
+        "beta_post": -0.4648,
+        "se": 0.6603,
+        "p": 0.4815,
+        "ci_low": -1.759,
+        "ci_high": 0.8293,
+        "n": 435,
+        "r2": 0.7206,
+        "significant": false
+      },
+      "FDR": {
+        "beta_post": -0.1896,
+        "se": 0.5411,
+        "p": 0.726,
+        "ci_low": -1.2502,
+        "ci_high": 0.8709,
+        "n": 398,
+        "r2": 0.5678,
+        "significant": false
+      },
+      "Hamilton_Bridge": {
+        "beta_post": 0.5271,
+        "se": 0.4054,
+        "p": 0.1935,
+        "ci_low": -0.2675,
+        "ci_high": 1.3216,
+        "n": 362,
+        "r2": 0.7728,
+        "significant": false
+      },
+      "BQE": {
+        "beta_post": 0.9605,
+        "se": 0.2801,
+        "p": 0.0006,
+        "ci_low": 0.4115,
+        "ci_high": 1.5095,
+        "n": 373,
+        "r2": 0.8257,
+        "significant": true
+      },
+      "SI_Expwy": {
+        "beta_post": -0.2,
+        "se": 0.5658,
+        "p": 0.7237,
+        "ci_low": -1.309,
+        "ci_high": 0.9089,
+        "n": 359,
+        "r2": 0.5009,
+        "significant": false
+      },
+      "Midtown_DOT": {
+        "beta_post": -0.407,
+        "se": 0.6697,
+        "p": 0.5433,
+        "ci_low": -1.7195,
+        "ci_high": 0.9055,
+        "n": 330,
+        "r2": 0.761,
+        "significant": false
+      }
+    }
+  },
+  "check3": {
+    "status": "ok",
+    "sites": {
+      "Cross_Bronx_Expy": {
+        "status": "ok",
+        "n_placebos": 11,
+        "betas": [
+          {
+            "date": "2023-07-01",
+            "beta_post": 11.9917
+          },
+          {
+            "date": "2023-08-01",
+            "beta_post": 5.3196
+          },
+          {
+            "date": "2023-09-01",
+            "beta_post": -0.7805
+          },
+          {
+            "date": "2023-10-01",
+            "beta_post": 0.9225
+          },
+          {
+            "date": "2023-11-01",
+            "beta_post": 2.7942
+          },
+          {
+            "date": "2023-12-01",
+            "beta_post": 2.8912
+          },
+          {
+            "date": "2024-01-01",
+            "beta_post": -2.0862
+          },
+          {
+            "date": "2024-02-01",
+            "beta_post": -10.7911
+          },
+          {
+            "date": "2024-03-01",
+            "beta_post": -21.3287
+          },
+          {
+            "date": "2024-04-01",
+            "beta_post": -30.161
+          },
+          {
+            "date": "2024-05-01",
+            "beta_post": -45.6312
+          }
+        ],
+        "skipped": [
+          [
+            "2021-07-01",
+            "pre_n=70<90"
+          ],
+          [
+            "2021-08-01",
+            "pre_n=70<90"
+          ],
+          [
+            "2021-09-01",
+            "pre_n=70<90"
+          ],
+          [
+            "2021-10-01",
+            "pre_n=70<90"
+          ],
+          [
+            "2021-11-01",
+            "pre_n=70<90"
+          ],
+          [
+            "2021-12-01",
+            "pre_n=70<90"
+          ],
+          [
+            "2022-01-01",
+            "pre_n=70<90"
+          ],
+          [
+            "2022-02-01",
+            "pre_n=70<90"
+          ],
+          [
+            "2022-03-01",
+            "pre_n=70<90"
+          ],
+          [
+            "2022-04-01",
+            "pre_6m_cov=14%<60%"
+          ],
+          [
+            "2022-05-01",
+            "pre_6m_cov=17%<60%"
+          ],
+          [
+            "2022-06-01",
+            "pre_6m_cov=17%<60%"
+          ],
+          [
+            "2022-07-01",
+            "pre_6m_cov=17%<60%"
+          ],
+          [
+            "2022-08-01",
+            "pre_6m_cov=17%<60%"
+          ],
+          [
+            "2022-09-01",
+            "pre_6m_cov=16%<60%"
+          ],
+          [
+            "2022-10-01",
+            "pre_6m_cov=3%<60%"
+          ],
+          [
+            "2022-11-01",
+            "pre_6m_cov=0%<60%"
+          ],
+          [
+            "2022-12-01",
+            "pre_6m_cov=0%<60%"
+          ],
+          [
+            "2023-01-01",
+            "pre_6m_cov=0%<60%"
+          ],
+          [
+            "2023-02-01",
+            "pre_6m_cov=0%<60%"
+          ],
+          [
+            "2023-03-01",
+            "pre_6m_cov=10%<60%"
+          ],
+          [
+            "2023-04-01",
+            "pre_6m_cov=26%<60%"
+          ],
+          [
+            "2023-05-01",
+            "pre_6m_cov=42%<60%"
+          ],
+          [
+            "2023-06-01",
+            "pre_6m_cov=59%<60%"
+          ],
+          [
+            "2024-06-01",
+            "post_6m_cov=60%<60%"
+          ]
+        ],
+        "beta_mean": -7.8963,
+        "beta_std": 16.71,
+        "obs_long_beta": -0.9678,
+        "obs_full_beta": -0.5226,
+        "empirical_p": 0.8182
+      },
+      "Mott_Haven": {
+        "status": "too_few_placebos",
+        "n_run": 0,
+        "skipped": [
+          [
+            "2021-07-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2021-08-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2021-09-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2021-10-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2021-11-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2021-12-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2022-01-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2022-02-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2022-03-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2022-04-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2022-05-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2022-06-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2022-07-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2022-08-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2022-09-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2022-10-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2022-11-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2022-12-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2023-01-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2023-02-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2023-03-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2023-04-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2023-05-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2023-06-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2023-07-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2023-08-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2023-09-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2023-10-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2023-11-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2023-12-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2024-01-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2024-02-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2024-03-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2024-04-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2024-05-01",
+            "pre_n=20<90"
+          ],
+          [
+            "2024-06-01",
+            "pre_n=51<90"
+          ]
+        ]
+      },
+      "Manhattan_Bridge": {
+        "status": "ok",
+        "n_placebos": 12,
+        "betas": [
+          {
+            "date": "2023-07-01",
+            "beta_post": 7.9637
+          },
+          {
+            "date": "2023-08-01",
+            "beta_post": 3.3719
+          },
+          {
+            "date": "2023-09-01",
+            "beta_post": -1.4375
+          },
+          {
+            "date": "2023-10-01",
+            "beta_post": -0.1785
+          },
+          {
+            "date": "2023-11-01",
+            "beta_post": 1.9563
+          },
+          {
+            "date": "2023-12-01",
+            "beta_post": 3.1351
+          },
+          {
+            "date": "2024-01-01",
+            "beta_post": 1.4874
+          },
+          {
+            "date": "2024-02-01",
+            "beta_post": -2.9857
+          },
+          {
+            "date": "2024-03-01",
+            "beta_post": -3.5392
+          },
+          {
+            "date": "2024-04-01",
+            "beta_post": -1.1878
+          },
+          {
+            "date": "2024-05-01",
+            "beta_post": -0.7553
+          },
+          {
+            "date": "2024-06-01",
+            "beta_post": -23.1994
+          }
+        ],
+        "skipped": [
+          [
+            "2021-07-01",
+            "pre_6m_cov=12%<60%"
+          ],
+          [
+            "2021-08-01",
+            "pre_6m_cov=12%<60%"
+          ],
+          [
+            "2021-09-01",
+            "pre_6m_cov=4%<60%"
+          ],
+          [
+            "2021-10-01",
+            "pre_6m_cov=2%<60%"
+          ],
+          [
+            "2021-11-01",
+            "pre_6m_cov=2%<60%"
+          ],
+          [
+            "2021-12-01",
+            "pre_6m_cov=0%<60%"
+          ],
+          [
+            "2022-01-01",
+            "pre_6m_cov=0%<60%"
+          ],
+          [
+            "2022-02-01",
+            "pre_6m_cov=0%<60%"
+          ],
+          [
+            "2022-03-01",
+            "pre_6m_cov=0%<60%"
+          ],
+          [
+            "2022-04-01",
+            "pre_6m_cov=14%<60%"
+          ],
+          [
+            "2022-05-01",
+            "pre_6m_cov=14%<60%"
+          ],
+          [
+            "2022-06-01",
+            "pre_6m_cov=14%<60%"
+          ],
+          [
+            "2022-07-01",
+            "pre_6m_cov=14%<60%"
+          ],
+          [
+            "2022-08-01",
+            "pre_6m_cov=14%<60%"
+          ],
+          [
+            "2022-09-01",
+            "pre_6m_cov=14%<60%"
+          ],
+          [
+            "2022-10-01",
+            "pre_6m_cov=0%<60%"
+          ],
+          [
+            "2022-11-01",
+            "pre_6m_cov=0%<60%"
+          ],
+          [
+            "2022-12-01",
+            "pre_6m_cov=0%<60%"
+          ],
+          [
+            "2023-01-01",
+            "pre_6m_cov=0%<60%"
+          ],
+          [
+            "2023-02-01",
+            "pre_6m_cov=0%<60%"
+          ],
+          [
+            "2023-03-01",
+            "pre_6m_cov=2%<60%"
+          ],
+          [
+            "2023-04-01",
+            "pre_6m_cov=19%<60%"
+          ],
+          [
+            "2023-05-01",
+            "pre_6m_cov=34%<60%"
+          ],
+          [
+            "2023-06-01",
+            "pre_6m_cov=51%<60%"
+          ]
+        ],
+        "beta_mean": -1.2808,
+        "beta_std": 7.2727,
+        "obs_long_beta": -3.0131,
+        "obs_full_beta": -1.3276,
+        "empirical_p": 0.4167
+      },
+      "Williamsburg_Bridge": {
+        "status": "ok",
+        "n_placebos": 3,
+        "betas": [
+          {
+            "date": "2021-07-01",
+            "beta_post": 7.8437
+          },
+          {
+            "date": "2021-08-01",
+            "beta_post": 6.3741
+          },
+          {
+            "date": "2021-09-01",
+            "beta_post": 4.3319
+          }
+        ],
+        "skipped": [
+          [
+            "2021-10-01",
+            "post_6m_cov=60%<60%"
+          ],
+          [
+            "2021-11-01",
+            "post_6m_cov=58%<60%"
+          ],
+          [
+            "2021-12-01",
+            "post_6m_cov=57%<60%"
+          ],
+          [
+            "2022-01-01",
+            "post_6m_cov=40%<60%"
+          ],
+          [
+            "2022-02-01",
+            "post_6m_cov=40%<60%"
+          ],
+          [
+            "2022-03-01",
+            "post_6m_cov=36%<60%"
+          ],
+          [
+            "2022-04-01",
+            "pre_6m_cov=60%<60%"
+          ],
+          [
+            "2022-05-01",
+            "pre_6m_cov=58%<60%"
+          ],
+          [
+            "2022-06-01",
+            "pre_6m_cov=57%<60%"
+          ],
+          [
+            "2022-07-01",
+            "pre_6m_cov=41%<60%"
+          ],
+          [
+            "2022-08-01",
+            "pre_6m_cov=40%<60%"
+          ],
+          [
+            "2022-09-01",
+            "pre_6m_cov=35%<60%"
+          ],
+          [
+            "2022-10-01",
+            "pre_6m_cov=31%<60%"
+          ],
+          [
+            "2022-11-01",
+            "pre_6m_cov=15%<60%"
+          ],
+          [
+            "2022-12-01",
+            "pre_6m_cov=0%<60%"
+          ],
+          [
+            "2023-01-01",
+            "pre_6m_cov=0%<60%"
+          ],
+          [
+            "2023-02-01",
+            "pre_6m_cov=0%<60%"
+          ],
+          [
+            "2023-03-01",
+            "pre_6m_cov=3%<60%"
+          ],
+          [
+            "2023-04-01",
+            "pre_6m_cov=20%<60%"
+          ],
+          [
+            "2023-05-01",
+            "pre_6m_cov=36%<60%"
+          ],
+          [
+            "2023-06-01",
+            "pre_6m_cov=52%<60%"
+          ],
+          [
+            "2023-07-01",
+            "post_6m_cov=19%<60%"
+          ],
+          [
+            "2023-08-01",
+            "post_6m_cov=2%<60%"
+          ],
+          [
+            "2023-09-01",
+            "post_6m_cov=0%<60%"
+          ],
+          [
+            "2023-10-01",
+            "post_6m_cov=16%<60%"
+          ],
+          [
+            "2023-11-01",
+            "pre_6m_cov=51%<60%"
+          ],
+          [
+            "2023-12-01",
+            "pre_6m_cov=35%<60%"
+          ],
+          [
+            "2024-01-01",
+            "pre_6m_cov=18%<60%"
+          ],
+          [
+            "2024-02-01",
+            "pre_6m_cov=1%<60%"
+          ],
+          [
+            "2024-03-01",
+            "pre_6m_cov=0%<60%"
+          ],
+          [
+            "2024-04-01",
+            "pre_6m_cov=17%<60%"
+          ],
+          [
+            "2024-05-01",
+            "pre_6m_cov=34%<60%"
+          ],
+          [
+            "2024-06-01",
+            "pre_6m_cov=51%<60%"
+          ]
+        ],
+        "beta_mean": 6.1832,
+        "beta_std": 1.44,
+        "obs_long_beta": 1.7779,
+        "obs_full_beta": -1.0352,
+        "empirical_p": 1.0
+      },
+      "Queensboro_Bridge": {
+        "status": "ok",
+        "n_placebos": 16,
+        "betas": [
+          {
+            "date": "2021-11-01",
+            "beta_post": 9.6348
+          },
+          {
+            "date": "2021-12-01",
+            "beta_post": 9.7072
+          },
+          {
+            "date": "2022-01-01",
+            "beta_post": 10.2958
+          },
+          {
+            "date": "2022-02-01",
+            "beta_post": 11.5633
+          },
+          {
+            "date": "2023-07-01",
+            "beta_post": 20.5928
+          },
+          {
+            "date": "2023-08-01",
+            "beta_post": 14.393
+          },
+          {
+            "date": "2023-09-01",
+            "beta_post": 6.4905
+          },
+          {
+            "date": "2023-10-01",
+            "beta_post": 2.5775
+          },
+          {
+            "date": "2023-11-01",
+            "beta_post": 0.4916
+          },
+          {
+            "date": "2023-12-01",
+            "beta_post": 0.1718
+          },
+          {
+            "date": "2024-01-01",
+            "beta_post": 0.2592
+          },
+          {
+            "date": "2024-02-01",
+            "beta_post": 3.8122
+          },
+          {
+            "date": "2024-03-01",
+            "beta_post": 14.133
+          },
+          {
+            "date": "2024-04-01",
+            "beta_post": 35.6513
+          },
+          {
+            "date": "2024-05-01",
+            "beta_post": 55.4734
+          },
+          {
+            "date": "2024-06-01",
+            "beta_post": 55.4734
+          }
+        ],
+        "skipped": [
+          [
+            "2021-07-01",
+            "pre_6m_cov=49%<60%"
+          ],
+          [
+            "2021-08-01",
+            "pre_6m_cov=46%<60%"
+          ],
+          [
+            "2021-09-01",
+            "pre_6m_cov=46%<60%"
+          ],
+          [
+            "2021-10-01",
+            "pre_6m_cov=47%<60%"
+          ],
+          [
+            "2022-03-01",
+            "post_6m_cov=51%<60%"
+          ],
+          [
+            "2022-04-01",
+            "post_6m_cov=34%<60%"
+          ],
+          [
+            "2022-05-01",
+            "post_6m_cov=17%<60%"
+          ],
+          [
+            "2022-06-01",
+            "post_6m_cov=0%<60%"
+          ],
+          [
+            "2022-07-01",
+            "post_6m_cov=0%<60%"
+          ],
+          [
+            "2022-08-01",
+            "post_6m_cov=0%<60%"
+          ],
+          [
+            "2022-09-01",
+            "pre_6m_cov=49%<60%"
+          ],
+          [
+            "2022-10-01",
+            "pre_6m_cov=33%<60%"
+          ],
+          [
+            "2022-11-01",
+            "pre_6m_cov=16%<60%"
+          ],
+          [
+            "2022-12-01",
+            "pre_6m_cov=0%<60%"
+          ],
+          [
+            "2023-01-01",
+            "pre_6m_cov=0%<60%"
+          ],
+          [
+            "2023-02-01",
+            "pre_6m_cov=0%<60%"
+          ],
+          [
+            "2023-03-01",
+            "pre_6m_cov=3%<60%"
+          ],
+          [
+            "2023-04-01",
+            "pre_6m_cov=20%<60%"
+          ],
+          [
+            "2023-05-01",
+            "pre_6m_cov=36%<60%"
+          ],
+          [
+            "2023-06-01",
+            "pre_6m_cov=52%<60%"
+          ]
+        ],
+        "beta_mean": 15.67,
+        "beta_std": 17.3533,
+        "obs_long_beta": -3.7087,
+        "obs_full_beta": -1.0981,
+        "empirical_p": 0.75
+      },
+      "Broadway_35th_St": {
+        "status": "ok",
+        "n_placebos": 13,
+        "betas": [
+          {
+            "date": "2021-07-01",
+            "beta_post": -1.2276
+          },
+          {
+            "date": "2023-07-01",
+            "beta_post": 14.2843
+          },
+          {
+            "date": "2023-08-01",
+            "beta_post": 8.4349
+          },
+          {
+            "date": "2023-09-01",
+            "beta_post": 1.6567
+          },
+          {
+            "date": "2023-10-01",
+            "beta_post": 0.6255
+          },
+          {
+            "date": "2023-11-01",
+            "beta_post": 1.0905
+          },
+          {
+            "date": "2023-12-01",
+            "beta_post": 2.5016
+          },
+          {
+            "date": "2024-01-01",
+            "beta_post": -1.0482
+          },
+          {
+            "date": "2024-02-01",
+            "beta_post": -1.236
+          },
+          {
+            "date": "2024-03-01",
+            "beta_post": -1.5467
+          },
+          {
+            "date": "2024-04-01",
+            "beta_post": -1.2715
+          },
+          {
+            "date": "2024-05-01",
+            "beta_post": -0.1665
+          },
+          {
+            "date": "2024-06-01",
+            "beta_post": -13.7328
+          }
+        ],
+        "skipped": [
+          [
+            "2021-08-01",
+            "post_6m_cov=59%<60%"
+          ],
+          [
+            "2021-09-01",
+            "post_6m_cov=42%<60%"
+          ],
+          [
+            "2021-10-01",
+            "post_6m_cov=41%<60%"
+          ],
+          [
+            "2021-11-01",
+            "post_6m_cov=41%<60%"
+          ],
+          [
+            "2021-12-01",
+            "post_6m_cov=49%<60%"
+          ],
+          [
+            "2022-01-01",
+            "post_6m_cov=53%<60%"
+          ],
+          [
+            "2022-02-01",
+            "pre_6m_cov=58%<60%"
+          ],
+          [
+            "2022-03-01",
+            "pre_6m_cov=42%<60%"
+          ],
+          [
+            "2022-04-01",
+            "pre_6m_cov=41%<60%"
+          ],
+          [
+            "2022-05-01",
+            "pre_6m_cov=41%<60%"
+          ],
+          [
+            "2022-06-01",
+            "pre_6m_cov=49%<60%"
+          ],
+          [
+            "2022-07-01",
+            "pre_6m_cov=53%<60%"
+          ],
+          [
+            "2022-08-01",
+            "pre_6m_cov=53%<60%"
+          ],
+          [
+            "2022-09-01",
+            "pre_6m_cov=53%<60%"
+          ],
+          [
+            "2022-10-01",
+            "pre_6m_cov=36%<60%"
+          ],
+          [
+            "2022-11-01",
+            "pre_6m_cov=19%<60%"
+          ],
+          [
+            "2022-12-01",
+            "pre_6m_cov=3%<60%"
+          ],
+          [
+            "2023-01-01",
+            "pre_6m_cov=0%<60%"
+          ],
+          [
+            "2023-02-01",
+            "pre_6m_cov=0%<60%"
+          ],
+          [
+            "2023-03-01",
+            "pre_6m_cov=10%<60%"
+          ],
+          [
+            "2023-04-01",
+            "pre_6m_cov=26%<60%"
+          ],
+          [
+            "2023-05-01",
+            "pre_6m_cov=41%<60%"
+          ],
+          [
+            "2023-06-01",
+            "pre_6m_cov=58%<60%"
+          ]
+        ],
+        "beta_mean": 0.6434,
+        "beta_std": 6.0584,
+        "obs_long_beta": null,
+        "obs_full_beta": null,
+        "empirical_p": null
+      },
+      "FDR": {
+        "status": "too_few_placebos",
+        "n_run": 0,
+        "skipped": [
+          [
+            "2021-07-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2021-08-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2021-09-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2021-10-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2021-11-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2021-12-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2022-01-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2022-02-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2022-03-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2022-04-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2022-05-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2022-06-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2022-07-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2022-08-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2022-09-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2022-10-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2022-11-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2022-12-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2023-01-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2023-02-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2023-03-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2023-04-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2023-05-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2023-06-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2023-07-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2023-08-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2023-09-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2023-10-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2023-11-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2023-12-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2024-01-01",
+            "pre_n=13<90"
+          ],
+          [
+            "2024-02-01",
+            "pre_n=13<90"
+          ],
+          [
+            "2024-03-01",
+            "pre_n=27<90"
+          ],
+          [
+            "2024-04-01",
+            "pre_n=58<90"
+          ],
+          [
+            "2024-05-01",
+            "pre_n=86<90"
+          ],
+          [
+            "2024-06-01",
+            "pre_6m_cov=59%<60%"
+          ]
+        ]
+      },
+      "Hamilton_Bridge": {
+        "status": "too_few_placebos",
+        "n_run": 0,
+        "skipped": [
+          [
+            "2021-07-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2021-08-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2021-09-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2021-10-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2021-11-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2021-12-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2022-01-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2022-02-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2022-03-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2022-04-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2022-05-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2022-06-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2022-07-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2022-08-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2022-09-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2022-10-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2022-11-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2022-12-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2023-01-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2023-02-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2023-03-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2023-04-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2023-05-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2023-06-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2023-07-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2023-08-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2023-09-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2023-10-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2023-11-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2023-12-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2024-01-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2024-02-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2024-03-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2024-04-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2024-05-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2024-06-01",
+            "pre_n=11<90"
+          ]
+        ]
+      },
+      "BQE": {
+        "status": "too_few_placebos",
+        "n_run": 0,
+        "skipped": [
+          [
+            "2021-07-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2021-08-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2021-09-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2021-10-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2021-11-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2021-12-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2022-01-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2022-02-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2022-03-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2022-04-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2022-05-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2022-06-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2022-07-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2022-08-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2022-09-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2022-10-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2022-11-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2022-12-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2023-01-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2023-02-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2023-03-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2023-04-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2023-05-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2023-06-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2023-07-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2023-08-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2023-09-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2023-10-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2023-11-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2023-12-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2024-01-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2024-02-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2024-03-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2024-04-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2024-05-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2024-06-01",
+            "pre_n=0<90"
+          ]
+        ]
+      },
+      "SI_Expwy": {
+        "status": "too_few_placebos",
+        "n_run": 0,
+        "skipped": [
+          [
+            "2021-07-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2021-08-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2021-09-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2021-10-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2021-11-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2021-12-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2022-01-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2022-02-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2022-03-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2022-04-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2022-05-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2022-06-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2022-07-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2022-08-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2022-09-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2022-10-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2022-11-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2022-12-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2023-01-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2023-02-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2023-03-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2023-04-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2023-05-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2023-06-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2023-07-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2023-08-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2023-09-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2023-10-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2023-11-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2023-12-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2024-01-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2024-02-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2024-03-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2024-04-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2024-05-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2024-06-01",
+            "pre_n=0<90"
+          ]
+        ]
+      },
+      "Midtown_DOT": {
+        "status": "too_few_placebos",
+        "n_run": 0,
+        "skipped": [
+          [
+            "2021-07-01",
+            "pre_6m_cov=46%<60%"
+          ],
+          [
+            "2021-08-01",
+            "pre_6m_cov=29%<60%"
+          ],
+          [
+            "2021-09-01",
+            "pre_6m_cov=12%<60%"
+          ],
+          [
+            "2021-10-01",
+            "pre_6m_cov=0%<60%"
+          ],
+          [
+            "2021-11-01",
+            "pre_6m_cov=0%<60%"
+          ],
+          [
+            "2021-12-01",
+            "pre_6m_cov=0%<60%"
+          ],
+          [
+            "2022-01-01",
+            "pre_6m_cov=0%<60%"
+          ],
+          [
+            "2022-02-01",
+            "pre_6m_cov=0%<60%"
+          ],
+          [
+            "2022-03-01",
+            "pre_6m_cov=0%<60%"
+          ],
+          [
+            "2022-04-01",
+            "pre_6m_cov=0%<60%"
+          ],
+          [
+            "2022-05-01",
+            "pre_6m_cov=0%<60%"
+          ],
+          [
+            "2022-06-01",
+            "pre_6m_cov=0%<60%"
+          ],
+          [
+            "2022-07-01",
+            "pre_6m_cov=4%<60%"
+          ],
+          [
+            "2022-08-01",
+            "pre_6m_cov=6%<60%"
+          ],
+          [
+            "2022-09-01",
+            "pre_6m_cov=6%<60%"
+          ],
+          [
+            "2022-10-01",
+            "pre_6m_cov=6%<60%"
+          ],
+          [
+            "2022-11-01",
+            "pre_6m_cov=6%<60%"
+          ],
+          [
+            "2022-12-01",
+            "pre_6m_cov=6%<60%"
+          ],
+          [
+            "2023-01-01",
+            "pre_6m_cov=1%<60%"
+          ],
+          [
+            "2023-02-01",
+            "pre_6m_cov=0%<60%"
+          ],
+          [
+            "2023-03-01",
+            "pre_6m_cov=0%<60%"
+          ],
+          [
+            "2023-04-01",
+            "pre_6m_cov=0%<60%"
+          ],
+          [
+            "2023-05-01",
+            "pre_6m_cov=0%<60%"
+          ],
+          [
+            "2023-06-01",
+            "pre_6m_cov=0%<60%"
+          ],
+          [
+            "2023-07-01",
+            "pre_6m_cov=0%<60%"
+          ],
+          [
+            "2023-08-01",
+            "pre_6m_cov=0%<60%"
+          ],
+          [
+            "2023-09-01",
+            "pre_6m_cov=0%<60%"
+          ],
+          [
+            "2023-10-01",
+            "pre_6m_cov=0%<60%"
+          ],
+          [
+            "2023-11-01",
+            "pre_6m_cov=0%<60%"
+          ],
+          [
+            "2023-12-01",
+            "pre_6m_cov=8%<60%"
+          ],
+          [
+            "2024-01-01",
+            "pre_6m_cov=25%<60%"
+          ],
+          [
+            "2024-02-01",
+            "pre_6m_cov=34%<60%"
+          ],
+          [
+            "2024-03-01",
+            "pre_6m_cov=40%<60%"
+          ],
+          [
+            "2024-04-01",
+            "pre_6m_cov=40%<60%"
+          ],
+          [
+            "2024-05-01",
+            "pre_6m_cov=40%<60%"
+          ],
+          [
+            "2024-06-01",
+            "pre_6m_cov=31%<60%"
+          ]
+        ]
+      },
+      "Hunts_Point": {
+        "status": "too_few_placebos",
+        "n_run": 0,
+        "skipped": [
+          [
+            "2021-07-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2021-08-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2021-09-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2021-10-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2021-11-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2021-12-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2022-01-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2022-02-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2022-03-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2022-04-01",
+            "pre_n=0<90"
+          ],
+          [
+            "2022-05-01",
+            "pre_n=3<90"
+          ],
+          [
+            "2022-06-01",
+            "pre_n=6<90"
+          ],
+          [
+            "2022-07-01",
+            "pre_n=6<90"
+          ],
+          [
+            "2022-08-01",
+            "pre_n=6<90"
+          ],
+          [
+            "2022-09-01",
+            "pre_n=6<90"
+          ],
+          [
+            "2022-10-01",
+            "pre_n=6<90"
+          ],
+          [
+            "2022-11-01",
+            "pre_n=6<90"
+          ],
+          [
+            "2022-12-01",
+            "pre_n=6<90"
+          ],
+          [
+            "2023-01-01",
+            "pre_n=6<90"
+          ],
+          [
+            "2023-02-01",
+            "pre_n=6<90"
+          ],
+          [
+            "2023-03-01",
+            "pre_n=25<90"
+          ],
+          [
+            "2023-04-01",
+            "pre_n=55<90"
+          ],
+          [
+            "2023-05-01",
+            "pre_n=82<90"
+          ],
+          [
+            "2023-06-01",
+            "pre_6m_cov=59%<60%"
+          ],
+          [
+            "2023-07-01",
+            "post_n=68<90"
+          ],
+          [
+            "2023-08-01",
+            "post_n=37<90"
+          ],
+          [
+            "2023-09-01",
+            "post_n=6<90"
+          ],
+          [
+            "2023-10-01",
+            "post_n=0<90"
+          ],
+          [
+            "2023-11-01",
+            "post_n=0<90"
+          ],
+          [
+            "2023-12-01",
+            "post_n=0<90"
+          ],
+          [
+            "2024-01-01",
+            "post_n=0<90"
+          ],
+          [
+            "2024-02-01",
+            "post_n=0<90"
+          ],
+          [
+            "2024-03-01",
+            "post_n=0<90"
+          ],
+          [
+            "2024-04-01",
+            "post_n=0<90"
+          ],
+          [
+            "2024-05-01",
+            "post_n=0<90"
+          ],
+          [
+            "2024-06-01",
+            "post_n=0<90"
+          ]
+        ]
+      }
+    }
+  },
+  "check4": {
+    "status": "ok",
+    "n_obs": 8821,
+    "n_sites": 11,
+    "sites": [
+      "Cross_Bronx_Expy",
+      "Mott_Haven",
+      "Manhattan_Bridge",
+      "Williamsburg_Bridge",
+      "Queensboro_Bridge",
+      "Broadway_35th_St",
+      "FDR",
+      "Hamilton_Bridge",
+      "BQE",
+      "SI_Expwy",
+      "Midtown_DOT"
+    ],
+    "spec_a": {
+      "BQE": {
+        "beta": 0.0,
+        "se": null,
+        "p": null,
+        "p_bootstrap": null,
+        "ci_low": null,
+        "ci_high": null,
+        "gap_flag": false,
+        "note": "reference site \u2014 differential=0 by construction; all other betas are relative to BQE"
+      },
+      "Broadway_35th_St": {
+        "beta": 0.281,
+        "se": 0.1574,
+        "p": 0.0743,
+        "p_bootstrap": 0.635,
+        "ci_low": -0.0276,
+        "ci_high": 0.5895,
+        "gap_flag": false
+      },
+      "Cross_Bronx_Expy": {
+        "beta": 0.9495,
+        "se": 0.2008,
+        "p": 0.0,
+        "p_bootstrap": 0.6111,
+        "ci_low": 0.5561,
+        "ci_high": 1.343,
+        "gap_flag": true
+      },
+      "FDR": {
+        "beta": 0.4223,
+        "se": 0.1339,
+        "p": 0.0016,
+        "p_bootstrap": 0.5765,
+        "ci_low": 0.1598,
+        "ci_high": 0.6849,
+        "gap_flag": false
+      },
+      "Hamilton_Bridge": {
+        "beta": 2.2058,
+        "se": 0.1138,
+        "p": 0.0,
+        "p_bootstrap": 0.38,
+        "ci_low": 1.9827,
+        "ci_high": 2.429,
+        "gap_flag": false
+      },
+      "Manhattan_Bridge": {
+        "beta": -0.356,
+        "se": 0.1595,
+        "p": 0.0257,
+        "p_bootstrap": 0.6413,
+        "ci_low": -0.6687,
+        "ci_high": -0.0433,
+        "gap_flag": false
+      },
+      "Midtown_DOT": {
+        "beta": 0.2181,
+        "se": 0.0398,
+        "p": 0.0,
+        "p_bootstrap": 0.1107,
+        "ci_low": 0.1401,
+        "ci_high": 0.2962,
+        "gap_flag": true
+      },
+      "Mott_Haven": {
+        "beta": 0.8985,
+        "se": 0.1744,
+        "p": 0.0,
+        "p_bootstrap": 0.6787,
+        "ci_low": 0.5568,
+        "ci_high": 1.2403,
+        "gap_flag": false
+      },
+      "Queensboro_Bridge": {
+        "beta": -0.2238,
+        "se": 0.0721,
+        "p": 0.0019,
+        "p_bootstrap": 0.2669,
+        "ci_low": -0.3652,
+        "ci_high": -0.0825,
+        "gap_flag": false
+      },
+      "SI_Expwy": {
+        "beta": 0.6861,
+        "se": 0.0216,
+        "p": 0.0,
+        "p_bootstrap": 0.092,
+        "ci_low": 0.6438,
+        "ci_high": 0.7285,
+        "gap_flag": false
+      },
+      "Williamsburg_Bridge": {
+        "beta": -0.6741,
+        "se": 0.1709,
+        "p": 0.0001,
+        "p_bootstrap": 0.5608,
+        "ci_low": -1.009,
+        "ci_high": -0.3392,
+        "gap_flag": false
+      }
+    },
+    "spec_b1": {
+      "label": "EJ=point, all sites",
+      "post_ej": {
+        "beta": -0.0745,
+        "se": 0.2462,
+        "p_normal": 0.7623,
+        "p_bootstrap": 0.7691,
+        "ci_low": -0.557,
+        "ci_high": 0.4081
+      },
+      "post_crz": {
+        "beta": -1.0286,
+        "se": 0.3122,
+        "p_normal": 0.001,
+        "p_bootstrap": 0.7661,
+        "ci_low": -1.6405,
+        "ci_high": -0.4167
+      }
+    },
+    "spec_b2": {
+      "label": "EJ=buffer>0.5, all sites",
+      "post_ej": {
+        "beta": -0.3825,
+        "se": 0.2387,
+        "p_normal": 0.1091,
+        "p_bootstrap": 0.6466,
+        "ci_low": -0.8504,
+        "ci_high": 0.0854
+      },
+      "post_crz": {
+        "beta": -1.1863,
+        "se": 0.2769,
+        "p_normal": 0.0,
+        "p_bootstrap": 0.8027,
+        "ci_low": -1.7289,
+        "ci_high": -0.6436
+      }
+    },
+    "spec_b3": {
+      "label": "EJ=point, outside-CRZ only",
+      "post_ej": {
+        "beta": 0.0212,
+        "se": 0.4014,
+        "p_normal": 0.9578,
+        "p_bootstrap": 0.9576,
+        "ci_low": -0.7656,
+        "ci_high": 0.808
+      }
+    },
+    "excluded": []
+  },
+  "check5": {
+    "status": "ok",
+    "n": 144,
+    "window": "2022-01-01 \u2013 2025-01-05",
+    "weather_added": [
+      "temp_c",
+      "wind_speed_ms",
+      "rh",
+      "precip_mm"
+    ],
+    "beta_tn_per1k": 0.0181,
+    "se_tn": 0.0164,
+    "p_tn": 0.2716,
+    "ci_low": -0.0141,
+    "ci_high": 0.0503,
+    "diversion_veh": 2041.0,
+    "implied_pm25": 0.0369,
+    "observed_beta": 0.2957,
+    "magnitude_consistent": true,
+    "scatter_x": [
+      124.822,
+      123.762,
+      133.01,
+      127.742,
+      107.243,
+      119.618,
+      119.59,
+      126.354,
+      119.146,
+      129.414,
+      125.317,
+      118.044,
+      117.432,
+      115.97,
+      124.125,
+      129.82,
+      130.183,
+      124.314,
+      112.397,
+      111.706,
+      122.635,
+      125.732,
+      134.003,
+      129.517,
+      123.623,
+      118.284,
+      123.358,
+      126.336,
+      134.049,
+      135.204,
+      133.255,
+      132.477,
+      129.075,
+      113.73,
+      123.328,
+      129.48,
+      123.547,
+      131.544,
+      137.092,
+      124.971,
+      121.111,
+      124.166,
+      136.003,
+      140.617,
+      134.272,
+      121.823,
+      126.79,
+      126.022,
+      130.916,
+      137.024,
+      138.591,
+      140.505,
+      142.638,
+      122.854,
+      123.084,
+      127.439,
+      131.79,
+      133.531,
+      132.806,
+      133.189,
+      122.781,
+      126.119,
+      125.684,
+      123.152,
+      126.949,
+      121.707,
+      128.9,
+      121.733,
+      122.32,
+      123.727,
+      131.047,
+      133.774,
+      133.451,
+      135.705,
+      120.554,
+      116.451,
+      124.02,
+      128.16,
+      130.592,
+      140.431,
+      137.374,
+      122.976,
+      123.3,
+      126.967,
+      137.121,
+      136.728,
+      128.958,
+      130.803,
+      120.424,
+      119.648,
+      124.203,
+      130.455,
+      133.245,
+      134.554,
+      120.335,
+      113.923,
+      119.553,
+      118.603,
+      129.315,
+      137.033,
+      131.166,
+      120.917,
+      116.483,
+      121.64,
+      117.879,
+      127.372,
+      129.492,
+      128.522,
+      117.359,
+      111.59,
+      120.42,
+      127.236,
+      128.574,
+      125.422,
+      122.058,
+      118.122,
+      120.188,
+      122.951,
+      130.277,
+      132.718,
+      125.282,
+      132.667,
+      135.511,
+      132.122,
+      121.308,
+      117.26,
+      119.283,
+      124.492,
+      126.22,
+      128.319,
+      119.222,
+      111.998,
+      123.604,
+      125.011,
+      121.258,
+      123.165,
+      128.379,
+      118.993,
+      109.777,
+      119.836,
+      94.362,
+      111.184,
+      112.664,
+      108.984
+    ],
+    "scatter_y": [
+      10.197,
+      5.828,
+      2.923,
+      3.86,
+      6.477,
+      4.943,
+      5.465,
+      4.063,
+      4.891,
+      8.32,
+      3.72,
+      4.46,
+      6.558,
+      5.145,
+      3.85,
+      6.235,
+      4.09,
+      7.389,
+      13.533,
+      11.573,
+      11.623,
+      12.573,
+      6.139,
+      4.493,
+      4.462,
+      15.089,
+      15.689,
+      8.493,
+      11.799,
+      19.459,
+      8.238,
+      8.079,
+      11.295,
+      14.418,
+      4.875,
+      5.58,
+      5.47,
+      7.032,
+      6.426,
+      5.753,
+      4.985,
+      16.007,
+      12.928,
+      19.015,
+      21.422,
+      19.022,
+      7.032,
+      3.431,
+      3.991,
+      5.257,
+      7.758,
+      10.676,
+      12.727,
+      15.08,
+      12.233,
+      13.463,
+      5.994,
+      3.897,
+      4.346,
+      7.194,
+      7.513,
+      3.962,
+      5.803,
+      6.073,
+      5.46,
+      3.918,
+      3.524,
+      4.352,
+      5.281,
+      4.028,
+      9.222,
+      7.62,
+      9.018,
+      8.558,
+      4.168,
+      5.57,
+      5.987,
+      7.826,
+      5.967,
+      5.379,
+      4.17,
+      3.627,
+      3.851,
+      3.512,
+      4.588,
+      4.791,
+      3.735,
+      3.928,
+      4.865,
+      4.383,
+      4.426,
+      3.73,
+      5.413,
+      7.394,
+      8.975,
+      11.113,
+      12.853,
+      5.866,
+      3.679,
+      4.794,
+      3.217,
+      4.588,
+      5.19,
+      9.352,
+      12.807,
+      5.949,
+      3.064,
+      3.532,
+      5.111,
+      9.51,
+      6.082,
+      6.095,
+      4.225,
+      16.5,
+      5.34,
+      5.855,
+      3.458,
+      3.44,
+      3.644,
+      5.797,
+      8.283,
+      4.946,
+      4.668,
+      4.239,
+      5.488,
+      5.414,
+      6.928,
+      7.295,
+      6.584,
+      4.205,
+      4.641,
+      3.405,
+      5.037,
+      8.165,
+      10.077,
+      8.162,
+      12.882,
+      13.955,
+      8.67,
+      4.763,
+      7.63,
+      3.491,
+      4.78,
+      3.979
+    ]
+  },
+  "check7": {
+    "status": "mismatch",
+    "mismatches": [
+      "  Manhattan_Bridge raw_delta_25: computed=-1.24, target=-1.21, diff=-0.03",
+      "  Manhattan_Bridge minus_vw_25: computed=-0.60, target=-0.59, diff=-0.01",
+      "  Manhattan_Bridge minus_vw_26: computed=-1.43, target=-1.40, diff=-0.03",
+      "  Manhattan_Bridge minus_qc_25: computed=-1.19, target=-1.17, diff=-0.02",
+      "  Manhattan_Bridge minus_qc_26: computed=-1.50, target=-1.53, diff=+0.03",
+      "  Williamsburg_Bridge raw_delta_25: computed=-1.86, target=-1.89, diff=+0.03",
+      "  Queensboro_Bridge minus_vw_25: computed=-0.14, target=-0.13, diff=-0.01",
+      "  Queensboro_Bridge minus_vw_26: computed=-0.66, target=-0.60, diff=-0.06",
+      "  Queensboro_Bridge minus_qc_26: computed=-1.10, target=-1.08, diff=-0.02",
+      "  FDR raw_delta_25: computed=-0.90, target=-0.91, diff=+0.01",
+      "  FDR minus_vw_25: computed=+0.04, target=+0.05, diff=-0.01",
+      "  FDR minus_vw_26: computed=-0.43, target=-0.46, diff=+0.03",
+      "  Broadway_35th_St raw_delta_25: computed=-0.90, target=-0.88, diff=-0.02",
+      "  Broadway_35th_St minus_vw_26: computed=-0.41, target=-0.38, diff=-0.03",
+      "  Broadway_35th_St minus_qc_25: computed=-0.84, target=-0.83, diff=-0.01",
+      "  Cross_Bronx_Expy raw_delta_25: computed=-0.16, target=-0.17, diff=+0.01",
+      "  Cross_Bronx_Expy minus_vw_25: computed=+0.97, target=+0.98, diff=-0.01",
+      "  Cross_Bronx_Expy minus_vw_26: computed=-0.15, target=-0.12, diff=-0.03",
+      "  Cross_Bronx_Expy minus_qc_25: computed=-0.11, target=-0.09, diff=-0.02",
+      "  Cross_Bronx_Expy minus_qc_26: computed=+0.21, target=+0.24, diff=-0.03",
+      "  Mott_Haven minus_vw_25: computed=+0.87, target=+0.88, diff=-0.01",
+      "  Mott_Haven minus_qc_25: computed=-0.22, target=-0.21, diff=-0.01",
+      "  Mott_Haven minus_qc_26: computed=+0.86, target=+0.84, diff=+0.02"
+    ],
+    "sites": {
+      "Manhattan_Bridge": {
+        "raw_delta_25": -1.24,
+        "minus_vw_25": -0.6,
+        "minus_vw_26": -1.43,
+        "minus_qc_25": -1.19,
+        "minus_qc_26": -1.5
+      },
+      "Williamsburg_Bridge": {
+        "raw_delta_25": -1.86,
+        "minus_vw_25": -0.81,
+        "minus_vw_26": -1.42,
+        "minus_qc_25": -1.61,
+        "minus_qc_26": -1.61
+      },
+      "Queensboro_Bridge": {
+        "raw_delta_25": -0.93,
+        "minus_vw_25": -0.14,
+        "minus_vw_26": -0.66,
+        "minus_qc_25": -0.83,
+        "minus_qc_26": -1.1
+      },
+      "FDR": {
+        "raw_delta_25": -0.9,
+        "minus_vw_25": 0.04,
+        "minus_vw_26": -0.43,
+        "minus_qc_25": -0.39,
+        "minus_qc_26": 0.15
+      },
+      "Broadway_35th_St": {
+        "raw_delta_25": -0.9,
+        "minus_vw_25": 0.06,
+        "minus_vw_26": -0.41,
+        "minus_qc_25": -0.84,
+        "minus_qc_26": -0.02
+      },
+      "Cross_Bronx_Expy": {
+        "raw_delta_25": -0.16,
+        "minus_vw_25": 0.97,
+        "minus_vw_26": -0.15,
+        "minus_qc_25": -0.11,
+        "minus_qc_26": 0.21
+      },
+      "Mott_Haven": {
+        "raw_delta_25": 0.08,
+        "minus_vw_25": 0.87,
+        "minus_vw_26": 0.85,
+        "minus_qc_25": -0.22,
+        "minus_qc_26": 0.86
+      }
+    },
+    "control_changes": {
+      "vw_delta_25": -0.48,
+      "vw_delta_26": -1.25,
+      "qc_delta_25": -0.24,
+      "qc_delta_26": -1.59
+    },
+    "note": "units: \u00b5g/m\u00b3; matched day-of-year 2025 vs 2024 and 2026 vs 2024"
+  },
+  "equity": {
+    "status": "ok",
+    "CS1": {
+      "label": "CS1: EJ=point, all sites",
+      "n": 5,
+      "r2": 0.9912,
+      "ej_point": {
+        "beta": 0.8377,
+        "se": 0.2381,
+        "p": 0.0004,
+        "ci_low": -2.1882,
+        "ci_high": 3.8636
+      },
+      "in_crz": {
+        "beta": -0.6038,
+        "se": 0.1535,
+        "p": 0.0001,
+        "ci_low": -2.5537,
+        "ci_high": 1.3461
+      },
+      "pre_z": {
+        "beta": -0.4894,
+        "se": 0.0988,
+        "p": 0.0,
+        "ci_low": -1.7442,
+        "ci_high": 0.7655
+      },
+      "sites": [
+        "Cross_Bronx_Expy",
+        "Mott_Haven",
+        "Manhattan_Bridge",
+        "Williamsburg_Bridge",
+        "Queensboro_Bridge"
+      ],
+      "values": [
+        {
+          "site": "Cross_Bronx_Expy",
+          "beta": -0.5226,
+          "ej": 1,
+          "in_crz": 0,
+          "hunts": 0
+        },
+        {
+          "site": "Mott_Haven",
+          "beta": 0.2957,
+          "ej": 1,
+          "in_crz": 0,
+          "hunts": 0
+        },
+        {
+          "site": "Manhattan_Bridge",
+          "beta": -1.3276,
+          "ej": 1,
+          "in_crz": 1,
+          "hunts": 0
+        },
+        {
+          "site": "Williamsburg_Bridge",
+          "beta": -1.0352,
+          "ej": 1,
+          "in_crz": 1,
+          "hunts": 0
+        },
+        {
+          "site": "Queensboro_Bridge",
+          "beta": -1.0981,
+          "ej": 0,
+          "in_crz": 1,
+          "hunts": 0
+        }
+      ]
+    },
+    "CS2": {
+      "label": "CS2: EJ=buffer>0.5, all sites",
+      "n": 5,
+      "r2": 0.9912,
+      "ej_buf": {
+        "beta": 0.8377,
+        "se": 0.2381,
+        "p": 0.0004,
+        "ci_low": -2.1882,
+        "ci_high": 3.8636
+      },
+      "in_crz": {
+        "beta": -0.6038,
+        "se": 0.1535,
+        "p": 0.0001,
+        "ci_low": -2.5537,
+        "ci_high": 1.3461
+      },
+      "pre_z": {
+        "beta": -0.4894,
+        "se": 0.0988,
+        "p": 0.0,
+        "ci_low": -1.7442,
+        "ci_high": 0.7655
+      },
+      "sites": [
+        "Cross_Bronx_Expy",
+        "Mott_Haven",
+        "Manhattan_Bridge",
+        "Williamsburg_Bridge",
+        "Queensboro_Bridge"
+      ],
+      "values": [
+        {
+          "site": "Cross_Bronx_Expy",
+          "beta": -0.5226,
+          "ej": 1,
+          "in_crz": 0,
+          "hunts": 0
+        },
+        {
+          "site": "Mott_Haven",
+          "beta": 0.2957,
+          "ej": 1,
+          "in_crz": 0,
+          "hunts": 0
+        },
+        {
+          "site": "Manhattan_Bridge",
+          "beta": -1.3276,
+          "ej": 1,
+          "in_crz": 1,
+          "hunts": 0
+        },
+        {
+          "site": "Williamsburg_Bridge",
+          "beta": -1.0352,
+          "ej": 1,
+          "in_crz": 1,
+          "hunts": 0
+        },
+        {
+          "site": "Queensboro_Bridge",
+          "beta": -1.0981,
+          "ej": 0,
+          "in_crz": 1,
+          "hunts": 0
+        }
+      ]
+    },
+    "CS3": {
+      "label": "CS3: EJ=point, outside-CRZ only",
+      "status": "n=2<3"
+    }
+  }
+}
