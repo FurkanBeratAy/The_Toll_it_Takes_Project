@@ -1,0 +1,8 @@
+numpy
+pandas
+statsmodels
+scipy
+shapely
+geopandas
+pyproj
+requests
