@@ -31,4 +31,4 @@ This reads `data/processed/` and writes `site/data_bundle.js` (~7 MB).
 
 ## Analysis by
 
-Furkan Beray
+
