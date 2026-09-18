@@ -2486,7 +2486,7 @@
         "ci_low": null,
         "ci_high": null,
         "gap_flag": false,
-        "note": "reference site \u2014 differential=0 by construction; all other betas are relative to BQE"
+        "note": "reference site — differential=0 by construction; all other betas are relative to BQE"
       },
       "Broadway_35th_St": {
         "beta": 0.281,
@@ -2633,7 +2633,7 @@
   "check5": {
     "status": "ok",
     "n": 144,
-    "window": "2022-01-01 \u2013 2025-01-05",
+    "window": "2022-01-01 – 2025-01-05",
     "weather_added": [
       "temp_c",
       "wind_speed_ms",
@@ -3026,7 +3026,7 @@
       "qc_delta_25": -0.24,
       "qc_delta_26": -1.59
     },
-    "note": "units: \u00b5g/m\u00b3; matched day-of-year 2025 vs 2024 and 2026 vs 2024"
+    "note": "units: µg/m³; matched day-of-year 2025 vs 2024 and 2026 vs 2024"
   },
   "equity": {
     "status": "ok",
@@ -3174,5 +3174,485 @@
       "label": "CS3: EJ=point, outside-CRZ only",
       "status": "n=2<3"
     }
+  },
+  "check9": {
+    "generated": "2026-09-17",
+    "plausibility_filter": "Drop any reading where pm2.5_cf_1_a >= 200 OR pm2.5_cf_1_b >= 200 OR EPA-corrected >= 200 (same threshold as scripts/04_pollution.py).",
+    "qc_table": {
+      "89th_and_Ridge": {
+        "sensor_index": 191419,
+        "borough": "Brooklyn",
+        "ej": false,
+        "rows": 919,
+        "b_miss": 0,
+        "a_miss": 0,
+        "no_rh": 0,
+        "diverge": 61,
+        "implausible": 7,
+        "valid": 851,
+        "med_ab": 1.8,
+        "p90_ab": 4.7,
+        "cov_pct": 90.63,
+        "n_pre": 276,
+        "pass_80": true,
+        "pass_70": true
+      },
+      "RGBIV": {
+        "sensor_index": 81785,
+        "borough": "Brooklyn",
+        "ej": false,
+        "rows": 913,
+        "b_miss": 0,
+        "a_miss": 0,
+        "no_rh": 0,
+        "diverge": 10,
+        "implausible": 0,
+        "valid": 903,
+        "med_ab": 1.5,
+        "p90_ab": 3.9,
+        "cov_pct": 96.17,
+        "n_pre": 289,
+        "pass_80": true,
+        "pass_70": true
+      },
+      "FA_O5": {
+        "sensor_index": 89957,
+        "borough": "Manhattan",
+        "ej": true,
+        "rows": 934,
+        "b_miss": 0,
+        "a_miss": 0,
+        "no_rh": 0,
+        "diverge": 81,
+        "implausible": 8,
+        "valid": 845,
+        "med_ab": 0.7,
+        "p90_ab": 4.55,
+        "cov_pct": 89.99,
+        "n_pre": 240,
+        "pass_80": true,
+        "pass_70": true
+      },
+      "Red_Hook_Farms": {
+        "sensor_index": 165783,
+        "borough": "Brooklyn",
+        "ej": true,
+        "rows": 908,
+        "b_miss": 0,
+        "a_miss": 0,
+        "no_rh": 0,
+        "diverge": 219,
+        "implausible": 1,
+        "valid": 688,
+        "med_ab": 1.5,
+        "p90_ab": 9.48,
+        "cov_pct": 73.27,
+        "n_pre": 289,
+        "pass_80": false,
+        "pass_70": true
+      },
+      "NBN_Green_Provost": {
+        "sensor_index": 150696,
+        "borough": "Brooklyn",
+        "ej": true,
+        "rows": 805,
+        "b_miss": 0,
+        "a_miss": 0,
+        "no_rh": 477,
+        "diverge": 30,
+        "implausible": 1,
+        "valid": 297,
+        "med_ab": 0.8,
+        "p90_ab": 3.82,
+        "cov_pct": 31.63,
+        "n_pre": 190,
+        "pass_80": false,
+        "pass_70": false,
+        "excl_reason": "coverage 31.6% < 70%; pre_days 190 < 200; 1 implausible days (cf_1 >= 200)"
+      },
+      "NBN_Bushwick": {
+        "sensor_index": 37185,
+        "borough": "Brooklyn",
+        "ej": true,
+        "rows": 931,
+        "b_miss": 0,
+        "a_miss": 0,
+        "no_rh": 0,
+        "diverge": 268,
+        "implausible": 0,
+        "valid": 663,
+        "med_ab": 2.9,
+        "p90_ab": 9.3,
+        "cov_pct": 70.61,
+        "n_pre": 176,
+        "pass_80": false,
+        "pass_70": false,
+        "excl_reason": "coverage 70.6% < 80%; pre_days 176 < 200"
+      },
+      "Riverdale": {
+        "sensor_index": 135148,
+        "borough": "Bronx",
+        "ej": false,
+        "rows": 675,
+        "b_miss": 0,
+        "a_miss": 0,
+        "no_rh": 129,
+        "diverge": 117,
+        "implausible": 0,
+        "valid": 429,
+        "med_ab": 2.2,
+        "p90_ab": 6.85,
+        "cov_pct": 45.69,
+        "n_pre": 48,
+        "pass_80": false,
+        "pass_70": false,
+        "excl_reason": "coverage 45.7% < 70%; pre_days 48 < 200"
+      },
+      "Neal_Phillip_BKLYN": {
+        "sensor_index": 138844,
+        "borough": "Brooklyn",
+        "ej": false,
+        "rows": 444,
+        "b_miss": 444,
+        "a_miss": 0,
+        "no_rh": 0,
+        "diverge": 0,
+        "implausible": 0,
+        "valid": 0,
+        "med_ab": null,
+        "p90_ab": null,
+        "cov_pct": 0.0,
+        "n_pre": 0,
+        "pass_80": false,
+        "pass_70": false,
+        "excl_reason": "channel B absent (sensor logs A only); coverage 0.0% < 70%; pre_days 0 < 200"
+      },
+      "W90th_CPW": {
+        "sensor_index": 4803,
+        "borough": "Manhattan",
+        "ej": false,
+        "rows": 426,
+        "b_miss": 0,
+        "a_miss": 28,
+        "no_rh": 242,
+        "diverge": 0,
+        "implausible": 6,
+        "valid": 150,
+        "med_ab": 0.6,
+        "p90_ab": 1.31,
+        "cov_pct": 15.97,
+        "n_pre": 0,
+        "pass_80": false,
+        "pass_70": false,
+        "excl_reason": "coverage 16.0% < 70%; pre_days 0 < 200; 6 implausible days (cf_1 >= 200)"
+      },
+      "Forest_Hills": {
+        "sensor_index": 24311,
+        "borough": "Queens",
+        "ej": false,
+        "rows": 901,
+        "b_miss": 0,
+        "a_miss": 0,
+        "no_rh": 0,
+        "diverge": 251,
+        "implausible": 0,
+        "valid": 650,
+        "med_ab": 2.2,
+        "p90_ab": 11.6,
+        "cov_pct": 69.22,
+        "n_pre": 265,
+        "pass_80": false,
+        "pass_70": false,
+        "excl_reason": "coverage 69.2% < 70%"
+      },
+      "SITHS256O": {
+        "sensor_index": 91441,
+        "borough": "Staten_Island",
+        "ej": false,
+        "rows": 727,
+        "b_miss": 0,
+        "a_miss": 0,
+        "no_rh": 3,
+        "diverge": 1,
+        "implausible": 0,
+        "valid": 723,
+        "med_ab": 0.7,
+        "p90_ab": 1.3,
+        "cov_pct": 77.0,
+        "n_pre": 316,
+        "pass_80": false,
+        "pass_70": true
+      },
+      "Hudson_View_Gardens": {
+        "sensor_index": 183603,
+        "borough": "Manhattan",
+        "ej": false,
+        "rows": 933,
+        "b_miss": 0,
+        "a_miss": 0,
+        "no_rh": 0,
+        "diverge": 28,
+        "implausible": 229,
+        "valid": 676,
+        "med_ab": 0.6,
+        "p90_ab": 2.87,
+        "cov_pct": 71.99,
+        "n_pre": 303,
+        "pass_80": false,
+        "pass_70": true
+      }
+    },
+    "primary_80pct": {
+      "threshold": "cov >= 80%, pre_days >= 200",
+      "sensors": [
+        {
+          "sensor_index": 191419,
+          "name": "89th_and_Ridge",
+          "borough": "Brooklyn",
+          "ej": false
+        },
+        {
+          "sensor_index": 81785,
+          "name": "RGBIV",
+          "borough": "Brooklyn",
+          "ej": false
+        },
+        {
+          "sensor_index": 89957,
+          "name": "FA_O5",
+          "borough": "Manhattan",
+          "ej": true
+        }
+      ],
+      "n_ej": 1,
+      "n_nonej": 2,
+      "spec_b1_extended": {
+        "label": "B1-ext: EJ=point, all sites, +post×PA",
+        "n_obs": 11420,
+        "n_sites": 14,
+        "post_ej": {
+          "beta": -0.2067,
+          "se": 0.1935,
+          "ci_low": -0.5861,
+          "ci_high": 0.1726,
+          "p_normal": 0.2854,
+          "p_bootstrap": 0.5866
+        },
+        "post_crz": {
+          "beta": -1.067,
+          "se": 0.3093,
+          "ci_low": -1.6733,
+          "ci_high": -0.4607,
+          "p_normal": 0.0006,
+          "p_bootstrap": 0.7816
+        },
+        "post_pa": {
+          "beta": 0.0592,
+          "se": 0.2882,
+          "ci_low": -0.5057,
+          "ci_high": 0.6241,
+          "p_normal": 0.8372,
+          "p_bootstrap": 0.8541
+        }
+      },
+      "spec_b3_extended": {
+        "label": "B3-ext: EJ=point, outside-CRZ, +post×PA",
+        "n_obs": 7319,
+        "n_sites": 9,
+        "post_ej": {
+          "beta": -0.1883,
+          "se": 0.2001,
+          "ci_low": -0.5804,
+          "ci_high": 0.2039,
+          "p_normal": 0.3467,
+          "p_bootstrap": 0.5507
+        },
+        "post_pa": {
+          "beta": 0.017,
+          "se": 0.2739,
+          "ci_low": -0.5198,
+          "ci_high": 0.5538,
+          "p_normal": 0.9505,
+          "p_bootstrap": 0.9542
+        }
+      },
+      "spec_b_pa_only": {
+        "label": "B-PA-only: post×EJ, PA sensors only",
+        "n_obs": 2599,
+        "n_sites": 3,
+        "n_ej_sites": 1,
+        "n_nonej_sites": 2,
+        "post_ej": {
+          "beta": -0.1369,
+          "se": 0.2654,
+          "ci_low": -0.6572,
+          "ci_high": 0.3834,
+          "p_normal": 0.6061,
+          "p_bootstrap": null,
+          "note": "fewer than 5 clusters; no calibrated inference"
+        },
+        "note_clusters": "3 clusters total (2 non-EJ, 1 EJ) — fewer than 5; no calibrated inference"
+      }
+    },
+    "sensitivity_70pct": {
+      "threshold": "cov >= 70%, pre_days >= 200",
+      "sensors": [
+        {
+          "sensor_index": 191419,
+          "name": "89th_and_Ridge",
+          "borough": "Brooklyn",
+          "ej": false
+        },
+        {
+          "sensor_index": 81785,
+          "name": "RGBIV",
+          "borough": "Brooklyn",
+          "ej": false
+        },
+        {
+          "sensor_index": 89957,
+          "name": "FA_O5",
+          "borough": "Manhattan",
+          "ej": true
+        },
+        {
+          "sensor_index": 165783,
+          "name": "Red_Hook_Farms",
+          "borough": "Brooklyn",
+          "ej": true
+        },
+        {
+          "sensor_index": 91441,
+          "name": "SITHS256O",
+          "borough": "Staten_Island",
+          "ej": false
+        },
+        {
+          "sensor_index": 183603,
+          "name": "Hudson_View_Gardens",
+          "borough": "Manhattan",
+          "ej": false
+        }
+      ],
+      "n_ej": 2,
+      "n_nonej": 4,
+      "spec_b1_extended": {
+        "label": "B1-ext: EJ=point, all sites, +post×PA",
+        "n_obs": 13507,
+        "n_sites": 17,
+        "post_ej": {
+          "beta": -0.472,
+          "se": 0.2678,
+          "ci_low": -0.9968,
+          "ci_high": 0.0528,
+          "p_normal": 0.0779,
+          "p_bootstrap": 0.6831
+        },
+        "post_crz": {
+          "beta": -1.1433,
+          "se": 0.3183,
+          "ci_low": -1.7672,
+          "ci_high": -0.5195,
+          "p_normal": 0.0003,
+          "p_bootstrap": 0.7898
+        },
+        "post_pa": {
+          "beta": -0.4457,
+          "se": 0.3697,
+          "ci_low": -1.1703,
+          "ci_high": 0.279,
+          "p_normal": 0.2281,
+          "p_bootstrap": 0.6342
+        }
+      },
+      "spec_b3_extended": {
+        "label": "B3-ext: EJ=point, outside-CRZ, +post×PA",
+        "n_obs": 9406,
+        "n_sites": 12,
+        "post_ej": {
+          "beta": -0.5178,
+          "se": 0.3232,
+          "ci_low": -1.1513,
+          "ci_high": 0.1156,
+          "p_normal": 0.1091,
+          "p_bootstrap": 0.6666
+        },
+        "post_pa": {
+          "beta": -0.5217,
+          "se": 0.3873,
+          "ci_low": -1.2809,
+          "ci_high": 0.2374,
+          "p_normal": 0.178,
+          "p_bootstrap": 0.6512
+        }
+      },
+      "spec_b_pa_only": {
+        "label": "B-PA-only: post×EJ, PA sensors only",
+        "n_obs": 4686,
+        "n_sites": 6,
+        "n_ej_sites": 2,
+        "n_nonej_sites": 4,
+        "post_ej": {
+          "beta": -0.5252,
+          "se": 0.366,
+          "ci_low": -1.2426,
+          "ci_high": 0.1923,
+          "p_normal": 0.1514,
+          "p_bootstrap": 0.6821
+        },
+        "note_clusters": "6 clusters total (4 non-EJ, 2 EJ)"
+      }
+    },
+    "check7_did": {
+      "FA_O5": {
+        "raw_delta_25": 0.74,
+        "minus_vw_25": 1.19,
+        "minus_vw_26": 1.41,
+        "minus_qc_25": 0.66,
+        "minus_qc_26": 1.29,
+        "pass_set": "primary+sensitivity"
+      },
+      "Red_Hook_Farms": {
+        "raw_delta_25": -1.38,
+        "minus_vw_25": 0.51,
+        "minus_vw_26": -1.48,
+        "minus_qc_25": 0.35,
+        "minus_qc_26": -1.59,
+        "pass_set": "sensitivity"
+      },
+      "89th_and_Ridge": {
+        "raw_delta_25": 0.25,
+        "minus_vw_25": 0.85,
+        "minus_vw_26": 0.1,
+        "minus_qc_25": 0.34,
+        "minus_qc_26": -0.09,
+        "pass_set": "primary+sensitivity"
+      },
+      "Hudson_View_Gardens": {
+        "raw_delta_25": 0.52,
+        "minus_vw_25": 0.71,
+        "minus_vw_26": 1.03,
+        "minus_qc_25": 0.07,
+        "minus_qc_26": 0.85,
+        "pass_set": "sensitivity"
+      },
+      "RGBIV": {
+        "raw_delta_25": 0.48,
+        "minus_vw_25": 1.26,
+        "minus_vw_26": 1.69,
+        "minus_qc_25": 0.81,
+        "minus_qc_26": 1.21,
+        "pass_set": "primary+sensitivity"
+      },
+      "SITHS256O": {
+        "raw_delta_25": -0.16,
+        "minus_vw_25": 0.55,
+        "minus_vw_26": 0.03,
+        "minus_qc_25": -0.46,
+        "minus_qc_26": -0.7,
+        "pass_set": "sensitivity"
+      }
+    },
+    "note": "EPA correction: 0.524*pm2.5_cf_1 − 0.0862*RH + 5.75 (Barkjohn 2021). A/B QC: drop if |A−B| > max(5, 0.20*mean_AB). Plausibility filter (matches 04_pollution.py): drop if cf_1_a >= 200 or cf_1_b >= 200 or EPA-corrected >= 200. Coverage gate: primary >= 80% (939-day panel); sensitivity >= 70%; both require >= 200 pre-toll days. post×purpleair absorbs instrument-level post-toll drift. Wild bootstrap B=9999, Webb weights, cluster by site."
   }
 }

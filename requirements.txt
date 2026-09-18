@@ -6,3 +6,4 @@ shapely
 geopandas
 pyproj
 requests
+python-dotenv

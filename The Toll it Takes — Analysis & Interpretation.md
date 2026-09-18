@@ -152,7 +152,7 @@ Both interpretations can be true simultaneously. The chart is presented as indep
 
 **The equity estimate:** Panel estimates (site + date FE, 11 sites) of an EJ gap run from −0.38 to +0.02 µg/m³ depending on flag definition (B1: −0.07, p=0.77; B2: −0.38, p=0.65; B3: +0.02, p=0.96), none significant. EJ status is confounded with zone status: every in-zone monitor except Queensboro sits in a designated tract, and so does every outside-zone monitor with a full pre-toll record.
 
-**What the data supports:** Geography, not a measured EJ gap. Inside the zone improved; the two South Bronx corridors did not. The panel cannot separate the zone effect from the EJ effect with the current monitoring network. **This result does not prove that the toll disproportionately harmed EJ communities — nor does it rule it out.**
+**What the data supports:** Geography, not a measured EJ gap. Inside the zone improved; no outside-zone site did — EJ or not, Bronx or not (see Check 9). The panel cannot separate the zone effect from the EJ effect with the current monitoring network. **This result does not prove that the toll disproportionately harmed EJ communities — nor does it rule it out.**
 
 The cross-sectional comparison (five ITS sites) is shown for geographic context only. With four EJ sites and one non-EJ site (Queensboro), a three-parameter OLS has essentially no degrees of freedom; any resulting coefficient and p-value are uninformative and should not be cited as a finding.
 
@@ -201,6 +201,54 @@ The finding that matters for this report: **Throgs Neck Bridge** shows the large
 **What it means:** The toll did reduce CRZ entries — total volumes are materially below the 2019–2024 pre-toll baseline. This is confirmation that the toll's primary mechanism (reducing entries) worked. The question the ITS analysis addresses is: *where did those vehicles go, and what happened to air quality in their wake?*
 
 The upward trend in entries through 2025 is worth watching. If drivers continue adapting and entries trend back toward pre-toll levels, the air quality benefits at bridge-adjacent sites could erode. If a behavioral equilibrium has been reached around ~480,000 entries/day, the effects are likely to remain stable.
+
+---
+
+### Check 9: Outside-Zone PurpleAir Sensors — Filling the Missing Cell
+
+The NYCCAS panel has no outside-CRZ, non-EJ sites. To test whether the EJ estimate changes when such sites are added, twelve community-operated PurpleAir sensors were evaluated; six passed a minimum quality bar (≥70% daily coverage, ≥200 pre-toll days). Three met the primary 80% threshold.
+
+**Primary set (≥80% coverage, ≥200 pre-toll days):**
+
+| Sensor | Neighborhood | EJ | Borough | Coverage |
+|---|---|---|---|---|
+| 89th & Ridge Ave | Bay Ridge | No | Brooklyn | 90.6% |
+| RGBIV | Sunset Park | No | Brooklyn | 96.2% |
+| FA_O5 | Washington Heights | Yes | Manhattan | 90.0% |
+
+**Sensitivity set (adds three sensors at ≥70%):** Red Hook Farms (EJ, Brooklyn, 73.3%), SITHS256O (non-EJ, Staten Island, 77.0%), Hudson View Gardens (non-EJ, Manhattan, 72.0%). Hudson View had 229 days of physically impossible readings (~6,000 µg/m³) removed by a plausibility filter; it appears only in the sensitivity set.
+
+**Spec B EJ estimates (β_EJ, wild bootstrap 95% CI):**
+
+| Specification | β_EJ | 95% CI |
+|---|---|---|
+| B1 baseline — NYCCAS only | −0.07 | [−0.56, +0.41] |
+| B1 extended — 80% primary (3 PA sensors) | −0.21 | [−0.59, +0.17] |
+| B1 extended — 70% sensitivity (6 PA sensors) | −0.47 | [−1.00, +0.05] |
+| B3 baseline — outside-CRZ NYCCAS only | +0.02 | [−0.77, +0.81] |
+| B3 extended — 80% primary | −0.19 | [−0.58, +0.20] |
+| B3 extended — 70% sensitivity | −0.52 | [−1.15, +0.12] |
+| PA-only — 80% primary (3 clusters) | −0.14 | [−0.66, +0.38] |
+| PA-only — 70% sensitivity (6 clusters) | −0.53 | [−1.24, +0.19] |
+
+All intervals span zero. The 70% estimates shift slightly toward EJ sites doing better (more negative β_EJ), not worse.
+
+**Check 7 matched-day DiD (2025 vs. 2024, µg/m³):**
+
+| Sensor | Type | Raw Δ25 | −VW 2025 | −VW 2026 | −QC 2025 | −QC 2026 |
+|---|---|---|---|---|---|---|
+| Cross Bronx Expy | NYCCAS/EJ | −0.16 | +0.97 | −0.15 | −0.11 | +0.21 |
+| Mott Haven | NYCCAS/EJ | +0.08 | +0.87 | +0.85 | −0.22 | +0.86 |
+| FA_O5 | PA/EJ | +0.74 | +1.19 | +1.41 | +0.66 | +1.29 |
+| Red Hook Farms | PA/EJ | −1.38 | +0.51 | −1.48 | +0.35 | −1.59 |
+| 89th & Ridge | PA/non-EJ | +0.25 | +0.85 | +0.10 | +0.34 | −0.09 |
+| Hudson View | PA/non-EJ | +0.52 | +0.71 | +1.03 | +0.07 | +0.85 |
+| RGBIV | PA/non-EJ | +0.48 | +1.26 | +1.69 | +0.81 | +1.21 |
+| SITHS256O | PA/non-EJ | −0.16 | +0.55 | +0.03 | −0.46 | −0.70 |
+
+Adding volunteer sensors outside the zone does not change the EJ estimate. With the three sensors that meet the 80% coverage standard, β_EJ ranges from −0.14 to −0.21 across specifications, and every confidence interval spans zero. Adding three lower-quality sensors at a 70% threshold moves the estimate to −0.47 to −0.53, still spanning zero, in the direction of EJ sites doing slightly better. Relative to Van Wyck, every outside-zone sensor rose by 0.5–1.3 µg/m³ in 2025, EJ and non-EJ alike; relative to Queens College, changes are smaller and mixed (−0.5 to +0.8) with no EJ pattern. The distinction that holds is inside-zone versus outside-zone, not EJ versus non-EJ, and not Bronx versus elsewhere.
+
+**Limitation:** Both Queens control monitors fell from 2024 to 2025 while most outside-zone sites rose relative to them, so part of the outside-zone "increase" may be control drift rather than site worsening. The inside-zone decrease is robust to either control.
 
 ---
 
@@ -400,6 +448,7 @@ Until then, the directional evidence is sufficient to warrant action. The green 
 | 311 Engine Idling Complaints | NYC Open Data `erm2-nwe9` | 2010–2026 |
 | LGA ASOS weather (temp, wind, RH, precip) | Iowa Environmental Mesonet | 2019–2026 |
 | Hourly NO₂ monitors (IS 52, Pfizer Lab) | US EPA AQS | 2022–2025 |
+| PurpleAir outdoor sensors, EPA-corrected | PurpleAir API | 2024–2026 |
 
 ---
 

@@ -142,48 +142,6 @@
   <div class="callout">Of the five ITS treatment sites, the two Manhattan landings inside the CRZ (Manhattan Bridge and Williamsburg Bridge) showed improvements of roughly 1 µg/m³ relative to control. Manhattan Bridge is significant under both model specifications; Williamsburg Bridge is significant in the full model and borderline (p = 0.07) in a step-only model.</div>
 </section>
 
-<!-- ─── Section 3.5: School-zone exposure ──────────────────────────────────── -->
-<section class="section">
-  <div class="section-header">
-    <h2>Schools near monitored corridors</h2>
-    <p>NYC Admin Code §24-163 limits vehicle idling to 1 minute within a school zone (vs. 3 minutes citywide), enforceable by any citizen who films a violation through DEP's Idling Complaint System (Local Law 58, 2018). This law applies uniquely to schools — a policy lever the corridor-level analysis cannot surface.</p>
-    <p class="footnote" style="margin-top:.5rem">Hunts Point is omitted from this analysis: its monitor was offline Sept 2023 to March 2025, so no pre/post comparison at the toll date is possible.</p>
-  </div>
-  <div class="table-scroll">
-  <table id="school-zone-table">
-    <thead><tr>
-      <th>Corridor</th><th>EJ-designated</th>
-      <th class="num">β<sub>post</sub> (µg/m³)</th>
-      <th class="num">Schools within 400 m</th>
-    </tr></thead>
-    <tbody id="school-zone-tbody">
-      <tr><td colspan="4"><div class="loading"><div class="spinner"></div>Loading…</div></td></tr>
-    </tbody>
-  </table>
-  </div>
-  <div id="mott-haven-schools-section" style="display:none">
-    <h3 style="margin:1.5rem 0 .75rem;font-size:1.125rem">Mott Haven: schools by name</h3>
-    <p style="max-width:var(--measure);margin-bottom:1rem;font-family:var(--font-body)">Nine school entries (six physical buildings) sit within 400 m of the Mott Haven monitor. Two are directly adjacent on Brown Place, 76 m from the air quality sensor.</p>
-    <div class="table-scroll">
-    <table id="mh-schools-table">
-      <thead><tr><th>School</th><th>Address</th><th class="num">Distance (m)</th></tr></thead>
-      <tbody id="mh-schools-tbody"></tbody>
-    </table>
-    </div>
-    <div class="callout">
-      <p><strong>The school-zone 1-minute rule.</strong> Within 400 m of the Mott Haven monitor there are nine school entries — more than at any other monitored corridor. Under §24-163, every one of these locations is a school zone where idling is limited to one minute. The corridor analysis does not distinguish school frontages from residential blocks; this table makes that distinction concrete.</p>
-    </div>
-  </div>
-  <div class="callout">
-    <p><strong>311 idling complaints.</strong> Residents near these schools can file complaints through NYC's 311 system under <em>Noise - Vehicle / Engine Idling</em> or <em>Air Quality / Vehicle Idling</em> (n=25 total in the 400 m box, 2021–2026). Complaint volume reflects reporting behavior as much as actual idling. DEP Citizens Air Complaint Program filings are not in 311, so this undercounts idling complaints. The chart shows the community-reported record as an independent signal, not a pollution measure.</p>
-  </div>
-  <div class="chart-wrap">
-    <p class="chart-title">Monthly idling complaints near Mott Haven schools (400 m buffer)</p>
-    <p class="chart-sub" id="chart-idling-sub">311 "Engine Idling" (Noise - Vehicle) + "Air Quality / Vehicle Idling" reports. Source: NYC Open Data 311. Vertical line: toll launch Jan 5, 2025.</p>
-    <div id="chart-idling-complaints" class="plotly-chart" style="min-height:260px"></div>
-  </div>
-</section>
-
 <!-- ─── Section 4: Equity ──────────────────────────────────────────────────── -->
 <section class="section">
   <div class="section-header">
@@ -193,7 +151,7 @@
       Queensboro sits in a designated tract, and so does every outside-zone monitor with a full
       pre-toll record. Panel estimates (site + date fixed effects, 11 sites) of an EJ gap run
       from −0.38 to +0.02 µg/m³ depending on flag definition, none significant (p = 0.65–0.96).
-      What the data shows is geography: inside the zone improved; the two South Bronx corridors did not.
+      What the data shows is geography: inside the zone improved; no outside-zone site did — EJ or not, Bronx or not (see Check 9).
     </p>
   </div>
   <div id="chart-equity-container">
@@ -400,6 +358,15 @@
   </div>
   <div class="callout">Manhattan Bridge remains significant in both specifications (full p=0.028, step-only p=0.003); the direction and approximate magnitude are stable. Williamsburg Bridge is significant in the full model (p=0.026) but not in the step-only model (p=0.065, 95% CI crosses zero): its result is <strong>model-dependent</strong>. Mott Haven shows a sign reversal (full β=+0.30, step-only β=−0.65): in the full model a positive drift term after the toll is capturing most of the post-period variation; removing it flips the sign. The direction of the Mott Haven result is therefore model-dependent: full β=+0.30 (p=0.61), step-only β=−0.65 (p=0.01). The sign depends on whether the post-toll drift term is included.</div>
 
+  <!-- ─ Check 9: Outside-zone PurpleAir sensors ─ -->
+  <div class="section-header" style="margin-top:2.5rem">
+    <h3>9. Filling the missing cell: outside-zone sensors</h3>
+    <p>The NYCCAS panel lacks outside-CRZ, non-EJ sites with a continuous record spanning the toll date. Twelve volunteer PurpleAir sensors were screened as supplements; all outside the CRZ; EJ status assigned by DAC point-in-polygon. EPA correction: 0.524 × cf1 − 0.0862 × RH + 5.75 (Barkjohn 2021). A/B QC and plausibility filter (≥200 µg/m³ readings dropped) applied before the coverage gate.</p>
+  </div>
+  <div id="check9-wrap">
+    <div class="loading"><div class="spinner"></div>Loading…</div>
+  </div>
+
 </section>
 
 <!-- ─── Section 6: Traffic Diversion ──────────────────────────────────────── -->
@@ -443,6 +410,48 @@
     <div class="chart-title">Daily CRZ entries — total &amp; by detection group</div>
     <div class="chart-sub">Source: MTA CRZ Vehicle Entries dataset</div>
     <div id="chart-crz" class="plotly-chart"></div>
+  </div>
+</section>
+
+<!-- ─── Section 3.5: School-zone exposure ──────────────────────────────────── -->
+<section class="section">
+  <div class="section-header">
+    <h2>Schools near monitored corridors</h2>
+    <p>NYC Admin Code §24-163 limits vehicle idling to 1 minute within a school zone (vs. 3 minutes citywide), enforceable by any citizen who films a violation through DEP's Idling Complaint System (Local Law 58, 2018). This law applies uniquely to schools — a policy lever the corridor-level analysis cannot surface.</p>
+    <p class="footnote" style="margin-top:.5rem">Hunts Point is omitted from this analysis: its monitor was offline Sept 2023 to March 2025, so no pre/post comparison at the toll date is possible.</p>
+  </div>
+  <div class="table-scroll">
+  <table id="school-zone-table">
+    <thead><tr>
+      <th>Corridor</th><th>EJ-designated</th>
+      <th class="num">β<sub>post</sub> (µg/m³)</th>
+      <th class="num">Schools within 400 m</th>
+    </tr></thead>
+    <tbody id="school-zone-tbody">
+      <tr><td colspan="4"><div class="loading"><div class="spinner"></div>Loading…</div></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div id="mott-haven-schools-section" style="display:none">
+    <h3 style="margin:1.5rem 0 .75rem;font-size:1.125rem">Mott Haven: schools by name</h3>
+    <p style="max-width:var(--measure);margin-bottom:1rem;font-family:var(--font-body)">Nine school entries (six physical buildings) sit within 400 m of the Mott Haven monitor. Two are directly adjacent on Brown Place, 76 m from the air quality sensor.</p>
+    <div class="table-scroll">
+    <table id="mh-schools-table">
+      <thead><tr><th>School</th><th>Address</th><th class="num">Distance (m)</th></tr></thead>
+      <tbody id="mh-schools-tbody"></tbody>
+    </table>
+    </div>
+    <div class="callout">
+      <p><strong>The school-zone 1-minute rule.</strong> Within 400 m of the Mott Haven monitor there are nine school entries — more than at any other monitored corridor. Under §24-163, every one of these locations is a school zone where idling is limited to one minute. The corridor analysis does not distinguish school frontages from residential blocks; this table makes that distinction concrete.</p>
+    </div>
+  </div>
+  <div class="callout">
+    <p><strong>311 idling complaints.</strong> Residents near these schools can file complaints through NYC's 311 system under <em>Noise - Vehicle / Engine Idling</em> or <em>Air Quality / Vehicle Idling</em> (n=25 total in the 400 m box, 2021–2026). Complaint volume reflects reporting behavior as much as actual idling. DEP Citizens Air Complaint Program filings are not in 311, so this undercounts idling complaints. The chart shows the community-reported record as an independent signal, not a pollution measure.</p>
+  </div>
+  <div class="chart-wrap">
+    <p class="chart-title">Monthly idling complaints near Mott Haven schools (400 m buffer)</p>
+    <p class="chart-sub" id="chart-idling-sub">311 "Engine Idling" (Noise - Vehicle) + "Air Quality / Vehicle Idling" reports. Source: NYC Open Data 311. Vertical line: toll launch Jan 5, 2025.</p>
+    <div id="chart-idling-complaints" class="plotly-chart" style="min-height:260px"></div>
   </div>
 </section>
 
@@ -1057,6 +1066,236 @@ function buildCheck7Table(robustness) {
   </table>`;
 }
 
+// ─── Check 9: Outside-zone PurpleAir sensors ────────────────────────── //
+function buildCheck9(robustness) {
+  const wrap = document.getElementById('check9-wrap');
+  if (!wrap) return;
+  const c9 = robustness?.check9;
+  if (!c9) {
+    wrap.innerHTML = '<div class="data-error">Check 9 data not available — run analysis/check9_phase3.py first.</div>';
+    return;
+  }
+
+  const p80 = c9.primary_80pct    || {};
+  const p70 = c9.sensitivity_70pct || {};
+  const c4  = robustness?.check4   || {};
+  const c7  = robustness?.check7?.sites || {};
+  const ej  = robustness?.ej_flags || {};
+  const qct = c9.qc_table || {};
+
+  const fmt  = v => (v == null) ? '—' : (v >= 0 ? '+' : '') + v.toFixed(2);
+  const fmtB = (d, sup) => {
+    if (!d) return '<td colspan="4" style="text-align:center;padding:4px 8px;color:#888">—</td>';
+    const b  = (d.beta  >= 0 ? '+' : '') + d.beta.toFixed(4);
+    const se = d.se.toFixed(4);
+    const lo = (d.ci_low  >= 0 ? '+' : '') + d.ci_low.toFixed(4);
+    const hi = (d.ci_high >= 0 ? '+' : '') + d.ci_high.toFixed(4);
+    const p  = (sup || d.p_bootstrap == null)
+      ? '<em style="color:#888">—</em>'
+      : d.p_bootstrap.toFixed(4);
+    return `<td style="text-align:right;padding:4px 8px">${b}</td>`
+         + `<td style="text-align:right;padding:4px 8px">${se}</td>`
+         + `<td style="text-align:right;padding:4px 8px">${p}</td>`
+         + `<td style="padding:4px 8px;font-size:0.75rem">[${lo}, ${hi}]</td>`;
+  };
+
+  const NBHD = {
+    '89th_and_Ridge':      'Bay Ridge, Brooklyn',
+    'RGBIV':               'Brooklyn',
+    'FA_O5':              'Washington Heights',
+    'Red_Hook_Farms':      'Red Hook, Brooklyn',
+    'SITHS256O':           'St. George, Staten Island',
+    'Hudson_View_Gardens': 'Hudson Heights',
+  };
+  const PRETTY = n => n.replace(/_/g,' ').replace('FA O5','FA-O5').replace(' BKLYN','');
+
+  // Build combined sensor meta
+  const sensors80 = new Set((p80.sensors||[]).map(s => s.name));
+  const allSensors = [...(p80.sensors||[])];
+  (p70.sensors||[]).forEach(s => { if (!sensors80.has(s.name)) allSensors.push(s); });
+  const meta = {};
+  [...(p80.sensors||[]), ...(p70.sensors||[])].forEach(s => { meta[s.name] = s; });
+
+  // ── Sensor roster table ───────────────────────────────────────────────
+  const sensorRows = allSensors.map(s => {
+    const set  = sensors80.has(s.name) ? '80% primary' : '70% sensitivity';
+    const cell = s.ej ? 'EJ' : 'non-EJ';
+    const qr   = qct[s.name];
+    const cov  = qr ? qr.cov_pct.toFixed(1) + '%' : '—';
+    return `<tr style="border-bottom:1px solid #eee">
+      <td style="padding:4px 8px">${PRETTY(s.name)}</td>
+      <td style="padding:4px 8px${s.ej ? ';font-weight:600' : ''}">${cell}</td>
+      <td style="padding:4px 8px">${NBHD[s.name] || s.borough}</td>
+      <td style="text-align:right;padding:4px 8px">${cov}</td>
+      <td style="padding:4px 8px;font-size:0.8rem;color:#555">${set}</td>
+    </tr>`;
+  }).join('');
+
+  const sensorTable = `<p style="font-size:0.82rem;color:#555;margin-bottom:0.5rem">
+    Passing sensors — 12 candidates screened; <strong>${(p80.sensors||[]).length}</strong> at ≥80% coverage (primary),
+    <strong>${(p70.sensors||[]).length}</strong> at ≥70% (sensitivity). All require ≥200 pre-toll days.</p>
+  <table style="width:100%;border-collapse:collapse;font-size:0.82rem;font-family:inherit">
+    <thead><tr style="border-bottom:2px solid #2E312F">
+      <th style="text-align:left;padding:4px 8px">Sensor</th>
+      <th style="text-align:left;padding:4px 8px">Cell</th>
+      <th style="text-align:left;padding:4px 8px">Neighborhood</th>
+      <th style="text-align:right;padding:4px 8px">Coverage</th>
+      <th style="text-align:left;padding:4px 8px">Set</th>
+    </tr></thead>
+    <tbody>${sensorRows}</tbody>
+  </table>`;
+
+  // ── Spec B comparison table ────────────────────────────────────────────
+  const n80 = (p80.sensors||[]).length;
+  const n70 = (p70.sensors||[]).length;
+  const pa80nc = p80.spec_b_pa_only?.n_sites ?? 0;
+  const pa70nc = p70.spec_b_pa_only?.n_sites ?? 0;
+
+  const specDefs = [
+    ['B1 baseline — NYCCAS only (Check 4)', 11, c4.spec_b1?.post_ej, false],
+    [`B1 extended — 80% primary (${n80} PA sensors)`, p80.spec_b1_extended?.n_sites, p80.spec_b1_extended?.post_ej, false],
+    [`B1 extended — 70% sensitivity (${n70} PA sensors)`, p70.spec_b1_extended?.n_sites, p70.spec_b1_extended?.post_ej, false],
+    ['B3 baseline — outside-CRZ only (Check 4)', 6, c4.spec_b3?.post_ej, false],
+    ['B3 extended — 80% primary', p80.spec_b3_extended?.n_sites, p80.spec_b3_extended?.post_ej, false],
+    ['B3 extended — 70% sensitivity', p70.spec_b3_extended?.n_sites, p70.spec_b3_extended?.post_ej, false],
+    [`B-PA-only — 80% primary (${pa80nc} clusters)`, pa80nc, p80.spec_b_pa_only?.post_ej, pa80nc < 5],
+    [`B-PA-only — 70% sensitivity (${pa70nc} clusters)`, pa70nc, p70.spec_b_pa_only?.post_ej, pa70nc < 5],
+  ];
+
+  const specRows = specDefs.map(([lbl, nc, d, sup], i) => {
+    const sep = (i === 3 || i === 6) ? 'border-top:2px solid #ccc;' : '';
+    return `<tr style="${sep}border-bottom:1px solid #eee">
+      <td style="padding:4px 8px">${lbl}</td>
+      <td style="text-align:right;padding:4px 8px">${nc ?? '—'}</td>
+      ${fmtB(d, sup)}
+    </tr>`;
+  }).join('');
+
+  const supNote = pa80nc < 5
+    ? '<tr><td colspan="6" style="padding:4px 8px;font-style:italic;color:#666;font-size:0.8rem">80% PA-only: 3 clusters — fewer than 5; no calibrated inference.</td></tr>'
+    : '';
+
+  const specTable = `<p style="font-size:0.82rem;color:#555;margin:1.25rem 0 0.5rem">
+    Spec B — β<sub>EJ</sub> (wild bootstrap B=9999, Webb weights, cluster by site):</p>
+  <table style="width:100%;border-collapse:collapse;font-size:0.82rem;font-family:inherit">
+    <thead><tr style="border-bottom:2px solid #2E312F">
+      <th style="text-align:left;padding:4px 8px">Specification</th>
+      <th style="text-align:right;padding:4px 8px">Clusters</th>
+      <th style="text-align:right;padding:4px 8px">β<sub>EJ</sub></th>
+      <th style="text-align:right;padding:4px 8px">SE</th>
+      <th style="text-align:right;padding:4px 8px">p (boot)</th>
+      <th style="text-align:left;padding:4px 8px">95% CI</th>
+    </tr></thead>
+    <tbody>${specRows}${supNote}</tbody>
+  </table>`;
+
+  // ── Check 7 DiD table (Cross Bronx + Mott Haven on top) ───────────────
+  const refSites = ['Cross_Bronx_Expy','Mott_Haven'];
+  const REF_LABEL = { Cross_Bronx_Expy:'Cross Bronx Expy', Mott_Haven:'Mott Haven' };
+  const refRows = refSites.map(site => {
+    const d  = c7[site] || {};
+    const ej_s = ej[site]?.ej_point ? 'Y' : 'N';
+    return `<tr style="border-bottom:1px solid #eee;font-style:italic;color:#555">
+      <td style="padding:4px 8px">${REF_LABEL[site]}</td>
+      <td style="text-align:center;padding:4px 8px">${ej_s}</td>
+      <td style="padding:4px 8px;font-size:0.75rem;color:#777">NYCCAS/EJ</td>
+      <td style="text-align:right;padding:4px 8px">${fmt(d.raw_delta_25)}</td>
+      <td style="text-align:right;padding:4px 8px">${fmt(d.minus_vw_25)}</td>
+      <td style="text-align:right;padding:4px 8px">${fmt(d.minus_vw_26)}</td>
+      <td style="text-align:right;padding:4px 8px">${fmt(d.minus_qc_25)}</td>
+      <td style="text-align:right;padding:4px 8px">${fmt(d.minus_qc_26)}</td>
+    </tr>`;
+  }).join('');
+
+  const did = c9.check7_did || {};
+  const PA_ORDER = ['FA_O5','Red_Hook_Farms','89th_and_Ridge','RGBIV','Hudson_View_Gardens','SITHS256O'];
+  const paRows = PA_ORDER.map(name => {
+    const d = did[name]; if (!d) return '';
+    const s = meta[name]; if (!s) return '';
+    const set = (d.pass_set === 'primary' || d.pass_set === 'primary+sensitivity') ? '[80%]' : '[70%]';
+    return `<tr style="border-bottom:1px solid #eee">
+      <td style="padding:4px 8px">${PRETTY(name)}</td>
+      <td style="text-align:center;padding:4px 8px${s.ej ? ';font-weight:600' : ''}">${s.ej ? 'Y' : 'N'}</td>
+      <td style="padding:4px 8px;font-size:0.75rem;color:#777">${s.ej ? 'PA/EJ' : 'PA/non-EJ'}
+        <span style="${set==='[70%]'?'color:#aaa':''}">${set}</span></td>
+      <td style="text-align:right;padding:4px 8px">${fmt(d.raw_delta_25)}</td>
+      <td style="text-align:right;padding:4px 8px">${fmt(d.minus_vw_25)}</td>
+      <td style="text-align:right;padding:4px 8px">${fmt(d.minus_vw_26)}</td>
+      <td style="text-align:right;padding:4px 8px">${fmt(d.minus_qc_25)}</td>
+      <td style="text-align:right;padding:4px 8px">${fmt(d.minus_qc_26)}</td>
+    </tr>`;
+  }).join('');
+
+  const didTable = `<p style="font-size:0.82rem;color:#555;margin:1.25rem 0 0.5rem">
+    Check 7 matched-day DiD (µg/m³; year vs 2024 matched by DOY).
+    NYCCAS reference sites in <em>italics</em>; PurpleAir sensors below separator.</p>
+  <table style="width:100%;border-collapse:collapse;font-size:0.82rem;font-family:inherit">
+    <thead><tr style="border-bottom:2px solid #2E312F">
+      <th style="text-align:left;padding:4px 8px">Sensor</th>
+      <th style="text-align:center;padding:4px 8px">EJ</th>
+      <th style="text-align:left;padding:4px 8px">Type</th>
+      <th style="text-align:right;padding:4px 8px">raw Δ 2025</th>
+      <th style="text-align:right;padding:4px 8px">−VW 2025</th>
+      <th style="text-align:right;padding:4px 8px">−VW 2026</th>
+      <th style="text-align:right;padding:4px 8px">−QC 2025</th>
+      <th style="text-align:right;padding:4px 8px">−QC 2026</th>
+    </tr></thead>
+    <tbody>
+      ${refRows}
+      <tr><td colspan="8" style="padding:2px 8px;font-size:0.75rem;color:#888;background:#f8f8f8">
+        PurpleAir volunteer sensors — outside CRZ</td></tr>
+      ${paRows}
+    </tbody>
+  </table>`;
+
+  // ── Reading (verbatim, numbers confirmed from robustness.json) ─────────
+  const reading = `Adding volunteer sensors outside the zone does not change the EJ
+estimate. With the three sensors that meet the 80% coverage standard,
+β<sub>EJ</sub> ranges from −0.14 to −0.21 across specifications, and every confidence
+interval spans zero. Adding three lower-quality sensors at a 70% threshold moves the
+estimate to −0.47 to −0.53, still spanning zero, in the direction of EJ sites doing
+slightly better. Relative to Van Wyck, every outside-zone sensor rose by 0.5–1.3 µg/m³
+in 2025, EJ and non-EJ alike; relative to Queens College, changes are smaller and mixed
+(−0.5 to +0.8) with no EJ pattern. The distinction that holds is inside-zone versus
+outside-zone, not EJ versus non-EJ, and not Bronx versus elsewhere.`;
+
+  // ── Coverage / exclusion note ─────────────────────────────────────────
+  const excluded = Object.entries(qct).filter(([,v]) => !v.pass_80 && !v.pass_70);
+  const exclItems = excluded.map(([name, v]) =>
+    `<li><strong>${PRETTY(name)}</strong>: ${v.excl_reason || 'unknown'}</li>`
+  ).join('');
+
+  const hvg  = qct['Hudson_View_Gardens'];
+  const rhf  = qct['Red_Hook_Farms'];
+  const hvgN = hvg?.implausible
+    ? `<li><strong>Hudson View Gardens</strong>: passes 70% sensitivity set only. ${hvg.implausible} days with physically impossible cf<sub>1</sub> readings (≥200 µg/m³) removed by plausibility filter; hardware fault.</li>`
+    : '';
+  const rhfN = rhf?.p90_ab
+    ? `<li><strong>Red Hook Farms</strong>: passes 70% sensitivity set only. P90 |A−B| = ${rhf.p90_ab.toFixed(1)} µg/m³; noisy channel.</li>`
+    : '';
+
+  const coverageNote = `<strong>Coverage.</strong>
+    ${(p80.sensors||[]).length} of 12 candidates passed the primary 80% standard;
+    ${(p70.sensors||[]).length} of 12 at 70%.
+    Excluded (${excluded.length}):
+    <ul style="margin:0.25rem 0 0.5rem 1.5rem">${exclItems}</ul>
+    Notes on sensors in the sensitivity set only:
+    <ul style="margin:0.25rem 0 0 1.5rem">${hvgN}${rhfN}</ul>`;
+
+  const limits = `<strong>Limitation.</strong> Both Queens control monitors fell from 2024 to 2025
+while most outside-zone sites rose relative to them, so part of the outside-zone
+&#8220;increase&#8221; may be control drift rather than site worsening. The inside-zone
+decrease is robust to either control.`;
+
+  wrap.innerHTML = `
+    <div style="overflow-x:auto;margin:1rem 0">${sensorTable}</div>
+    <div style="overflow-x:auto;margin:1rem 0">${specTable}</div>
+    <div style="overflow-x:auto;margin:1rem 0">${didTable}</div>
+    <div class="callout">${reading}</div>
+    <div style="font-size:0.82rem;color:#444;margin:0.75rem 0 1rem">${coverageNote}</div>
+    <div class="callout" style="background:#f7f4f0;border-color:#c8b88a">${limits}</div>`;
+}
+
 // ─── Traffic charts ────────────────────────────────────────────────────── //
 function buildTrafficChart(traffic) {
   const facs = traffic.facilities;
@@ -1263,6 +1502,7 @@ async function main() {
     buildITSTable(its);
     buildEquityChart(its, robustness);
     buildCheck7Table(robustness);
+    buildCheck9(robustness);
     const schoolZone = DATA.school_zone;
     buildSchoolZoneSection(its, schoolZone);
   } else {

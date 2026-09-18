@@ -1,10 +1,10 @@
 """
-Generate site/data_bundle.js — embeds all processed data as a JS global
+Generate docs/data_bundle.js — embeds all processed data as a JS global
 so that the HTML pages work when opened directly from the file system
 (file:// protocol) without an HTTP server.
 
 Usage:  python scripts/bundle_data.py
-Output: site/data_bundle.js  (~16 MB, minified JSON)
+Output: docs/data_bundle.js  (~16 MB, minified JSON)
 """
 import json
 import sys
@@ -12,7 +12,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).parent.parent
 PROCESSED = ROOT / "data" / "processed"
-OUT = ROOT / "site" / "data_bundle.js"
+OUT = ROOT / "docs" / "data_bundle.js"
 
 # Map: key used in DATA_BUNDLE → filename in data/processed/
 # Keys match the paths used in the HTML PATHS objects

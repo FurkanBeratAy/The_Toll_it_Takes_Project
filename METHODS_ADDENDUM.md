@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document describes the five robustness specifications added to the CRZ air-quality
+This document describes the nine robustness specifications added to the CRZ air-quality
 analysis. The main ITS pipeline (scripts/05_its_model.py) is unchanged. All results are
 stored in `data/processed/robustness.json`.
 
@@ -188,6 +188,70 @@ for estimating the long-run trend. The gap-era COVID dummy covers most of the of
 period. Results should be interpreted with appropriate uncertainty.
 
 **Check 7 raw Δ revision (Cross Bronx Expy):** Initial implementation used post-toll 2025 days only (Jan 5 onward), giving −0.10 µg/m³; finalised method includes all calendar-2025 days (Jan 1–Dec 31) matched to 2024 by (month, day), giving −0.16 µg/m³ (279 matched pairs, including Jan 1–4 which are pre-toll but counted as 2025 calendar days).
+
+---
+
+## Check 9 — Outside-Zone PurpleAir Sensors
+
+**Panel window** — 2024-02-22 to 2026-09-17 (939 days). Toll date: 2025-01-05.
+Pre-toll window: 2024-02-22 to 2025-01-04 (317 days maximum).
+
+**Sensor roster** — Twelve PurpleAir sensors were evaluated. Eleven have dual channels (A and B). One sensor (Neal Phillip BKLYN, index
+138844) has channel B missing throughout; channel A only. It was excluded before QC.
+
+**EPA correction** — Barkjohn (2021): `EPA_PM25 = 0.524 × mean(cf_1_A, cf_1_B) − 0.0862 × RH + 5.75`.
+Applied only when both channels and RH are present. All regressions use EPA-corrected values.
+
+**QC rules (applied in order per daily observation):**
+1. Both channels must be present (cf_1_A and cf_1_B non-missing); otherwise flagged as
+   a_only or b_only and dropped.
+2. **Plausibility filter** — drop if cf_1_A ≥ 200 µg/m³ OR cf_1_B ≥ 200 µg/m³ OR
+   EPA-corrected ≥ 200 µg/m³. Mirrors the `Value < 200` filter in `scripts/04_pollution.py`.
+3. Relative humidity required for EPA correction; drop if RH missing.
+4. **A/B divergence** — drop if |cf_1_A − cf_1_B| > max(5.0, 0.20 × mean(cf_1_A, cf_1_B)).
+
+**Coverage gate** — Primary set: ≥80% of expected daily observations AND ≥200 pre-toll days.
+Sensitivity set: ≥70% / ≥200 pre-toll days.
+
+**Sensor-level notes:**
+
+- **Hudson View Gardens** (index 183603): 229 days of physically impossible readings
+  (~6,000 µg/m³, both channels in agreement) removed by the plausibility filter. These
+  readings passed the A/B divergence check because both channels agreed. Without the
+  plausibility filter, these values would corrupt the regression. Hardware fault confirmed;
+  sensor appears only in the 70% sensitivity set (post-filter coverage 72.0%).
+
+- **Red Hook Farms** (index 165783): P90 of |A−B| = 9.5 µg/m³ — the highest channel
+  divergence in the sensor pool. Coverage 73.3% after divergence QC. Passes 70% sensitivity
+  threshold only.
+
+- **NBN Bushwick McKibbin** (index 37185): coverage 70.6% after QC; pre-toll days 176 <
+  200 threshold. Excluded from both sets.
+
+- **NBN Green Provost** (index 150696): coverage 31.6%; pre-toll days 190 < 200; 1
+  implausible day. Excluded from both sets.
+
+- **Forest Hills** (index 24311): coverage 69.2% < 70% threshold. Excluded from both sets.
+
+- **Riverdale** (index 135148): coverage 45.7%; pre-toll days only 48. Excluded from both sets.
+
+- **W90th CPW** (index 4803): sensor offline until 2025-07; 0 pre-toll days; 6 implausible
+  days; 16.0% total coverage. Excluded from both sets.
+
+- **SITHS256O** (index 91441): coverage 77.0%, pre-toll days 316. Passes 70% sensitivity
+  set (fails 80% primary threshold).
+
+**Regression** — Same wild bootstrap as Check 4 (B=9999, Webb weights {−√1.5, −√0.5,
+−√1/6, +√1/6, +√0.5, +√1.5}, cluster by site). Three specifications:
+- B1-ext: full NYCCAS panel + passing PA sensors; indicators post×EJ, post×CRZ, post×PA.
+- B3-ext: outside-CRZ sites only; indicators post×EJ, post×PA.
+- B-PA-only: PA sensors only; indicator post×EJ.
+
+The post×PA term absorbs any instrument-level post-toll drift (PurpleAir reads on a
+different scale than NYCCAS; site FE absorb the level offset but not humidity-driven
+seasonal bias, hence the EPA correction and the additional post×PA instrument term).
+
+p-values suppressed when cluster count < 5 (B-PA-only 80% primary has 3 clusters).
 
 ---
 
