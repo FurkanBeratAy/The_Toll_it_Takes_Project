@@ -12,7 +12,7 @@ Part 2 outputs:
 
 Updates: processed/its_results.json with true EJ designations from DAC data.
 """
-import sys, json
+import sys, json, math
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent))
 from config import RAW_DIR, PROCESSED_DIR, STATION_COORDS, TREATMENT_SITES
@@ -23,6 +23,9 @@ import geopandas as gpd
 from shapely.geometry import Point, box
 import warnings
 warnings.filterwarnings("ignore")
+
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace", line_buffering=True)
 
 
 # ─── DAC tracts ────────────────────────────────────────────────────────────── #
@@ -120,6 +123,55 @@ def get_corridor_bbox(its_results):
         "min_lon": lon - buf, "max_lon": lon + buf,
         "min_lat": lat - buf, "max_lat": lat + buf,
     }
+
+
+# ─── Monitor-to-expressway and monitor-to-CRZ distances ───────────────────── #
+
+def compute_mott_haven_distances():
+    """Return {dist_deegan_m, dist_bruckner_m, dist_crz_m} in integer metres.
+
+    Uses Haversine nearest-vertex on LION mainline segments so the figures
+    reproduce the values cited in the boulevard section of part1.html:
+    44 m (Deegan), 633 m (Bruckner), 6079 m (CRZ).
+    """
+    lat0, lon0 = STATION_COORDS['Mott_Haven']
+
+    def hav(lat1, lon1, lat2, lon2):
+        R = 6371008.8
+        phi1, phi2 = math.radians(lat1), math.radians(lat2)
+        a = (math.sin(math.radians(lat2-lat1)/2)**2
+             + math.cos(phi1)*math.cos(phi2)*math.sin(math.radians(lon2-lon1)/2)**2)
+        return 2*R*math.atan2(math.sqrt(a), math.sqrt(1-a))
+
+    result = {}
+
+    streets_path = PROCESSED_DIR / 'corridor_streets.geojson'
+    if streets_path.exists():
+        feats = json.loads(streets_path.read_text())['features']
+        for key, name in (('dist_deegan_m', 'MAJOR DEEGAN EXPRESSWAY'),
+                          ('dist_bruckner_m', 'BRUCKNER EXPRESSWAY')):
+            matched = [f for f in feats
+                       if f['properties'].get('Street', '').upper() == name]
+            if matched:
+                d = min(hav(lat0, lon0, cy, cx)
+                        for f in matched
+                        for ring in f['geometry']['coordinates']
+                        for cx, cy in ring)
+                result[key] = int(d)
+
+    crz_path = PROCESSED_DIR / 'crz_boundary.geojson'
+    if crz_path.exists():
+        pts = []
+        for f in json.loads(crz_path.read_text())['features']:
+            g = f['geometry']
+            rings = (g['coordinates'] if g['type'] == 'Polygon'
+                     else [r for poly in g['coordinates'] for r in poly])
+            for ring in rings:
+                pts.extend(ring)
+        if pts:
+            result['dist_crz_m'] = int(min(hav(lat0, lon0, cy, cx) for cx, cy in pts))
+
+    return result
 
 
 # ─── LION street segments ──────────────────────────────────────────────────── #
@@ -384,6 +436,16 @@ def main():
 
     print("\n=== Processing LION street segments ===")
     process_lion(bbox)
+
+    print("\n=== Computing monitor-to-expressway distances ===")
+    dists = compute_mott_haven_distances()
+    if dists:
+        meta = json.loads((PROCESSED_DIR / "corridor_meta.json").read_text())
+        meta.update(dists)
+        (PROCESSED_DIR / "corridor_meta.json").write_text(json.dumps(meta, indent=2))
+        print(f"  dist_deegan_m={dists.get('dist_deegan_m')}  "
+              f"dist_bruckner_m={dists.get('dist_bruckner_m')}  "
+              f"dist_crz_m={dists.get('dist_crz_m')}")
 
     print("\n=== Processing street trees ===")
     process_trees(bbox)

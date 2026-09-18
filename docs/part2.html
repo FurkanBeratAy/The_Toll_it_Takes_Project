@@ -178,10 +178,11 @@
       <th>Typology</th>
       <th class="num">Naive removal (kg/yr)</th>
       <th class="num">Canyon-adjusted (kg/yr)</th>
+      <th class="num">Stormwater intercepted at maturity (kL/yr)</th>
       <th>Scope</th>
     </tr></thead>
     <tbody id="typology-comparison-tbody">
-      <tr><td colspan="4"><div class="loading"><div class="spinner"></div>Loading…</div></td></tr>
+      <tr><td colspan="5"><div class="loading"><div class="spinner"></div>Loading…</div></td></tr>
     </tbody>
   </table>
   </div>
@@ -214,6 +215,17 @@
     average (2015 Street Tree Census), scaled to the 22.1% citywide canopy
     cover figure. This is a rough proxy — actual canopy coverage requires
     LiDAR or aerial image analysis, neither of which is in this dataset.
+  </div>
+  <div class="callout">
+    <strong>Stormwater interception.</strong>
+    Annual rainfall interception estimated at 1,432 gallons per tree per year
+    (= 5,421 L/tree/yr; 1 US gal = 3.785 L), the NYC street-tree average from
+    Peper et al. 2007 (<em>New York City, NY Municipal Forest Resource Analysis</em>,
+    USDA Forest Service / i-Tree Streets). Applied directly to proposed tree counts
+    with no DBH scaling — the Peper figure is already a citywide average across all
+    DBH classes. Vertical surfaces (green wall, green screen) intercept little direct
+    rainfall; no defensible per-m² rate was found — stormwater benefit for those
+    typologies is not estimated.
   </div>
   <div class="callout">
     <strong>Complaint counts and reporting behavior.</strong>
@@ -538,15 +550,16 @@ function buildTypologyTable(canyon, schoolZone) {
   const t = canyon.typologies;
   const gs = schoolZone?.green_screen_typology;
   const rows = [
-    ['Dense street trees (20 ft spacing)', t.dense_street_trees?.removal_naive_kg_yr, t.dense_street_trees?.removal_adjusted_kg_yr, 'Full corridor (~56 miles of street network)'],
-    ['Spaced street trees (40 ft spacing)', t.spaced_street_trees?.removal_naive_kg_yr, t.spaced_street_trees?.removal_adjusted_kg_yr, 'Full corridor, lower density'],
-    ['Green wall (south-facing facades)', t.green_wall?.removal_naive_kg_yr, t.green_wall?.removal_adjusted_kg_yr, '16,570 m² leaf area, structural'],
-    ['Green screen — school frontage', gs?.removal_naive_kg_yr ?? 13.36, gs?.removal_adjusted_kg_yr ?? 12.29, '2 school frontages, Brown Place (180 ft × 20 ft)'],
+    ['Dense street trees (20 ft spacing)', t.dense_street_trees?.removal_naive_kg_yr, t.dense_street_trees?.removal_adjusted_kg_yr, t.dense_street_trees?.stormwater_kL_yr, 'Full corridor (~56 miles of street network)'],
+    ['Spaced street trees (40 ft spacing)', t.spaced_street_trees?.removal_naive_kg_yr, t.spaced_street_trees?.removal_adjusted_kg_yr, t.spaced_street_trees?.stormwater_kL_yr, 'Full corridor, lower density'],
+    ['Green wall (south-facing facades)', t.green_wall?.removal_naive_kg_yr, t.green_wall?.removal_adjusted_kg_yr, t.green_wall?.stormwater_kL_yr, '16,570 m² leaf area, structural'],
+    ['Green screen — school frontage', gs?.removal_naive_kg_yr ?? 13.36, gs?.removal_adjusted_kg_yr ?? 12.29, gs?.stormwater_kL_yr ?? null, '2 school frontages, Brown Place (180 ft × 20 ft)'],
   ];
-  tbody.innerHTML = rows.map(([name, naive, adj, scope]) => `<tr>
+  tbody.innerHTML = rows.map(([name, naive, adj, sw, scope]) => `<tr>
     <td>${name}</td>
     <td class="num">${naive != null ? naive.toFixed(2) : '—'}</td>
     <td class="num">${adj != null ? adj.toFixed(2) : '—'}</td>
+    <td class="num">${sw != null ? sw.toLocaleString() : 'not estimated'}</td>
     <td>${scope}</td>
   </tr>`).join('');
 }

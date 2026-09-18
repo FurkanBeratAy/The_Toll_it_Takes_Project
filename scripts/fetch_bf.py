@@ -7,6 +7,6 @@ params = {chr(36)+'limit': 50000, chr(36)+'select': 'bin,height_roof,ground_elev
 r = requests.get(BF_URL, params=params, timeout=120)
 print('Status:', r.status_code, 'Records:', len(r.json()) if r.ok else 0)
 if r.ok:
-    out = Path(r'C:\Users\Furkan\Desktop\The Toll it Takes\building_footprints_sbx.json')
+    out = Path(__file__).resolve().parent.parent / 'building_footprints_sbx.json'
     out.write_text(json.dumps(r.json(), indent=2))
     print('Saved to', out)

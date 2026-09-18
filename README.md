@@ -26,7 +26,7 @@ NYC's congestion toll went live on January 5, 2025. This project uses hourly PM�
 - Did it get worse in the South Bronx (Mott Haven, Cross Bronx), where diverted traffic would go?
 - Did environmental-justice-designated neighborhoods fare differently than non-EJ sites?
 
-The method is interrupted time series (ITS) regression with HAC standard errors, using Queens College and Van Wyck as control monitors. Nine robustness checks are reported: weather adjustment, peak/overnight differencing, placebo-in-time, pooled panel, mechanism check, Bronx NO₂ trend, matched-day DiD, step-only ITS, and outside-zone PurpleAir sensors.
+The method is interrupted time series (ITS) regression with HAC standard errors, using Queens College and Van Wyck as control monitors. Nine robustness checks are reported: weather adjustment, peak/overnight differencing, placebo-in-time, pooled panel, mechanism check, Bronx NO₂ trend, matched-day DiD, step-only ITS, and outside-zone PurpleAir sensors. Part I also compares these results with the South Bronx Unite community study and reasons through an expressway-to-boulevard scenario; Part II reports stormwater interception alongside PM₂.₅ removal.
 
 ---
 
@@ -97,6 +97,8 @@ python scripts/bundle_data.py          # build docs/data_bundle.js
 With `data/raw/purpleair/` present, only phase2_diag and phase3 need to run.
 
 Check 9 (phases 1–2) requires `PURPLEAIR_READ_KEY` set in a `.env` file.
+
+**Reproducibility note:** To reproduce the headline ITS numbers without the raw data: `data/processed/pollution_daily.json` is in the repo; run `python scripts/05_its_model.py`. `scripts/config.py` derives `BASE_DIR` via `Path(__file__).resolve().parent.parent`, so all paths resolve relative to the repo root regardless of clone location. No hard-coded absolute paths remain in `scripts/` or `analysis/`. All scripts that print β, µ, or other non-ASCII characters call `sys.stdout.reconfigure(encoding="utf-8")` on startup; no `PYTHONIOENCODING` environment variable is needed on Windows. Re-running `scripts/05_its_model.py` from a clean clone reproduces `its_results.json` exactly (verified: Manhattan Bridge β_post = −1.328, Mott Haven β_post = +0.296).
 
 ---
 

@@ -26,6 +26,9 @@ import statsmodels.api as sm
 import warnings
 warnings.filterwarnings("ignore")
 
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace", line_buffering=True)
+
 
 def load_daily():
     fpath = PROCESSED_DIR / "pollution_daily.json"

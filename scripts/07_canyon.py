@@ -47,6 +47,17 @@ BASE_REMOVAL_KG_YR = 0.31   # kg PM2.5 per tree per year at DBH=10"
 DBH_EXPONENT = 1.5
 REF_DBH = 10.0  # reference diameter in inches
 
+# ─── Published stormwater interception rate ────────────────────────────────── #
+
+# Peper et al. 2007, "New York City, NY Municipal Forest Resource Analysis"
+# (USDA Forest Service / i-Tree Streets, psw_cufr687_NYC_MFRA.pdf)
+# "the average tree intercepts 1432 gallons of stormwater each year"
+# Applied directly to tree counts — no DBH scaling; figure is already a
+# citywide average across all DBH classes.
+BASE_STORMWATER_GAL_YR = 1432          # gallons/tree/year (NYC street-tree avg)
+_GAL_TO_L = 3.785411784                # 1 US gallon = 3.785411784 litres
+BASE_STORMWATER_L_YR = BASE_STORMWATER_GAL_YR * _GAL_TO_L  # 5420.7 L/tree/yr
+
 
 def dbh_scalar(dbh):
     """Scale removal rate by DBH relative to reference."""
@@ -166,6 +177,8 @@ def removal_typology(hw_ratio, corridor_length_ft, existing_dbh_mean=10):
         "canyon_discount":     round(disc_dense, 2),
         "removal_naive_kg_yr": round(removal_dense_full, 2),
         "removal_adjusted_kg_yr": round(removal_dense_full * (1 - disc_dense), 2),
+        # Peper et al. 2007 (NYC MFRA): 1,432 gal/tree/yr = 5,421 L/tree/yr; no DBH scaling
+        "stormwater_kL_yr":    round(int(n_dense) * BASE_STORMWATER_L_YR / 1000),
         "projection": {
             str(y): round(removal_dense_full * (1 - disc_dense) * MATURATION[y], 2)
             for y in YEARS
@@ -183,6 +196,8 @@ def removal_typology(hw_ratio, corridor_length_ft, existing_dbh_mean=10):
         "canyon_discount":     round(disc_spaced, 2),
         "removal_naive_kg_yr": round(removal_spaced_full, 2),
         "removal_adjusted_kg_yr": round(removal_spaced_full * (1 - disc_spaced), 2),
+        # Peper et al. 2007 (NYC MFRA): 1,432 gal/tree/yr = 5,421 L/tree/yr; no DBH scaling
+        "stormwater_kL_yr":    round(int(n_spaced) * BASE_STORMWATER_L_YR / 1000),
         "projection": {
             str(y): round(removal_spaced_full * (1 - disc_spaced) * MATURATION[y], 2)
             for y in YEARS
@@ -202,6 +217,8 @@ def removal_typology(hw_ratio, corridor_length_ft, existing_dbh_mean=10):
         "canyon_discount":     round(disc_wall, 2),
         "removal_naive_kg_yr": round(removal_wall_full, 3),
         "removal_adjusted_kg_yr": round(removal_wall_adj, 3),
+        # Vertical surfaces intercept little direct rainfall; no defensible per-m² rate found
+        "stormwater_kL_yr":    None,
         "projection": {
             str(y): round(removal_wall_adj, 3)
             for y in YEARS
@@ -414,7 +431,11 @@ def main():
             "DBH scaling: removal ∝ (DBH/10)^1.5 (Hirabayashi 2012). "
             "Canyon discount: linear ramp from H/W=0.5 to H/W=2.5, max 60%, "
             "based on Li et al. (2019) LES simulations and Morakinyo & Lam (2016) review. "
-            "Projection maturation curve: 10% yr1, 55% yr10, 90% yr20 of full-size removal."
+            "Projection maturation curve: 10% yr1, 55% yr10, 90% yr20 of full-size removal. "
+            "Stormwater: 1,432 gal/tree/yr (=5,421 L/tree/yr) from Peper et al. 2007 "
+            "(NYC Municipal Forest Resource Analysis, USDA Forest Service / i-Tree Streets); "
+            "applied directly to tree counts, no DBH scaling. "
+            "Green wall/screen stormwater: not estimated."
         ),
     }
 

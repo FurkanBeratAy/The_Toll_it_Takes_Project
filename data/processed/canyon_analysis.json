@@ -25,6 +25,7 @@
       "canyon_discount": 0.13,
       "removal_naive_kg_yr": 6934.32,
       "removal_adjusted_kg_yr": 6029.61,
+      "stormwater_kL_yr": 80573,
       "projection": {
         "1": 602.96,
         "10": 3316.28,
@@ -38,6 +39,7 @@
       "canyon_discount": 0.05,
       "removal_naive_kg_yr": 3467.16,
       "removal_adjusted_kg_yr": 3286.22,
+      "stormwater_kL_yr": 40287,
       "projection": {
         "1": 328.62,
         "10": 1807.42,
@@ -50,6 +52,7 @@
       "canyon_discount": 0.05,
       "removal_naive_kg_yr": 14.913,
       "removal_adjusted_kg_yr": 14.168,
+      "stormwater_kL_yr": null,
       "projection": {
         "1": 14.168,
         "10": 14.168,
@@ -95,5 +98,5 @@
       "rationale": "The most pollution-tolerant tree in the NYC palette; columnar form minimises wind-shadow on truck lanes. Use only male cultivars \u2014 female Ginkgo fruits create a maintenance burden."
     }
   ],
-  "methodology_note": "PM2.5 removal rates from Nowak et al. (2006, 2018). DBH scaling: removal \u221d (DBH/10)^1.5 (Hirabayashi 2012). Canyon discount: linear ramp from H/W=0.5 to H/W=2.5, max 60%, based on Li et al. (2019) LES simulations and Morakinyo & Lam (2016) review. Projection maturation curve: 10% yr1, 55% yr10, 90% yr20 of full-size removal."
+  "methodology_note": "PM2.5 removal rates from Nowak et al. (2006, 2018). DBH scaling: removal \u221d (DBH/10)^1.5 (Hirabayashi 2012). Canyon discount: linear ramp from H/W=0.5 to H/W=2.5, max 60%, based on Li et al. (2019) LES simulations and Morakinyo & Lam (2016) review. Projection maturation curve: 10% yr1, 55% yr10, 90% yr20 of full-size removal. Stormwater: 1,432 gal/tree/yr (=5,421 L/tree/yr) from Peper et al. 2007 (NYC Municipal Forest Resource Analysis, USDA Forest Service / i-Tree Streets); applied directly to tree counts, no DBH scaling. Green wall/screen stormwater: not estimated."
 }

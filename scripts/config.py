@@ -1,10 +1,10 @@
 from pathlib import Path
 import pandas as pd
 
-BASE_DIR = Path(r"C:\Users\Furkan\Desktop\The Toll it Takes")
-RAW_DIR = BASE_DIR          # existing downloads are in root
+BASE_DIR = Path(__file__).resolve().parent.parent   # repo root, works from any clone
+RAW_DIR = BASE_DIR          # raw downloads live in repo root (gitignored)
 PROCESSED_DIR = BASE_DIR / "data" / "processed"
-SITE_DIR = BASE_DIR / "site"
+SITE_DIR = BASE_DIR / "docs"
 
 TOLL_DATE = pd.Timestamp("2025-01-05")
 VW_START  = pd.Timestamp("2024-02-22")   # Van Wyck monitor start

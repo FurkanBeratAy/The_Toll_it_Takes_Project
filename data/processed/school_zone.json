@@ -194,6 +194,7 @@
     "removal_naive_kg_yr": 13.36,
     "canyon_discount": 0.08,
     "removal_adjusted_kg_yr": 12.29,
+    "stormwater_kL_yr": null,
     "projection": {
       "1": 12.29,
       "10": 12.29,

@@ -78,7 +78,7 @@
 
   <div class="map-wrap">
     <div id="map-aqi" class="map-container"></div>
-    <div class="map-legend" id="legend-aqi">
+    <div class="map-legend" id="legend-aqi" style="max-width:240px">
       <div class="legend-title">β<sub>post</sub> (µg/m³)</div>
       <div class="legend-row"><div class="legend-swatch" style="background:#7A2510"></div><span>Rose more than 0.5</span></div>
       <div class="legend-row"><div class="legend-swatch" style="background:#B4391B"></div><span>Rose 0.1 to 0.5</span></div>
@@ -88,13 +88,22 @@
       <hr>
       <div class="legend-row"><div class="legend-swatch" style="background:repeating-linear-gradient(45deg,#000 0 1px,transparent 1px 4px)"></div><span>Disadvantaged-community tracts</span></div>
       <div class="legend-row"><div class="legend-swatch" style="background:none;border:2px solid #4B2E83"></div><span>Congestion Relief Zone</span></div>
+      <hr>
+      <div class="legend-title">Toll rates (E-ZPass, 2025 schedule)</div>
+      <div style="font-size:.74rem;line-height:1.65">
+        Car: <strong>$9</strong>&nbsp;/&nbsp;$2.25<br>
+        Small truck&nbsp;/ bus: <strong>$14.40</strong>&nbsp;/&nbsp;$3.60<br>
+        Large truck&nbsp;/ tour bus: <strong>$21.60</strong>&nbsp;/&nbsp;$5.40<br>
+        <em style="color:var(--ink-muted);font-size:.68rem">peak&nbsp;/ overnight<br>
+        Wkdays 5am–9pm · wknds 9am–9pm</em>
+      </div>
     </div>
     <div class="map-toggle-row">
       <button class="map-toggle active" onclick="toggleLayer('map-aqi','ej-fill','ej-outline',this)">Disadvantaged-community tracts</button>
       <button class="map-toggle active" onclick="toggleLayer('map-aqi','crz-fill','crz-outline',this)">Zone boundary</button>
       <button class="map-toggle active" onclick="toggleLayer('map-aqi','raster-pm',null,this)">PM<sub>2.5</sub> raster, 2023–24</button>
     </div>
-    <figcaption class="figure-caption"><b>Figure 1.</b> ITS step-changes after the toll at five treatment sites. The two Bronx sites (Cross Bronx, Mott Haven) are in state-designated disadvantaged-community tracts and outside the CRZ. The three East River bridge sites are inside or on the CRZ boundary; Manhattan and Williamsburg Bridges are ~800 m inside the zone.</figcaption>
+    <figcaption class="figure-caption"><b>Figure 1.</b> ITS step-changes after the toll at five treatment sites. The two Bronx sites (Cross Bronx, Mott Haven) are in state-designated disadvantaged-community tracts and outside the CRZ. The three East River bridge sites are inside or on the CRZ boundary; Manhattan and Williamsburg Bridges are ~800 m inside the zone. Toll rates: <a href="https://www.mta.info/fares-tolls/tolls/congestion-relief-zone/about" target="_blank" rel="noopener">MTA Congestion Relief Zone</a>.</figcaption>
   </div>
 </section>
 
@@ -367,6 +376,15 @@
     <div class="loading"><div class="spinner"></div>Loading…</div>
   </div>
 
+  <!-- ─ South Bronx Unite comparison ─ -->
+  <div class="section-header" style="margin-top:2.5rem">
+    <h3>How this compares to the South Bronx Unite study</h3>
+    <p>The South Bronx Unite community network documented PM₂.₅ rising at 12–14 of 19 sensors between January 2024 and December 2025, averaging approximately +0.22 µg/m³ and reaching +1.29 µg/m³ near expressways (NYC Congestion Pricing Datathon brief). Our Check 7 matched-day raw changes at the two Bronx NYCCAS sites are in the same order of magnitude: Mott Haven +0.08 µg/m³, Cross Bronx −0.16 µg/m³ — small and mixed in sign (2025 vs. 2024).</p>
+    <p>The difference between the two studies is the counterfactual. South Bronx Unite reports raw year-over-year change. When we subtract a control monitor, the same upward shift appears at every outside-zone site regardless of borough or EJ status. In 2025, the three primary-set PurpleAir sensors each rose relative to Van Wyck: 89th &amp; Ridge Ave in Bay Ridge +0.85 µg/m³, RGBIV in Brooklyn Heights +1.26 µg/m³, FA_O5 in East Harlem +1.19 µg/m³ (Check 9). Their raw year-over-year changes (+0.25, +0.48, and +0.74 µg/m³) are close to the South Bronx Unite average.</p>
+    <p>On the expressway question, our one expressway-adjacent peak-hour result points the same way. Cross Bronx Expressway, weekday peak hours (Check 2): β<sub>post</sub> = +0.90 µg/m³ (95% CI +0.04 to +1.75, p = 0.04) — values that fall within the range South Bronx Unite reports across its network. That is one significant result among the peak-hour tests — a hint, not a finding.</p>
+  </div>
+  <div class="callout"><strong>The two studies see the same underlying data.</strong> PM₂.₅ did not fall at outside-zone Bronx sites. The disagreement is about what to compare it to. Relative to the regional background (the control monitors), the Bronx moved the same way as Bay Ridge, Brooklyn Heights, and East Harlem. The organizing variable is inside versus outside the toll zone — not EJ status, not the Bronx.</div>
+
 </section>
 
 <!-- ─── Section 6: Traffic Diversion ──────────────────────────────────────── -->
@@ -455,6 +473,44 @@
   </div>
 </section>
 
+<!-- ─── What if the expressways were boulevards? ─────────────────────────── -->
+<section class="section">
+  <div class="section-header">
+    <h2>What if the expressways were boulevards?</h2>
+    <p>The NYCCAS monitor at Mott Haven sits <strong><span class="dist-deegan">44</span> m</strong> from the Major Deegan
+    Expressway and <strong><span class="dist-bruckner">633</span> m</strong> from the Bruckner Expressway. The Major Deegan
+    carries roughly 100,000–130,000 vehicles per day — approximately 7,000–8,500 vehicles
+    per hour bidirectional at peak (Bronx MIS traffic counts). The congestion toll has
+    little leverage over an expressway that mostly bypasses the zone.</p>
+  </div>
+  <div class="callout">
+    <p>To translate that volume into a rough PM₂.₅ figure, two sanity checks converge.
+    Arithmetically, the pre-toll mechanism coefficient (β = 0.018 µg/m³ per 1,000 veh/day
+    at Throgs Neck, Check 5, p = 0.27) times 100,000–130,000 veh/day gives
+    <strong>1.8–2.4 µg/m³</strong> — an upper bound, because the coefficient comes from a
+    single bridge, not the full local source mix. Independently, the
+    <a href="https://a816-dohbesp.nyc.gov/IndicatorPublic/data-features/congestion-pricing-report/">NYC
+    Health Department's congestion pricing air quality report (August 2026)</a> estimates
+    that vehicle traffic contributes about 14% of the city's PM₂.₅ emissions. Applied to
+    Mott Haven's pre-toll mean of 7.45 µg/m³, that implies roughly
+    <strong>1.04 µg/m³</strong> from all traffic combined. Both approaches point to a
+    defensible range of about <strong>1–2 µg/m³</strong> attributable to traffic at this
+    site.</p>
+    <p>Now the boulevard scenario. If the Major Deegan were redesigned to carry half its
+    current volume — say, 50,000–65,000 vehicles per day — the implied PM₂.₅ reduction at
+    the monitor would be on the order of <strong>0.5–1 µg/m³</strong>. That is larger than
+    any change measured outside the zone in this report, and comparable to what the toll
+    delivered inside it. And it would be delivered directly to the nine schools within
+    400 m of the monitor.</p>
+    <p>This is back-of-envelope, not a model. It treats the mechanism coefficient as causal,
+    ignores local mixing and fleet composition, and the Health Department's 14% figure is an
+    emissions share for the whole city applied to a measured concentration at a single site.
+    But the order of magnitude is the point: street-network restructuring <span class="dist-deegan">44</span> m from the
+    monitor may have more leverage on Mott Haven air quality than a toll that reduces
+    vehicles entering a zone roughly <span class="dist-crz">6</span> km to the south.</p>
+  </div>
+</section>
+
 </div><!-- /container -->
 
 <footer class="site-footer">
@@ -513,17 +569,18 @@ async function loadJSON(path) {
 
 const DATA = {};
 const PATHS = {
-  its:        '../data/processed/its_results.json',
-  stations:   '../data/processed/monitor_stations.geojson',
-  crz_bnd:    '../data/processed/crz_boundary.geojson',
-  dac:        '../data/processed/dac_tracts_nyc.geojson',
-  traffic:    '../data/processed/traffic_diversion.json',
-  crz:        '../data/processed/crz_daily.json',
-  raster:     '../data/processed/nyccas_raster_points.geojson',
-  headline:   '../data/processed/headline_stats.json',
-  bt_geo:     '../data/processed/bt_facilities.geojson',
-  school_zone:  '../data/processed/school_zone.json',
-  robustness:   '../data/processed/robustness.json',
+  its:           '../data/processed/its_results.json',
+  stations:      '../data/processed/monitor_stations.geojson',
+  crz_bnd:       '../data/processed/crz_boundary.geojson',
+  dac:           '../data/processed/dac_tracts_nyc.geojson',
+  traffic:       '../data/processed/traffic_diversion.json',
+  crz:           '../data/processed/crz_daily.json',
+  raster:        '../data/processed/nyccas_raster_points.geojson',
+  headline:      '../data/processed/headline_stats.json',
+  bt_geo:        '../data/processed/bt_facilities.geojson',
+  school_zone:   '../data/processed/school_zone.json',
+  robustness:    '../data/processed/robustness.json',
+  corridor_meta: '../data/processed/corridor_meta.json',
 };
 
 // ─── Maps ─────────────────────────────────────────────────────────────── //
@@ -1101,8 +1158,8 @@ function buildCheck9(robustness) {
 
   const NBHD = {
     '89th_and_Ridge':      'Bay Ridge, Brooklyn',
-    'RGBIV':               'Brooklyn',
-    'FA_O5':              'Washington Heights',
+    'RGBIV':               'Brooklyn Heights',
+    'FA_O5':               'East Harlem',
     'Red_Hook_Farms':      'Red Hook, Brooklyn',
     'SITHS256O':           'St. George, Staten Island',
     'Hudson_View_Gardens': 'Hudson Heights',
@@ -1514,6 +1571,13 @@ async function main() {
 
   if (traffic) buildTrafficChart(traffic);
   if (crz) buildCRZChart(crz);
+
+  const meta = await loadJSON(PATHS.corridor_meta).catch(() => null);
+  if (meta) {
+    document.querySelectorAll('.dist-deegan').forEach(el => { el.textContent = meta.dist_deegan_m ?? 44; });
+    document.querySelectorAll('.dist-bruckner').forEach(el => { el.textContent = meta.dist_bruckner_m ?? 633; });
+    document.querySelectorAll('.dist-crz').forEach(el => { el.textContent = Math.round((meta.dist_crz_m ?? 6079) / 1000); });
+  }
 }
 
 main();

@@ -46,7 +46,7 @@ Two specifications are run per site:
 
 ### Figure 1: PM₂.₅ by Monitoring Corridor (Map)
 
-**What it shows:** A map of New York City with five ITS treatment sites colored by their ITS β_post coefficient. Green dots indicate corridors where air quality improved after the toll. Brick-red dots indicate corridors where it worsened. The Congestion Relief Zone boundary is shown in purple. State-designated Disadvantaged Community (DAC) tracts are outlined.
+**What it shows:** A map of New York City with five ITS treatment sites colored by their ITS β_post coefficient. Green dots indicate corridors where air quality improved after the toll. Brick-red dots indicate corridors where it worsened. The Congestion Relief Zone boundary is shown in purple. State-designated Disadvantaged Community (DAC) tracts are outlined. A toll-structure legend box shows E-ZPass rates (2025 schedule): car $9 peak / $2.25 overnight; small truck / bus $14.40 / $3.60; large truck / tour bus $21.60 / $5.40 (peak: weekdays 5am–9pm, weekends 9am–9pm; source: [MTA Congestion Relief Zone](https://www.mta.info/fares-tolls/tolls/congestion-relief-zone/about)).
 
 **How to read it:** The color carries all the information about direction. The dot size stays constant — this is not a bubble chart where size encodes magnitude. To read magnitude, consult the ITS table (Figure 3) or click a dot for the popup.
 
@@ -146,6 +146,18 @@ Both interpretations can be true simultaneously. The chart is presented as indep
 
 ---
 
+### What if the expressways were boulevards?
+
+The NYCCAS monitor at Mott Haven sits **44 m** from the Major Deegan Expressway and **633 m** from the Bruckner Expressway. The Major Deegan carries roughly 100,000–130,000 vehicles per day — approximately 7,000–8,500 vehicles per hour bidirectional at peak (Bronx MIS traffic counts). The congestion toll has little leverage over an expressway that mostly bypasses the zone.
+
+To translate that volume into a rough PM₂.₅ figure, two sanity checks converge. Arithmetically, the pre-toll mechanism coefficient (β = 0.018 µg/m³ per 1,000 veh/day at Throgs Neck, Check 5, p = 0.27) times 100,000–130,000 veh/day gives **1.8–2.4 µg/m³** — an upper bound, because the coefficient comes from a single bridge, not the full local source mix. Independently, the NYC Health Department's [congestion pricing air quality report (August 2026)](https://a816-dohbesp.nyc.gov/IndicatorPublic/data-features/congestion-pricing-report/) estimates that vehicle traffic contributes about 14% of the city's PM₂.₅ emissions. Applied to Mott Haven's pre-toll mean of 7.45 µg/m³, that implies roughly **1.04 µg/m³** from all traffic combined. Both approaches point to a defensible range of about **1–2 µg/m³** attributable to traffic at this site.
+
+Now the boulevard scenario. If the Major Deegan were redesigned to carry half its current volume — say, 50,000–65,000 vehicles per day — the implied PM₂.₅ reduction at the monitor would be on the order of **0.5–1 µg/m³**. That is larger than any change measured outside the zone in this report, and comparable to what the toll delivered inside it. And it would be delivered directly to the nine schools within 400 m of the monitor.
+
+This is back-of-envelope, not a model. It treats the mechanism coefficient as causal, ignores local mixing and fleet composition, and the Health Department's 14% figure is an emissions share for the whole city applied to a measured concentration at a single site. But the order of magnitude is the point: street-network restructuring 44 m from the monitor may have more leverage on Mott Haven air quality than a toll that reduces vehicles entering a zone roughly 6 km to the south.
+
+---
+
 ### Figure 6: Did EJ-Designated Sites Fare Worse? (Equity Chart)
 
 **What it shows:** A scatter plot with each ITS treatment site as a point. The x-axis is the site's pre-toll mean PM₂.₅ (a proxy for baseline pollution load); the y-axis is β_post (the ITS step-change). Points are colored by EJ designation (corrected spatial-join flags): brick for EJ-designated sites, green for non-EJ. Symbol indicates CRZ membership: circles for outside-zone sites, squares for inside. No site-level regression line is shown — the estimate is read from the panel model.
@@ -213,8 +225,8 @@ The NYCCAS panel has no outside-CRZ, non-EJ sites. To test whether the EJ estima
 | Sensor | Neighborhood | EJ | Borough | Coverage |
 |---|---|---|---|---|
 | 89th & Ridge Ave | Bay Ridge | No | Brooklyn | 90.6% |
-| RGBIV | Sunset Park | No | Brooklyn | 96.2% |
-| FA_O5 | Washington Heights | Yes | Manhattan | 90.0% |
+| RGBIV | Brooklyn Heights | No | Brooklyn | 96.2% |
+| FA_O5 | East Harlem | Yes | Manhattan | 90.0% |
 
 **Sensitivity set (adds three sensors at ≥70%):** Red Hook Farms (EJ, Brooklyn, 73.3%), SITHS256O (non-EJ, Staten Island, 77.0%), Hudson View Gardens (non-EJ, Manhattan, 72.0%). Hudson View had 229 days of physically impossible readings (~6,000 µg/m³) removed by a plausibility filter; it appears only in the sensitivity set.
 
@@ -249,6 +261,18 @@ All intervals span zero. The 70% estimates shift slightly toward EJ sites doing 
 Adding volunteer sensors outside the zone does not change the EJ estimate. With the three sensors that meet the 80% coverage standard, β_EJ ranges from −0.14 to −0.21 across specifications, and every confidence interval spans zero. Adding three lower-quality sensors at a 70% threshold moves the estimate to −0.47 to −0.53, still spanning zero, in the direction of EJ sites doing slightly better. Relative to Van Wyck, every outside-zone sensor rose by 0.5–1.3 µg/m³ in 2025, EJ and non-EJ alike; relative to Queens College, changes are smaller and mixed (−0.5 to +0.8) with no EJ pattern. The distinction that holds is inside-zone versus outside-zone, not EJ versus non-EJ, and not Bronx versus elsewhere.
 
 **Limitation:** Both Queens control monitors fell from 2024 to 2025 while most outside-zone sites rose relative to them, so part of the outside-zone "increase" may be control drift rather than site worsening. The inside-zone decrease is robust to either control.
+
+---
+
+### How this compares to the South Bronx Unite study
+
+The South Bronx Unite community network documented PM₂.₅ rising at 12–14 of 19 sensors between January 2024 and December 2025, averaging approximately +0.22 µg/m³ and reaching +1.29 µg/m³ near expressways (NYC Congestion Pricing Datathon brief). Our Check 7 matched-day raw changes at the two Bronx NYCCAS sites are in the same order of magnitude: Mott Haven +0.08 µg/m³, Cross Bronx −0.16 µg/m³ — small and mixed in sign (2025 vs. 2024).
+
+The difference between the two studies is the counterfactual. South Bronx Unite reports raw year-over-year change. When we subtract a control monitor, the same upward shift appears at every outside-zone site regardless of borough or EJ status. In 2025, the three primary-set PurpleAir sensors each rose relative to Van Wyck: 89th & Ridge Ave in Bay Ridge +0.85 µg/m³, RGBIV in Brooklyn Heights +1.26 µg/m³, FA_O5 in East Harlem +1.19 µg/m³ (Check 9). Their raw year-over-year changes (+0.25, +0.48, and +0.74 µg/m³) are close to the South Bronx Unite average.
+
+On the expressway question, our one expressway-adjacent peak-hour result points the same way. Cross Bronx Expressway, weekday peak hours (Check 2): β_post = +0.90 µg/m³ (95% CI +0.04 to +1.75, p = 0.04) — values that fall within the range South Bronx Unite reports across its network. That is one significant result among the peak-hour tests — a hint, not a finding.
+
+**The two studies see the same underlying data.** PM₂.₅ did not fall at outside-zone Bronx sites. The disagreement is about what to compare it to. Relative to the regional background (the control monitors), the Bronx moved the same way as Bay Ridge, Brooklyn Heights, and East Harlem. The organizing variable is inside versus outside the toll zone — not EJ status, not the Bronx.
 
 ---
 
@@ -305,12 +329,12 @@ This 13% discount is not trivial — it is the reason the analysis shows both na
 
 **The actual numbers:**
 
-| Typology | Scope | Naïve (kg/yr) | Canyon-adjusted (kg/yr) | Discount |
-|---|---|---|---|---|
-| Dense street trees (20 ft) | 14,864 trees, full corridor | 6,934 | **6,030** | 13% |
-| Spaced street trees (40 ft) | 7,432 trees, full corridor | 3,467 | **3,286** | 5% |
-| Green wall (south-facing facades) | 16,570 m² leaf area, structural | 14.9 | **14.2** | 5% |
-| Green screen (school frontage) | 2 school frontages, 180 ft × 20 ft | 13.4 | **12.3** | 8% |
+| Typology | Scope | Naïve (kg/yr) | Canyon-adjusted (kg/yr) | Discount | Stormwater intercepted at maturity (kL/yr) |
+|---|---|---|---|---|---|
+| Dense street trees (20 ft) | 14,864 trees, full corridor | 6,934 | **6,030** | 13% | **80,573** |
+| Spaced street trees (40 ft) | 7,432 trees, full corridor | 3,467 | **3,286** | 5% | **40,287** |
+| Green wall (south-facing facades) | 16,570 m² leaf area, structural | 14.9 | **14.2** | 5% | not estimated |
+| Green screen (school frontage) | 2 school frontages, 180 ft × 20 ft | 13.4 | **12.3** | 8% | not estimated |
 
 **How to read it:** The gap between naïve and adjusted bars is the visual argument for typology selection. The wider the gap, the more the canyon penalty hurts that typology. Dense trees take the largest absolute hit (−905 kg/yr) but still outperform all alternatives because of their sheer number of trees and leaf area.
 
@@ -395,6 +419,8 @@ The most pollution-tolerant tree in the NYC palette by empirical evidence. Colum
 ---
 
 ### Methodology & Limitations: What the Numbers Don't Prove
+
+**Stormwater interception:** Annual rainfall interception estimated at 1,432 gallons per tree per year (= 5,421 L/tree/yr; 1 US gal = 3.785 L), the NYC street-tree average from Peper et al. 2007 (*New York City, NY Municipal Forest Resource Analysis*, USDA Forest Service / i-Tree Streets). Applied directly to proposed tree counts with no DBH scaling — the Peper figure is already a citywide average across all DBH classes. Vertical surfaces (green wall, green screen) intercept little direct rainfall; no defensible per-m² rate was found — stormwater benefit for those typologies is not estimated.
 
 **i-Tree approximation (±30–50% on removal estimates):** The PM₂.₅ removal estimates use published per-tree rates from Nowak et al. (2006, 2018) scaled by DBH. The i-Tree Eco desktop model would produce site-specific results at the individual-tree level using actual local meteorology and hourly pollution concentrations. The approximation used here is adequate for typology comparison (the relative differences between typologies are robust even if the absolute numbers shift) but should not be cited as a precise forecast.
 

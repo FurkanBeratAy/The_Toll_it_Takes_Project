@@ -1,1 +1,14 @@
-{"site": "Mott_Haven", "bbox": {"min_lon": -73.93048999999999, "max_lon": -73.91449, "min_lat": 40.798489999999994, "max_lat": 40.81449}, "lat": 40.80649, "lon": -73.92249}
+{
+  "site": "Mott_Haven",
+  "bbox": {
+    "min_lon": -73.93048999999999,
+    "max_lon": -73.91449,
+    "min_lat": 40.798489999999994,
+    "max_lat": 40.81449
+  },
+  "lat": 40.80649,
+  "lon": -73.92249,
+  "dist_deegan_m": 44,
+  "dist_bruckner_m": 633,
+  "dist_crz_m": 6079
+}
