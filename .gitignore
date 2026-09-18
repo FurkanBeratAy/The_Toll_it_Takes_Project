@@ -6,7 +6,7 @@ __pycache__/
 venv/
 env/
 
-# Raw data (too large — download instructions in PRODUCT.md)
+# Raw data (too large — see README.md for download instructions)
 data/raw/
 nyccas_hourly/
 
