@@ -101,6 +101,128 @@
     </ul>
   </section>
 
+  <section style="margin-top:2.5rem;border-top:2px solid var(--ink);padding-top:1.5rem">
+    <h2 style="font-size:1.125rem;margin-bottom:0.25rem">Every monitor, every check</h2>
+    <p style="font-size:0.875rem;color:var(--ink-muted);margin-bottom:0.75rem;font-family:var(--font-head)">Five NYCCAS sites + three PurpleAir sensors. <a href="part1.html#scorecard">Full scorecard in Part I →</a></p>
+    <div style="font-family:var(--font-head);font-size:0.8rem;margin-bottom:0.5rem;display:flex;gap:1.25rem;flex-wrap:wrap;align-items:center">
+      <span><span style="display:inline-block;width:12px;height:12px;background:#DFEBE1;outline:1.5px solid #000000;outline-offset:-1px;vertical-align:middle;margin-right:3px"></span>Cleaner</span>
+      <span><span style="display:inline-block;width:12px;height:12px;background:#F6E4DD;outline:1.5px solid #000000;outline-offset:-1px;vertical-align:middle;margin-right:3px"></span>Dirtier</span>
+      <span><span style="display:inline-block;width:12px;height:12px;background:#F2F2F2;border:1px solid #BBBBBB;vertical-align:middle;margin-right:3px"></span>Near zero</span>
+      <span><b>bold + border</b> = significant</span>
+    </div>
+    <div style="overflow-x:auto;position:relative">
+      <div id="sc-compact-wrap"><div class="loading"><div class="spinner"></div>Loading…</div></div>
+    </div>
+    <p style="font-size:0.78rem;color:var(--ink-muted);margin-top:0.5rem;font-family:var(--font-head)">Column 4 (vs Van Wyck) carries no inference and is never bolded.</p>
+  </section>
+<script>
+window.addEventListener('DOMContentLoaded', function() {
+  const its = window.DATA_BUNDLE?.['../data/processed/its_results.json'];
+  const rob = window.DATA_BUNDLE?.['../data/processed/robustness.json'];
+  const wrap = document.getElementById('sc-compact-wrap');
+  if (!its || !rob || !wrap) return;
+
+  const ITS_SET = new Set(['Cross_Bronx_Expy','Mott_Haven','Manhattan_Bridge','Williamsburg_Bridge','Queensboro_Bridge']);
+  const STEP_ONLY_IDX = {
+    Cross_Bronx_Expy:   {beta:-0.019, p:0.947},
+    Mott_Haven:         {beta:-0.645, p:0.012},
+    Manhattan_Bridge:   {beta:-0.858, p:0.003},
+    Williamsburg_Bridge:{beta:-0.473, p:0.065},
+    Queensboro_Bridge:  {beta:-0.767, p:0.026},
+  };
+
+  const ROWS = [
+    {group:'Inside zone / boundary', sites:[
+      {key:'Manhattan_Bridge',    label:'Manhattan Bridge'},
+      {key:'Williamsburg_Bridge', label:'Williamsburg Bridge'},
+      {key:'Queensboro_Bridge',   label:'Queensboro Bridge'},
+    ]},
+    {group:'Outside zone', sites:[
+      {key:'Cross_Bronx_Expy', label:'Cross Bronx Expy'},
+      {key:'Mott_Haven',       label:'Mott Haven'},
+      {key:'89th_and_Ridge',   label:'89th & Ridge (Bay Ridge)', pa:true},
+      {key:'RGBIV',            label:'RGBIV (Brooklyn Heights)', pa:true},
+      {key:'FA_O5',            label:'FA_O5 (East Harlem)', pa:true},
+    ]},
+  ];
+
+  function cellC(val, sig, noInfer) {
+    if (val == null) return '<td style="text-align:right;padding:.5rem .75rem;color:var(--ink-muted)">—</td>';
+    const v = +val, sgn = v >= 0 ? '+' : '';
+    const bg   = v < -0.05 ? '#DFEBE1' : v > 0.05 ? '#F6E4DD' : '#F2F2F2';
+    const outl = (!noInfer && sig) ? ';outline:1.5px solid #000000;outline-offset:-1px' : '';
+    const fw   = (!noInfer && sig) ? 'font-weight:700;' : '';
+    return `<td style="${fw}text-align:right;padding:.5rem .75rem;background:${bg}${outl};white-space:nowrap">${sgn}${v.toFixed(2)}</td>`;
+  }
+
+  const VSTYLE = {
+    'Confirmed cleaner':'color:#1B4A24;font-weight:700',
+    'Confirmed worse':  'color:#7A2510;font-weight:700',
+    'Leans cleaner':    'color:#2F6B3A;font-weight:600',
+    'Leans worse':      'color:#B4391B;font-weight:600',
+    'No direction':     'color:var(--ink-muted)',
+    '—':               'color:var(--rule-mid)',
+  };
+  const STK = 'position:sticky;left:0;background:#FFFFFF;z-index:1;border-right:2px solid #000000;';
+
+  const HDRS = ['Site','Main model β','Step-only β','vs Van Wyck 2025','Peak vs overnight, weekdays','Verdict'];
+  let html = `<table style="min-width:560px">`;
+  html += `<thead><tr>`;
+  HDRS.forEach((h,i) => {
+    const sticky = i===0 ? `position:sticky;left:0;z-index:2;background:#FFFFFF;` : '';
+    const align  = i===0 ? '' : 'text-align:right;';
+    const minW   = i===0 ? 'min-width:150px;' : 'min-width:70px;';
+    html += `<th style="${sticky}${align}${minW}white-space:normal;padding:.55rem .75rem .55rem ${i===0?'0':'.75rem'}">${h}</th>`;
+  });
+  html += `</tr></thead><tbody>`;
+
+  ROWS.forEach(grp => {
+    html += `<tr style="background:var(--haze)"><td colspan="6" style="padding:.35rem .75rem;font-weight:700;text-transform:uppercase;font-size:.75rem;letter-spacing:.06em;color:var(--ink-muted)">${grp.group}</td></tr>`;
+    grp.sites.forEach(cfg => {
+      const k = cfg.key, pa = !!cfg.pa;
+      const c1s = pa ? null : its.sites[k]?.full;
+      const c2s = pa ? null : rob.check1?.sites[k]?.weather;
+      const c3s = STEP_ONLY_IDX[k] || null;
+      const c45 = pa ? rob.check9?.check7_did?.[k] : rob.check7?.sites?.[k];
+      const c4v = c45?.minus_vw_25 ?? null;
+      const c5v = c45?.minus_qc_25 ?? null;
+      const c7s = pa ? null : rob.check2?.weekday_only?.[k];
+
+      const col1 = c1s?.beta_post ?? null;
+      const col1p = c1s?.beta_post_p ?? null;
+      const col1sig = c1s ? !!(c1s.significant ?? (col1p != null && col1p < 0.05)) : false;
+      const col2 = c2s?.beta_post ?? null;
+      const col3 = c3s?.beta ?? null;
+      const col3sig = c3s ? c3s.p < 0.05 : false;
+      const col7 = c7s?.beta_post ?? null;
+      const col7sig = c7s ? !!(c7s.significant ?? ((c7s.p??1) < 0.05)) : false;
+
+      // Verdict — same logic as full scorecard: cols 1-5 only, |value|<0.05 neutral
+      const NT = 0.05, sig2 = v => v != null && Math.abs(v) >= NT;
+      let verdict;
+      if (pa) {
+        const vals = [c4v, c5v].filter(sig2);
+        verdict = !vals.length ? '—' : vals.every(v=>v<0) ? 'Leans cleaner' : vals.every(v=>v>0) ? 'Leans worse' : 'No direction';
+      } else if (col1 == null) {
+        verdict = '—';
+      } else if (col1sig) {
+        verdict = col1 < 0 ? 'Confirmed cleaner' : 'Confirmed worse';
+      } else {
+        const vals = [col1, col2, col3, c4v, c5v].filter(sig2);
+        verdict = !vals.length ? '—' : vals.every(v=>v<0) ? 'Leans cleaner' : vals.every(v=>v>0) ? 'Leans worse' : 'No direction';
+      }
+
+      html += `<tr>`;
+      html += `<td style="${STK}padding:.5rem .75rem .5rem 0">${cfg.label}</td>`;
+      html += cellC(col1,col1sig,false)+cellC(col3,col3sig,false)+cellC(c4v,false,true)+cellC(col7,col7sig,false);
+      html += `<td style="padding:.5rem .75rem;${VSTYLE[verdict]||''}">${verdict}</td></tr>`;
+    });
+  });
+  html += `</tbody></table>`;
+  wrap.innerHTML = html;
+});
+</script>
+
   <section class="contents">
     <div class="contents-part">
       <div class="part-num">Part I</div>
@@ -175,20 +297,62 @@
 <script>
 (function() {
   const its = window.DATA_BUNDLE?.['../data/processed/its_results.json'];
+  const robustness = window.DATA_BUNDLE?.['../data/processed/robustness.json'];
   if (!its) return;
+
+  const STEP_ONLY_IDX = {
+    Cross_Bronx_Expy: {beta: -0.019, p: 0.947},
+    Mott_Haven: {beta: -0.645, p: 0.012},
+    Manhattan_Bridge: {beta: -0.858, p: 0.003},
+    Williamsburg_Bridge: {beta: -0.473, p: 0.065},
+    Queensboro_Bridge: {beta: -0.767, p: 0.026},
+  };
+
   document.querySelectorAll('.stop[data-site]').forEach(el => {
     const site = el.dataset.site;
     const siteData = its.sites?.[site];
     const spec = siteData?.full || siteData?.long;
     if (!spec) { el.style.display = 'none'; return; }
     const beta = spec.beta_post;
+    const p = spec.beta_post_p;
+    const sig = spec.significant;
     const valEl = el.querySelector('.value');
     if (valEl) {
-      valEl.innerHTML = (beta >= 0 ? '+' : '') + beta.toFixed(2) + '<span class="unit">µg/m³</span>';
+      const nsStr = sig ? '' : ' <span style="color:#888;font-size:0.78em">n.s.</span>';
+      valEl.innerHTML = (beta >= 0 ? '+' : '') + beta.toFixed(2) + '<span class="unit">µg/m³</span>' + nsStr;
     }
     el.classList.remove('worse', 'better');
     if (beta > 0) el.classList.add('worse');
     else if (beta < 0) el.classList.add('better');
+
+    // Fill rule: filled if significant, hollow if not
+    const dotEl = el.querySelector('.dot');
+    if (dotEl) {
+      if (!sig) {
+        dotEl.style.background = 'transparent';
+        dotEl.style.border = '2px solid currentColor';
+      }
+    }
+
+    // Compute verdict
+    const step = STEP_ONLY_IDX[site];
+    const vw25 = robustness?.check7?.sites?.[site]?.minus_vw_25;
+    let verdict;
+    if (spec.n < 200) verdict = 'Short baseline — unreliable';
+    else if (p < 0.05 && beta < 0) verdict = 'Confirmed improvement';
+    else if (p < 0.05 && beta > 0) verdict = 'Confirmed worsening';
+    else if (p >= 0.05 && beta < 0 && step && step.beta < 0 && vw25 != null && vw25 < 0) verdict = 'Leans cleaner, not confirmed';
+    else verdict = 'No measurable change';
+
+    // Add verdict subline after .name element
+    const nameEl = el.querySelector('.name');
+    if (nameEl) {
+      const vEl = document.createElement('div');
+      vEl.className = 'verdict-sub';
+      vEl.style.cssText = 'font-size:0.72em;color:#666;font-style:italic;margin-top:2px';
+      vEl.textContent = verdict;
+      nameEl.insertAdjacentElement('afterend', vEl);
+    }
   });
 })();
 </script>

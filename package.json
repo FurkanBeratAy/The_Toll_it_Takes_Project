@@ -1,0 +1,30 @@
+{
+  "name": "the-toll-it-takes-github",
+  "version": "1.0.0",
+  "description": "**Did New York's congestion toll clean the air across the city, or push the problem onto South Bronx neighborhoods already living in Asthma Alley?**",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FurkanBeratAy/The_Toll_it_Takes_Project.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/FurkanBeratAy/The_Toll_it_Takes_Project/issues"
+  },
+  "homepage": "https://github.com/FurkanBeratAy/The_Toll_it_Takes_Project#readme",
+  "dependencies": {
+    "@playwright/test": "^1.63.0"
+  },
+  "devDependencies": {
+    "sharp": "^0.35.4"
+  }
+}

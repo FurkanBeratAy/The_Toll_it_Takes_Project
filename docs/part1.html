@@ -36,12 +36,12 @@
 <div class="container">
   <div class="stat-row" id="stat-row">
     <div class="stat-card" id="stat-worst">
-      <div class="stat-label">Worst-affected corridor</div>
+      <div class="stat-label">Largest positive estimate (not significant)</div>
       <div class="stat-value" id="val-worst">—</div>
       <div class="stat-desc" id="desc-worst">Largest positive ITS β<sub>post</sub></div>
     </div>
     <div class="stat-card" id="stat-best">
-      <div class="stat-label">Most-improved corridor</div>
+      <div class="stat-label">Largest confirmed improvement</div>
       <div class="stat-value" id="val-best">—</div>
       <div class="stat-desc" id="desc-best">Largest negative ITS β<sub>post</sub></div>
     </div>
@@ -77,33 +77,36 @@
   </div>
 
   <div class="map-wrap">
-    <div id="map-aqi" class="map-container"></div>
-    <div class="map-legend" id="legend-aqi" style="max-width:240px">
-      <div class="legend-title">β<sub>post</sub> (µg/m³)</div>
-      <div class="legend-row"><div class="legend-swatch" style="background:#7A2510"></div><span>Rose more than 0.5</span></div>
-      <div class="legend-row"><div class="legend-swatch" style="background:#B4391B"></div><span>Rose 0.1 to 0.5</span></div>
-      <div class="legend-row"><div class="legend-swatch" style="background:#fff;border:1px solid #ccc"></div><span>Within ±0.1</span></div>
-      <div class="legend-row"><div class="legend-swatch" style="background:#2F6B3A"></div><span>Fell 0.1 to 0.5</span></div>
-      <div class="legend-row"><div class="legend-swatch" style="background:#1B4A24"></div><span>Fell more than 0.5</span></div>
-      <hr>
-      <div class="legend-row"><div class="legend-swatch" style="background:repeating-linear-gradient(45deg,#000 0 1px,transparent 1px 4px)"></div><span>Disadvantaged-community tracts</span></div>
-      <div class="legend-row"><div class="legend-swatch" style="background:none;border:2px solid #4B2E83"></div><span>Congestion Relief Zone</span></div>
-      <hr>
-      <div class="legend-title">Toll rates (E-ZPass, 2025 schedule)</div>
-      <div style="font-size:.74rem;line-height:1.65">
-        Car: <strong>$9</strong>&nbsp;/&nbsp;$2.25<br>
-        Small truck&nbsp;/ bus: <strong>$14.40</strong>&nbsp;/&nbsp;$3.60<br>
-        Large truck&nbsp;/ tour bus: <strong>$21.60</strong>&nbsp;/&nbsp;$5.40<br>
-        <em style="color:var(--ink-muted);font-size:.68rem">peak&nbsp;/ overnight<br>
-        Wkdays 5am–9pm · wknds 9am–9pm</em>
+    <div id="map-aqi" class="map-container">
+      <div class="map-legend" id="legend-aqi" style="max-width:240px;top:auto;bottom:12px;z-index:10;max-height:calc(560px - 24px);overflow-y:auto;">
+        <div class="legend-title">Change after the toll</div>
+        <div class="legend-row"><div class="legend-swatch" style="background:#2F6B3A;border-radius:50%;width:12px;height:12px;border:none"></div><span>Fell — confirmed</span></div>
+        <div class="legend-row"><div class="legend-swatch" style="background:#B4391B;border-radius:50%;width:12px;height:12px;border:none"></div><span>Rose — confirmed</span></div>
+        <div class="legend-row"><div class="legend-swatch" style="background:none;border:2px solid #2F6B3A;border-radius:50%;width:12px;height:12px"></div><span>Fell — not confirmed</span></div>
+        <div class="legend-row"><div class="legend-swatch" style="background:none;border:2px solid #B4391B;border-radius:50%;width:12px;height:12px"></div><span>Rose — not confirmed</span></div>
+        <hr>
+        <div class="legend-row"><div class="legend-swatch" style="background:rgba(75,46,131,0.15);border:1px solid #BBBBBB;width:12px;height:12px"></div><span>Disadvantaged-community tracts</span></div>
+        <div class="legend-row"><div class="legend-swatch" style="background:none;border:2px solid #4B2E83"></div><span>Congestion Relief Zone</span></div>
+        <hr>
+        <details style="font-size:.74rem">
+          <summary style="cursor:pointer;font-weight:600;color:var(--ink);margin-bottom:.2rem">Toll rates (E-ZPass, 2025 schedule)</summary>
+          <div style="line-height:1.65;margin-top:.3rem">
+            Car: <strong>$9</strong>&nbsp;/&nbsp;$2.25<br>
+            Small truck&nbsp;/ bus: <strong>$14.40</strong>&nbsp;/&nbsp;$3.60<br>
+            Large truck&nbsp;/ tour bus: <strong>$21.60</strong>&nbsp;/&nbsp;$5.40<br>
+            <em style="color:var(--ink-muted);font-size:.68rem">peak&nbsp;/ overnight<br>
+            Wkdays 5am–9pm · wknds 9am–9pm</em>
+          </div>
+        </details>
       </div>
     </div>
     <div class="map-toggle-row">
       <button class="map-toggle active" onclick="toggleLayer('map-aqi','ej-fill','ej-outline',this)">Disadvantaged-community tracts</button>
       <button class="map-toggle active" onclick="toggleLayer('map-aqi','crz-fill','crz-outline',this)">Zone boundary</button>
-      <button class="map-toggle active" onclick="toggleLayer('map-aqi','raster-pm',null,this)">PM<sub>2.5</sub> raster, 2023–24</button>
+      <button class="map-toggle" onclick="toggleLayer('map-aqi','raster-pm',null,this)">PM<sub>2.5</sub> raster, 2023–24</button>
     </div>
     <figcaption class="figure-caption"><b>Figure 1.</b> ITS step-changes after the toll at five treatment sites. The two Bronx sites (Cross Bronx, Mott Haven) are in state-designated disadvantaged-community tracts and outside the CRZ. The three East River bridge sites are inside or on the CRZ boundary; Manhattan and Williamsburg Bridges are ~800 m inside the zone. Toll rates: <a href="https://www.mta.info/fares-tolls/tolls/congestion-relief-zone/about" target="_blank" rel="noopener">MTA Congestion Relief Zone</a>.</figcaption>
+    <p class="caption"><strong>How to read this:</strong> Filled circles = significant (p&nbsp;&lt;&nbsp;0.05); hollow circles = not distinguishable from zero. Green = PM₂.₅ fell; brick = PM₂.₅ rose. Click a circle for full model stats and verdict.</p>
   </div>
 </section>
 
@@ -175,7 +178,7 @@
   <div class="section-header">
     <h2>Robustness checks</h2>
     <p>
-      Five independent tests of the traffic-diversion hypothesis. The main ITS estimates
+      Nine independent tests of the traffic-diversion hypothesis. The main ITS estimates
       are underpowered (Mott Haven p&nbsp;=&nbsp;0.61; five ITS sites, eleven in the panel) and PM2.5
       is driven largely by regional sources. The checks below probe whether the null
       results are informative or whether a signal emerges under sharper designs.
@@ -190,13 +193,46 @@
     <p>Daily wind speed, temperature, precipitation, relative humidity, and dominant
     wind-direction sector (8 compass bins) added to the full ITS model.
     Compares 95% CI width to the original specification.</p>
+    <p class="chart-sub"><strong>How to read this:</strong> Grey dot = original estimate; purple diamond = after adding weather. A bar entirely on one side of the dashed line is a confident result; a bar crossing it is not.</p>
   </div>
   <div class="chart-wrap">
     <p class="chart-title">Original vs. weather-adjusted β_post with 95% CI</p>
     <div id="rb-check1" class="plotly-chart" style="min-height:320px"></div>
 <script>window.addEventListener("DOMContentLoaded",function(){if(typeof Plotly!=="undefined")Plotly.newPlot("rb-check1",[{"error_x": {"array": [0.81775, 1.1292, 1.18025, 0.9134000000000001, 1.69955, 1.4024, 0.7551999999999999, 0.9578499999999999, 0.75085, 1.0409, 1.45095], "color": "#888", "type": "data", "visible": true}, "marker": {"color": "#888", "size": 9}, "mode": "markers", "name": "Original", "x": [-0.5226, 0.2957, -1.3276, -1.0352, -1.0981, -2.6818, -1.7628, 1.1467, -0.3574, 2.842, -1.0741], "y": ["Cross Bronx Expy", "Mott Haven", "Manhattan Bridge", "Williamsburg Bridge", "Queensboro Bridge", "Broadway 35th St", "FDR", "Hamilton Bridge", "BQE", "SI Expwy", "Midtown DOT"], "type": "scatter"}, {"error_x": {"array": [0.8306, 1.12135, 0.92475, 0.76215, 1.54125, 1.2208, 0.6389500000000001, 0.8945, 0.7768999999999999, 1.08915, 1.4039000000000001], "color": "#4B2E83", "type": "data", "visible": true}, "marker": {"color": "#4B2E83", "size": 9, "symbol": "diamond"}, "mode": "markers", "name": "Weather-adjusted", "x": [-0.2903, 0.8694, -1.0961, -0.8382, -0.9135, -2.4715, -1.5756, 1.5396, -0.2561, 3.0102, -0.6216], "y": ["Cross Bronx Expy", "Mott Haven", "Manhattan Bridge", "Williamsburg Bridge", "Queensboro Bridge", "Broadway 35th St", "FDR", "Hamilton Bridge", "BQE", "SI Expwy", "Midtown DOT"], "type": "scatter"}],{"template": {"data": {"histogram2dcontour": [{"type": "histogram2dcontour", "colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}], "choropleth": [{"type": "choropleth", "colorbar": {"outlinewidth": 0, "ticks": ""}}], "histogram2d": [{"type": "histogram2d", "colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}], "heatmap": [{"type": "heatmap", "colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}], "contourcarpet": [{"type": "contourcarpet", "colorbar": {"outlinewidth": 0, "ticks": ""}}], "contour": [{"type": "contour", "colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}], "surface": [{"type": "surface", "colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}], "mesh3d": [{"type": "mesh3d", "colorbar": {"outlinewidth": 0, "ticks": ""}}], "scatter": [{"fillpattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}, "type": "scatter"}], "parcoords": [{"type": "parcoords", "line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "scatterpolargl": [{"type": "scatterpolargl", "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "bar": [{"error_x": {"color": "#2a3f5f"}, "error_y": {"color": "#2a3f5f"}, "marker": {"line": {"color": "#E5ECF6", "width": 0.5}, "pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "bar"}], "scattergeo": [{"type": "scattergeo", "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "scatterpolar": [{"type": "scatterpolar", "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "histogram": [{"marker": {"pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "histogram"}], "scattergl": [{"type": "scattergl", "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "scatter3d": [{"type": "scatter3d", "line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "scattermap": [{"type": "scattermap", "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "scatterternary": [{"type": "scatterternary", "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "scattercarpet": [{"type": "scattercarpet", "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "carpet": [{"aaxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "baxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "type": "carpet"}], "table": [{"cells": {"fill": {"color": "#EBF0F8"}, "line": {"color": "white"}}, "header": {"fill": {"color": "#C8D4E3"}, "line": {"color": "white"}}, "type": "table"}], "barpolar": [{"marker": {"line": {"color": "#E5ECF6", "width": 0.5}, "pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "barpolar"}], "pie": [{"automargin": true, "type": "pie"}]}, "layout": {"autotypenumbers": "strict", "colorway": ["#636efa", "#EF553B", "#00cc96", "#ab63fa", "#FFA15A", "#19d3f3", "#FF6692", "#B6E880", "#FF97FF", "#FECB52"], "font": {"color": "#2a3f5f"}, "hovermode": "closest", "hoverlabel": {"align": "left"}, "paper_bgcolor": "white", "plot_bgcolor": "#E5ECF6", "polar": {"bgcolor": "#E5ECF6", "angularaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "radialaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "ternary": {"bgcolor": "#E5ECF6", "aaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "baxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "caxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "coloraxis": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "colorscale": {"sequential": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "sequentialminus": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "diverging": [[0, "#8e0152"], [0.1, "#c51b7d"], [0.2, "#de77ae"], [0.3, "#f1b6da"], [0.4, "#fde0ef"], [0.5, "#f7f7f7"], [0.6, "#e6f5d0"], [0.7, "#b8e186"], [0.8, "#7fbc41"], [0.9, "#4d9221"], [1, "#276419"]]}, "xaxis": {"gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "automargin": true, "zerolinewidth": 2}, "yaxis": {"gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "automargin": true, "zerolinewidth": 2}, "scene": {"xaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white", "gridwidth": 2}, "yaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white", "gridwidth": 2}, "zaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white", "gridwidth": 2}}, "shapedefaults": {"line": {"color": "#2a3f5f"}}, "annotationdefaults": {"arrowcolor": "#2a3f5f", "arrowhead": 0, "arrowwidth": 1}, "geo": {"bgcolor": "white", "landcolor": "#E5ECF6", "subunitcolor": "white", "showland": true, "showlakes": true, "lakecolor": "white"}, "title": {"x": 0.05}}}, "shapes": [{"line": {"color": "#333", "dash": "dot", "width": 1}, "type": "line", "x0": 0, "x1": 0, "xref": "x", "y0": 0, "y1": 1, "yref": "y domain"}], "font": {"family": "Archivo, sans-serif", "color": "#2E312F"}, "legend": {"orientation": "h", "yanchor": "bottom", "y": 1.02}, "margin": {"l": 150, "r": 30, "t": 60, "b": 40}, "title": {"text": "Check 1: Weather-adjusted \u03b2_post"}, "xaxis": {"title": {"text": "\u03b2_post (\u00b5g/m\u00b3)"}}, "paper_bgcolor": "#FFFFFF", "plot_bgcolor": "#FFFFFF", "height": 550},{responsive:true});});</script>
   </div>
+<script>window.addEventListener("DOMContentLoaded",function(){
+const ZONE_LABELS = {
+  'Cross Bronx Expy': '[outside] Cross Bronx Expy',
+  'Mott Haven': '[outside] Mott Haven',
+  'Manhattan Bridge': '[in zone] Manhattan Bridge',
+  'Williamsburg Bridge': '[in zone] Williamsburg Bridge',
+  'Queensboro Bridge': '[boundary] Queensboro Bridge',
+  'Broadway 35th St': '[in zone] Broadway 35th St',
+  'FDR': '[boundary] FDR',
+  'Hamilton Bridge': '[outside] Hamilton Bridge',
+  'BQE': '[outside] BQE',
+  'SI Expwy': '[outside] SI Expwy',
+  'Midtown DOT': '[in zone] Midtown DOT',
+};
+const SHORT_BASELINE = ['Hamilton Bridge','SI Expwy'];
+const el = document.getElementById('rb-check1');
+if (!el || !el.data) return;
+const newY = el.data[0].y.map(label => {
+  const z = ZONE_LABELS[label] || label;
+  return SHORT_BASELINE.includes(label) ? z + ' †' : z;
+});
+const origColors = el.data[0].y.map(label =>
+  SHORT_BASELINE.includes(label) ? '#CCCCCC' : '#888888');
+const wxColors = el.data[1].y.map(label =>
+  SHORT_BASELINE.includes(label) ? '#CCCCCC' : '#4B2E83');
+Plotly.restyle('rb-check1',
+  {'y': [newY, newY], 'marker.color': [origColors, wxColors]}
+);
+});</script>
+<p class="caption"><strong>How to read this:</strong> Grey dot = original estimate; purple diamond = after adding weather. A bar entirely on one side of the dashed zero line is a confident result; a bar crossing it is not.</p>
+<p class="caption" style="font-size:0.79rem;color:#555;font-style:italic;margin-top:4px">† SI Expwy and Hamilton Bridge shown in grey — fewer than 200 pre-toll days in one season; seasonal terms are not identified, so these estimates are not interpreted.</p>
   <div class="callout">Adding five daily weather covariates (temperature, wind speed, relative humidity, precipitation, wind direction) tightened the 95% CI at 8 of 11 sites. No point estimate changed sign, indicating the baseline results are not artefacts of uncontrolled meteorology.</div>
+<p class="footnote">Greyed monitors (SI Expwy, Hamilton Bridge) have under 200 pre-toll days in one season; seasonal terms are not identified, so these estimates are not interpreted.</p>
 
   <!-- ─ Check 2: Peak vs overnight ─ -->
   <div class="section-header" style="margin-top:2.5rem">
@@ -205,13 +241,44 @@
     peak-hour PM2.5 should rise relative to overnight.
     Daily outcome: mean peak PM2.5 minus mean overnight PM2.5 (≥8 peak hours, ≥5 overnight hours required).
     QC and VW differences used as controls.</p>
+    <p class="chart-sub"><strong>How to read this:</strong> Each bar is how much the daytime-minus-nighttime gap changed after the toll. Smoke and weather affect both and cancel; extra daytime traffic does not. Dark bar = all days; light bar = weekdays only.</p>
   </div>
   <div class="chart-wrap">
     <p class="chart-title">ITS β_post on peak-minus-overnight PM2.5 (all days and weekdays only)</p>
     <div id="rb-check2" class="plotly-chart" style="min-height:320px"></div>
 <script>window.addEventListener("DOMContentLoaded",function(){if(typeof Plotly!=="undefined")Plotly.newPlot("rb-check2",[{"marker": {"color": ["#B4391B", "#B4391B", "#2F6B3A", "#B4391B", "#B4391B", "#2F6B3A", "#2F6B3A", "#B4391B", "#B4391B", "#B4391B", "#2F6B3A"]}, "name": "All days", "opacity": 0.85, "x": ["Cross Bronx Expy", "Mott Haven", "Manhattan Bridge", "Williamsburg Bridge", "Queensboro Bridge", "Broadway 35th St", "FDR", "Hamilton Bridge", "BQE", "SI Expwy", "Midtown DOT"], "y": [0.6024, 0.2188, -0.2616, 0.0237, 0.0697, -0.2488, -0.2358, 0.38, 1.0208, 0.1044, -0.2972], "type": "bar"}, {"marker": {"color": ["#D67A5E", "#D67A5E", "#5E9E6E", "#5E9E6E", "#5E9E6E", "#5E9E6E", "#5E9E6E", "#D67A5E", "#D67A5E", "#5E9E6E", "#5E9E6E"]}, "name": "Weekday only", "opacity": 0.85, "x": ["Cross Bronx Expy", "Mott Haven", "Manhattan Bridge", "Williamsburg Bridge", "Queensboro Bridge", "Broadway 35th St", "FDR", "Hamilton Bridge", "BQE", "SI Expwy", "Midtown DOT"], "y": [0.8996, 0.0579, -0.1566, -0.0733, -0.0066, -0.4648, -0.1896, 0.5271, 0.9605, -0.2, -0.407], "type": "bar"}],{"template": {"data": {"histogram2dcontour": [{"type": "histogram2dcontour", "colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}], "choropleth": [{"type": "choropleth", "colorbar": {"outlinewidth": 0, "ticks": ""}}], "histogram2d": [{"type": "histogram2d", "colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}], "heatmap": [{"type": "heatmap", "colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}], "contourcarpet": [{"type": "contourcarpet", "colorbar": {"outlinewidth": 0, "ticks": ""}}], "contour": [{"type": "contour", "colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}], "surface": [{"type": "surface", "colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}], "mesh3d": [{"type": "mesh3d", "colorbar": {"outlinewidth": 0, "ticks": ""}}], "scatter": [{"fillpattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}, "type": "scatter"}], "parcoords": [{"type": "parcoords", "line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "scatterpolargl": [{"type": "scatterpolargl", "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "bar": [{"error_x": {"color": "#2a3f5f"}, "error_y": {"color": "#2a3f5f"}, "marker": {"line": {"color": "#E5ECF6", "width": 0.5}, "pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "bar"}], "scattergeo": [{"type": "scattergeo", "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "scatterpolar": [{"type": "scatterpolar", "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "histogram": [{"marker": {"pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "histogram"}], "scattergl": [{"type": "scattergl", "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "scatter3d": [{"type": "scatter3d", "line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "scattermap": [{"type": "scattermap", "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "scatterternary": [{"type": "scatterternary", "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "scattercarpet": [{"type": "scattercarpet", "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "carpet": [{"aaxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "baxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "type": "carpet"}], "table": [{"cells": {"fill": {"color": "#EBF0F8"}, "line": {"color": "white"}}, "header": {"fill": {"color": "#C8D4E3"}, "line": {"color": "white"}}, "type": "table"}], "barpolar": [{"marker": {"line": {"color": "#E5ECF6", "width": 0.5}, "pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "barpolar"}], "pie": [{"automargin": true, "type": "pie"}]}, "layout": {"autotypenumbers": "strict", "colorway": ["#636efa", "#EF553B", "#00cc96", "#ab63fa", "#FFA15A", "#19d3f3", "#FF6692", "#B6E880", "#FF97FF", "#FECB52"], "font": {"color": "#2a3f5f"}, "hovermode": "closest", "hoverlabel": {"align": "left"}, "paper_bgcolor": "white", "plot_bgcolor": "#E5ECF6", "polar": {"bgcolor": "#E5ECF6", "angularaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "radialaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "ternary": {"bgcolor": "#E5ECF6", "aaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "baxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "caxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "coloraxis": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "colorscale": {"sequential": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "sequentialminus": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "diverging": [[0, "#8e0152"], [0.1, "#c51b7d"], [0.2, "#de77ae"], [0.3, "#f1b6da"], [0.4, "#fde0ef"], [0.5, "#f7f7f7"], [0.6, "#e6f5d0"], [0.7, "#b8e186"], [0.8, "#7fbc41"], [0.9, "#4d9221"], [1, "#276419"]]}, "xaxis": {"gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "automargin": true, "zerolinewidth": 2}, "yaxis": {"gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "automargin": true, "zerolinewidth": 2}, "scene": {"xaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white", "gridwidth": 2}, "yaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white", "gridwidth": 2}, "zaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white", "gridwidth": 2}}, "shapedefaults": {"line": {"color": "#2a3f5f"}}, "annotationdefaults": {"arrowcolor": "#2a3f5f", "arrowhead": 0, "arrowwidth": 1}, "geo": {"bgcolor": "white", "landcolor": "#E5ECF6", "subunitcolor": "white", "showland": true, "showlakes": true, "lakecolor": "white"}, "title": {"x": 0.05}}}, "shapes": [{"line": {"color": "#333", "width": 1}, "type": "line", "x0": 0, "x1": 1, "xref": "x domain", "y0": 0, "y1": 0, "yref": "y"}], "font": {"family": "Archivo, sans-serif", "color": "#2E312F"}, "legend": {"orientation": "h", "yanchor": "bottom", "y": 1.02}, "barmode": "group", "title": {"text": "ITS \u03b2_post on peak-minus-overnight PM2.5 difference"}, "yaxis": {"title": {"text": "\u03b2_post (\u00b5g/m\u00b3, peak\u2212overnight diff)"}}, "paper_bgcolor": "#FFFFFF", "plot_bgcolor": "#FFFFFF", "height": 380},{responsive:true});});</script>
   </div>
-  <div class="callout">At Mott Haven, peak-hour PM2.5 was 0.219 µg/m³ higher than overnight after the toll (p=0.419). The weekday-only version gives β=+0.058 (p=0.851). Cross Bronx Expy is the one site where this test is informative: all-days β=+0.60 (p=0.089), weekday-only β=+0.90 (p=0.039) — the only significant result in 22 peak/overnight tests across 11 sites. Regional weather differences cancel in the differenced series, so this result is harder to attribute to non-traffic sources. One significant result in 22 tests is consistent with chance, but it is the Bronx EJ site closest to the Throgs Neck diversion route and therefore the most plausible candidate for a real effect. BQE and SI Expwy, each with only ~4 months of pre-toll data in a single season, should be read with caution.</div>
+<script>window.addEventListener("DOMContentLoaded",function(){
+const el2 = document.getElementById('rb-check2');
+if (!el2 || !el2.data) return;
+const sites2 = el2.data[0].x;
+const SHORT2 = ['Hamilton Bridge','SI Expwy','BQE'];
+const lineColorsAll = sites2.map(() => 'transparent');
+const lineWidthsAll = sites2.map(() => 0);
+const opacityAll = sites2.map(s => SHORT2.includes(s) ? 0.35 : 0.85);
+const lineColorsWkd = sites2.map(s => s === 'Cross Bronx Expy' ? '#000000' : 'transparent');
+const lineWidthsWkd = sites2.map(s => s === 'Cross Bronx Expy' ? 2 : 0);
+const opacityWkd = sites2.map(s => SHORT2.includes(s) ? 0.35 : 0.85);
+Plotly.restyle('rb-check2', {
+  'marker.line.color': [lineColorsAll, lineColorsWkd],
+  'marker.line.width': [lineWidthsAll, lineWidthsWkd],
+  'marker.opacity': [opacityAll, opacityWkd]
+});
+Plotly.relayout('rb-check2', {
+  annotations: [{
+    x: 1, y: 1, xref: 'paper', yref: 'paper',
+    xanchor: 'right', yanchor: 'top',
+    text: '1 of 16 bars significant (CI excludes zero)<br>among sites with ≥200 pre-toll days',
+    showarrow: false,
+    font: {size: 10, color: '#555'},
+    bgcolor: 'rgba(255,255,255,0.8)',
+    bordercolor: '#ccc', borderwidth: 1,
+    borderpad: 4,
+  }]
+});
+});</script>
+<p class="caption"><strong>How to read this:</strong> Each bar is how much the daytime-minus-nighttime gap changed after the toll. Smoke and weather affect both and cancel; extra daytime traffic does not. Dark bar = all days; light bar = weekdays only. Black outline = 95% CI excludes zero (weekdays only). Faded bars = sites with fewer than 200 pre-toll days (Hamilton Bridge, SI Expwy, BQE).</p>
+  <div class="callout">At Mott Haven, peak-hour PM2.5 was 0.219 µg/m³ higher than overnight after the toll (p=0.419). The weekday-only version gives β=+0.058 (p=0.851). Cross Bronx Expy is the one site where this test is informative: all-days β=+0.60 (p=0.089), weekday-only β=+0.90 (p=0.039) — the only significant result among the 16 peak/overnight tests at the 8 sites with ≥200 pre-toll days. Hamilton Bridge, SI Expwy, and BQE are shown faded: all three have fewer than 200 pre-toll days in the Van Wyck window (short baseline, not non-significance). Regional weather differences cancel in the differenced series, so the Cross Bronx result is harder to attribute to non-traffic sources.</div>
 
   <!-- ─ Check 3: Placebo-in-time ─ -->
   <div class="section-header" style="margin-top:2.5rem">
@@ -221,12 +288,32 @@
     spec is used for all sites. Each placebo requires ≥90 observed days on each side
     and ≥60% data coverage in the surrounding 6-month windows.
     Empirical p = share of |β_placebo| ≥ |β_observed|.</p>
+    <p class="chart-sub"><strong>How to read this:</strong> Grey bars = estimates from fake toll dates; red line = estimate with the real date. A red line inside a very wide pile means the method can't distinguish real from fake.</p>
   </div>
   <div class="chart-wrap">
     <p class="chart-title">Distribution of placebo β_post by site (red line = observed long-baseline β)</p>
     <div id="rb-check3" class="plotly-chart" style="min-height:400px"></div>
 <script>window.addEventListener("DOMContentLoaded",function(){if(typeof Plotly!=="undefined")Plotly.newPlot("rb-check3",[{"marker": {"color": "#888"}, "name": "Cross_Bronx_Expy", "opacity": 0.7, "showlegend": false, "x": [11.9917, 5.3196, -0.7805, 0.9225, 2.7942, 2.8912, -2.0862, -10.7911, -21.3287, -30.161, -45.6312], "type": "histogram", "xaxis": "x", "yaxis": "y"}, {"marker": {"color": "#888"}, "name": "Manhattan_Bridge", "opacity": 0.7, "showlegend": false, "x": [7.9637, 3.3719, -1.4375, -0.1785, 1.9563, 3.1351, 1.4874, -2.9857, -3.5392, -1.1878, -0.7553, -23.1994], "type": "histogram", "xaxis": "x2", "yaxis": "y2"}, {"marker": {"color": "#888"}, "name": "Williamsburg_Bridge", "opacity": 0.7, "showlegend": false, "x": [7.8437, 6.3741, 4.3319], "type": "histogram", "xaxis": "x3", "yaxis": "y3"}, {"marker": {"color": "#888"}, "name": "Queensboro_Bridge", "opacity": 0.7, "showlegend": false, "x": [9.6348, 9.7072, 10.2958, 11.5633, 20.5928, 14.393, 6.4905, 2.5775, 0.4916, 0.1718, 0.2592, 3.8122, 14.133, 35.6513, 55.4734, 55.4734], "type": "histogram", "xaxis": "x4", "yaxis": "y4"}, {"marker": {"color": "#888"}, "name": "Broadway_35th_St", "opacity": 0.7, "showlegend": false, "x": [-1.2276, 14.2843, 8.4349, 1.6567, 0.6255, 1.0905, 2.5016, -1.0482, -1.236, -1.5467, -1.2715, -0.1665, -13.7328], "type": "histogram", "xaxis": "x5", "yaxis": "y5"}],{"template": {"data": {"histogram2dcontour": [{"type": "histogram2dcontour", "colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}], "choropleth": [{"type": "choropleth", "colorbar": {"outlinewidth": 0, "ticks": ""}}], "histogram2d": [{"type": "histogram2d", "colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}], "heatmap": [{"type": "heatmap", "colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}], "contourcarpet": [{"type": "contourcarpet", "colorbar": {"outlinewidth": 0, "ticks": ""}}], "contour": [{"type": "contour", "colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}], "surface": [{"type": "surface", "colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}], "mesh3d": [{"type": "mesh3d", "colorbar": {"outlinewidth": 0, "ticks": ""}}], "scatter": [{"fillpattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}, "type": "scatter"}], "parcoords": [{"type": "parcoords", "line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "scatterpolargl": [{"type": "scatterpolargl", "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "bar": [{"error_x": {"color": "#2a3f5f"}, "error_y": {"color": "#2a3f5f"}, "marker": {"line": {"color": "#E5ECF6", "width": 0.5}, "pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "bar"}], "scattergeo": [{"type": "scattergeo", "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "scatterpolar": [{"type": "scatterpolar", "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "histogram": [{"marker": {"pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "histogram"}], "scattergl": [{"type": "scattergl", "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "scatter3d": [{"type": "scatter3d", "line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "scattermap": [{"type": "scattermap", "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "scatterternary": [{"type": "scatterternary", "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "scattercarpet": [{"type": "scattercarpet", "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "carpet": [{"aaxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "baxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "type": "carpet"}], "table": [{"cells": {"fill": {"color": "#EBF0F8"}, "line": {"color": "white"}}, "header": {"fill": {"color": "#C8D4E3"}, "line": {"color": "white"}}, "type": "table"}], "barpolar": [{"marker": {"line": {"color": "#E5ECF6", "width": 0.5}, "pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "barpolar"}], "pie": [{"automargin": true, "type": "pie"}]}, "layout": {"autotypenumbers": "strict", "colorway": ["#636efa", "#EF553B", "#00cc96", "#ab63fa", "#FFA15A", "#19d3f3", "#FF6692", "#B6E880", "#FF97FF", "#FECB52"], "font": {"color": "#2a3f5f"}, "hovermode": "closest", "hoverlabel": {"align": "left"}, "paper_bgcolor": "white", "plot_bgcolor": "#E5ECF6", "polar": {"bgcolor": "#E5ECF6", "angularaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "radialaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "ternary": {"bgcolor": "#E5ECF6", "aaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "baxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "caxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "coloraxis": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "colorscale": {"sequential": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "sequentialminus": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "diverging": [[0, "#8e0152"], [0.1, "#c51b7d"], [0.2, "#de77ae"], [0.3, "#f1b6da"], [0.4, "#fde0ef"], [0.5, "#f7f7f7"], [0.6, "#e6f5d0"], [0.7, "#b8e186"], [0.8, "#7fbc41"], [0.9, "#4d9221"], [1, "#276419"]]}, "xaxis": {"gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "automargin": true, "zerolinewidth": 2}, "yaxis": {"gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "automargin": true, "zerolinewidth": 2}, "scene": {"xaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white", "gridwidth": 2}, "yaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white", "gridwidth": 2}, "zaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white", "gridwidth": 2}}, "shapedefaults": {"line": {"color": "#2a3f5f"}}, "annotationdefaults": {"arrowcolor": "#2a3f5f", "arrowhead": 0, "arrowwidth": 1}, "geo": {"bgcolor": "white", "landcolor": "#E5ECF6", "subunitcolor": "white", "showland": true, "showlakes": true, "lakecolor": "white"}, "title": {"x": 0.05}}}, "xaxis": {"anchor": "y", "domain": [0.0, 0.2888888888888889]}, "yaxis": {"anchor": "x", "domain": [0.625, 1.0]}, "xaxis2": {"anchor": "y2", "domain": [0.35555555555555557, 0.6444444444444445]}, "yaxis2": {"anchor": "x2", "domain": [0.625, 1.0]}, "xaxis3": {"anchor": "y3", "domain": [0.7111111111111111, 1.0]}, "yaxis3": {"anchor": "x3", "domain": [0.625, 1.0]}, "xaxis4": {"anchor": "y4", "domain": [0.0, 0.2888888888888889]}, "yaxis4": {"anchor": "x4", "domain": [0.0, 0.375]}, "xaxis5": {"anchor": "y5", "domain": [0.35555555555555557, 0.6444444444444445]}, "yaxis5": {"anchor": "x5", "domain": [0.0, 0.375]}, "xaxis6": {"anchor": "y6", "domain": [0.7111111111111111, 1.0]}, "yaxis6": {"anchor": "x6", "domain": [0.0, 0.375]}, "annotations": [{"font": {"size": 16}, "showarrow": false, "text": "Cross Bronx Expy", "x": 0.14444444444444446, "xanchor": "center", "xref": "paper", "y": 1.0, "yanchor": "bottom", "yref": "paper"}, {"font": {"size": 16}, "showarrow": false, "text": "Manhattan Bridge", "x": 0.5, "xanchor": "center", "xref": "paper", "y": 1.0, "yanchor": "bottom", "yref": "paper"}, {"font": {"size": 16}, "showarrow": false, "text": "Williamsburg Bridge", "x": 0.8555555555555556, "xanchor": "center", "xref": "paper", "y": 1.0, "yanchor": "bottom", "yref": "paper"}, {"font": {"size": 16}, "showarrow": false, "text": "Queensboro Bridge", "x": 0.14444444444444446, "xanchor": "center", "xref": "paper", "y": 0.375, "yanchor": "bottom", "yref": "paper"}, {"font": {"size": 16}, "showarrow": false, "text": "Broadway 35th St", "x": 0.5, "xanchor": "center", "xref": "paper", "y": 0.375, "yanchor": "bottom", "yref": "paper"}], "shapes": [{"line": {"color": "#B4391B", "dash": "solid", "width": 2}, "type": "line", "x0": -0.9678, "x1": -0.9678, "xref": "x", "y0": 0, "y1": 1, "yref": "y domain"}, {"line": {"color": "#B4391B", "dash": "solid", "width": 2}, "type": "line", "x0": -3.0131, "x1": -3.0131, "xref": "x2", "y0": 0, "y1": 1, "yref": "y2 domain"}, {"line": {"color": "#B4391B", "dash": "solid", "width": 2}, "type": "line", "x0": 1.7779, "x1": 1.7779, "xref": "x3", "y0": 0, "y1": 1, "yref": "y3 domain"}, {"line": {"color": "#B4391B", "dash": "solid", "width": 2}, "type": "line", "x0": -3.7087, "x1": -3.7087, "xref": "x4", "y0": 0, "y1": 1, "yref": "y4 domain"}], "font": {"family": "Archivo, sans-serif", "color": "#2E312F"}, "title": {"text": "Placebo \u03b2_post distribution (red=observed long-baseline \u03b2)"}, "paper_bgcolor": "#FFFFFF", "plot_bgcolor": "#FFFFFF", "height": 600},{responsive:true});});</script>
   </div>
+<script>window.addEventListener("DOMContentLoaded",function(){
+const el3 = document.getElementById('rb-check3');
+if (!el3) return;
+Plotly.relayout('rb-check3', {
+  title: {text: 'Placebo β_post distribution (red=observed long-baseline β)'},
+  legend: {orientation: 'h', xanchor: 'left', x: 0, yanchor: 'top', y: -0.12,
+    font: {family: 'Archivo, sans-serif', size: 11}, traceorder: 'normal'},
+  margin: {b: 120},
+  annotations: (el3.layout?.annotations || []).concat([{
+    x: 0.5, y: 1.08, xref: 'paper', yref: 'paper',
+    xanchor: 'center', yanchor: 'bottom',
+    text: 'x-axis ranges of tens of µg/m³ show the long-baseline model is unstable; this check is inconclusive and the long-baseline column is not used.',
+    showarrow: false,
+    font: {size: 10.5, color: '#7A2510', style: 'italic'},
+    bgcolor: '#FFF8F0', bordercolor: '#B4391B', borderwidth: 1, borderpad: 4,
+  }])
+});
+});</script>
+<p class="caption"><strong>How to read this:</strong> Grey bars = estimates from fake toll dates; red line = estimate with the real date. A red line inside a very wide pile means the method can't distinguish real from fake.</p>
   <div class="callout">The placebo test is inconclusive for this dataset. The long-baseline QC-only specification is highly unstable: placebo β distributions have SD of 7–17 µg/m³ across the five sites (Queensboro placebo mean +15.7 µg/m³; Williamsburg has only 3 valid placebos), driven by large data gaps (268–791 days), the COVID period, and wildfire months. Observed effects of 1–3 µg/m³ are not exceptional against a baseline that swings ±15 µg/m³. The placebo test cannot distinguish signal from instability, so empirical p-values are not reported. The long-baseline column in the ITS table should be read as a sensitivity note, not a primary result.</div>
 
   <!-- ─ Check 4: Pooled panel ─ -->
@@ -239,12 +326,55 @@
     (B) post × EJ + post × in-CRZ — differential effect by environmental-justice status.
     Wild cluster bootstrap with Webb weights (B=9,999, G clusters). Hunts Point
     excluded (zero pre-toll observations in the VW window).</p>
+    <p class="chart-sub"><strong>How to read this:</strong> Every day gets its own baseline, so citywide events cancel. Dots left of zero moved cleaner than BQE on the same days; right of zero, dirtier.</p>
   </div>
   <div class="chart-wrap">
-    <p class="chart-title">Spec A: per-site toll effect (site + date FE, cluster-robust CI)</p>
+    <p class="chart-title">Per-site change relative to BQE (site + date fixed effects). None bootstrap-significant (p 0.09–0.68).</p>
     <div id="rb-check4a" class="plotly-chart" style="min-height:320px"></div>
 <script>window.addEventListener("DOMContentLoaded",function(){if(typeof Plotly!=="undefined")Plotly.newPlot("rb-check4a",[{"error_x": {"array": [0.30855, 0.39344999999999997, 0.26254999999999995, 0.22314999999999996, 0.3127, 0.07805000000000001, 0.34175, 0.14135, 0.04235, 0.3349], "type": "data", "visible": true}, "marker": {"color": ["#B4391B", "#B4391B", "#B4391B", "#B4391B", "#2F6B3A", "#B4391B", "#B4391B", "#2F6B3A", "#B4391B", "#2F6B3A"], "size": 10}, "mode": "markers", "x": [0.281, 0.9495, 0.4223, 2.2058, -0.356, 0.2181, 0.8985, -0.2238, 0.6861, -0.6741], "y": ["Broadway 35th St", "Cross Bronx Expy", "FDR", "Hamilton Bridge", "Manhattan Bridge", "Midtown DOT", "Mott Haven", "Queensboro Bridge", "SI Expwy", "Williamsburg Bridge"], "type": "scatter"}],{"template": {"data": {"histogram2dcontour": [{"type": "histogram2dcontour", "colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}], "choropleth": [{"type": "choropleth", "colorbar": {"outlinewidth": 0, "ticks": ""}}], "histogram2d": [{"type": "histogram2d", "colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}], "heatmap": [{"type": "heatmap", "colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}], "contourcarpet": [{"type": "contourcarpet", "colorbar": {"outlinewidth": 0, "ticks": ""}}], "contour": [{"type": "contour", "colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}], "surface": [{"type": "surface", "colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}], "mesh3d": [{"type": "mesh3d", "colorbar": {"outlinewidth": 0, "ticks": ""}}], "scatter": [{"fillpattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}, "type": "scatter"}], "parcoords": [{"type": "parcoords", "line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "scatterpolargl": [{"type": "scatterpolargl", "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "bar": [{"error_x": {"color": "#2a3f5f"}, "error_y": {"color": "#2a3f5f"}, "marker": {"line": {"color": "#E5ECF6", "width": 0.5}, "pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "bar"}], "scattergeo": [{"type": "scattergeo", "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "scatterpolar": [{"type": "scatterpolar", "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "histogram": [{"marker": {"pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "histogram"}], "scattergl": [{"type": "scattergl", "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "scatter3d": [{"type": "scatter3d", "line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "scattermap": [{"type": "scattermap", "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "scatterternary": [{"type": "scatterternary", "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "scattercarpet": [{"type": "scattercarpet", "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "carpet": [{"aaxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "baxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "type": "carpet"}], "table": [{"cells": {"fill": {"color": "#EBF0F8"}, "line": {"color": "white"}}, "header": {"fill": {"color": "#C8D4E3"}, "line": {"color": "white"}}, "type": "table"}], "barpolar": [{"marker": {"line": {"color": "#E5ECF6", "width": 0.5}, "pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "barpolar"}], "pie": [{"automargin": true, "type": "pie"}]}, "layout": {"autotypenumbers": "strict", "colorway": ["#636efa", "#EF553B", "#00cc96", "#ab63fa", "#FFA15A", "#19d3f3", "#FF6692", "#B6E880", "#FF97FF", "#FECB52"], "font": {"color": "#2a3f5f"}, "hovermode": "closest", "hoverlabel": {"align": "left"}, "paper_bgcolor": "white", "plot_bgcolor": "#E5ECF6", "polar": {"bgcolor": "#E5ECF6", "angularaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "radialaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "ternary": {"bgcolor": "#E5ECF6", "aaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "baxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "caxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "coloraxis": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "colorscale": {"sequential": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "sequentialminus": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "diverging": [[0, "#8e0152"], [0.1, "#c51b7d"], [0.2, "#de77ae"], [0.3, "#f1b6da"], [0.4, "#fde0ef"], [0.5, "#f7f7f7"], [0.6, "#e6f5d0"], [0.7, "#b8e186"], [0.8, "#7fbc41"], [0.9, "#4d9221"], [1, "#276419"]]}, "xaxis": {"gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "automargin": true, "zerolinewidth": 2}, "yaxis": {"gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "automargin": true, "zerolinewidth": 2}, "scene": {"xaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white", "gridwidth": 2}, "yaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white", "gridwidth": 2}, "zaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white", "gridwidth": 2}}, "shapedefaults": {"line": {"color": "#2a3f5f"}}, "annotationdefaults": {"arrowcolor": "#2a3f5f", "arrowhead": 0, "arrowwidth": 1}, "geo": {"bgcolor": "white", "landcolor": "#E5ECF6", "subunitcolor": "white", "showland": true, "showlakes": true, "lakecolor": "white"}, "title": {"x": 0.05}}}, "shapes": [{"line": {"color": "#333", "dash": "dot", "width": 1}, "type": "line", "x0": 0, "x1": 0, "xref": "x", "y0": 0, "y1": 1, "yref": "y domain"}], "font": {"family": "Archivo, sans-serif", "color": "#2E312F"}, "margin": {"l": 160, "r": 30, "t": 60, "b": 40}, "title": {"text": "Pooled panel: per-site toll effect (site+date FE, cluster-robust SE)"}, "xaxis": {"title": {"text": "\u03b2_post (\u00b5g/m\u00b3)"}}, "paper_bgcolor": "#FFFFFF", "plot_bgcolor": "#FFFFFF", "height": 500},{responsive:true});});</script>
   </div>
+<script>window.addEventListener("DOMContentLoaded",function(){
+const el4 = document.getElementById('rb-check4a');
+if (!el4 || !el4.data) return;
+const SHORT4 = ['Hamilton Bridge'];
+const colors4 = el4.data[0].y.map((label, i) =>
+  SHORT4.includes(label) ? '#CCCCCC' : (el4.data[0].x[i] < 0 ? '#2F6B3A' : '#B4391B'));
+Plotly.restyle('rb-check4a', {
+  'error_x.visible': [false],
+  'marker.color': [colors4],
+  'marker.size': [10],
+}, [0]);
+
+const KEY4 = {
+  'Broadway 35th St':'Broadway_35th_St','Cross Bronx Expy':'Cross_Bronx_Expy',
+  'FDR':'FDR','Hamilton Bridge':'Hamilton_Bridge','Manhattan Bridge':'Manhattan_Bridge',
+  'Midtown DOT':'Midtown_DOT','Mott Haven':'Mott_Haven','Queensboro Bridge':'Queensboro_Bridge',
+  'SI Expwy':'SI_Expwy','Williamsburg Bridge':'Williamsburg_Bridge',
+};
+const specA = window.DATA_BUNDLE?.['../data/processed/robustness.json']?.check4?.spec_a || {};
+const pAnnotations = [];
+el4.data[0].y.forEach((label, i) => {
+  const key = KEY4[label];
+  const p = key ? specA[key]?.p_bootstrap : null;
+  if (p == null) return;
+  const x = el4.data[0].x[i];
+  const right = x >= 0;
+  pAnnotations.push({
+    x: x + (right ? 0.07 : -0.07), y: label,
+    xanchor: right ? 'left' : 'right', yanchor: 'middle',
+    text: 'p = ' + p.toFixed(2),
+    showarrow: false,
+    font: {size: 9, color: '#666', family: 'Archivo, sans-serif'},
+  });
+});
+Plotly.relayout('rb-check4a', {
+  title: {text: 'Per-site change relative to BQE (site + date FE). None bootstrap-significant (p 0.09–0.68).'},
+  margin: {l: 160, r: 60, t: 60, b: 40},
+  annotations: pAnnotations,
+});
+});</script>
+<p class="caption" style="font-size:0.79rem;color:#555;font-style:italic;margin-top:4px">† Hamilton Bridge shown in grey — fewer than 200 pre-toll days; estimate not interpreted.</p>
+<p class="caption"><strong>How to read this:</strong> Every day gets its own baseline, so citywide events cancel. Dots left of zero moved cleaner than BQE on the same days; right of zero, dirtier. Error bars removed: bootstrap p-values 0.09–0.68, none significant.</p>
   <div class="callout">Panel estimates of an EJ gap range from −0.38 to +0.02 µg/m³ depending on how the flag is defined (B1: −0.07, p=0.77; B2: −0.38, p=0.65; B3: +0.02, p=0.96), none significant. EJ status is confounded with zone status in this data: every in-zone monitor except Queensboro sits in a designated tract, and so does every outside-zone monitor with a full pre-toll record. The panel cannot separate the zone effect from the EJ effect with the current monitoring network.</div>
 
   <!-- ─ Check 5: Mechanism ─ -->
@@ -262,6 +392,24 @@
     <div id="rb-check5" class="plotly-chart" style="min-height:320px"></div>
 <script>window.addEventListener("DOMContentLoaded",function(){if(typeof Plotly!=="undefined")Plotly.newPlot("rb-check5",[{"marker": {"color": "#888", "opacity": 0.5, "size": 5}, "mode": "markers", "name": "Daily obs (pre-toll)", "x": [124.822, 123.762, 133.01, 127.742, 107.243, 119.618, 119.59, 126.354, 119.146, 129.414, 125.317, 118.044, 117.432, 115.97, 124.125, 129.82, 130.183, 124.314, 112.397, 111.706, 122.635, 125.732, 134.003, 129.517, 123.623, 118.284, 123.358, 126.336, 134.049, 135.204, 133.255, 132.477, 129.075, 113.73, 123.328, 129.48, 123.547, 131.544, 137.092, 124.971, 121.111, 124.166, 136.003, 140.617, 134.272, 121.823, 126.79, 126.022, 130.916, 137.024, 138.591, 140.505, 142.638, 122.854, 123.084, 127.439, 131.79, 133.531, 132.806, 133.189, 122.781, 126.119, 125.684, 123.152, 126.949, 121.707, 128.9, 121.733, 122.32, 123.727, 131.047, 133.774, 133.451, 135.705, 120.554, 116.451, 124.02, 128.16, 130.592, 140.431, 137.374, 122.976, 123.3, 126.967, 137.121, 136.728, 128.958, 130.803, 120.424, 119.648, 124.203, 130.455, 133.245, 134.554, 120.335, 113.923, 119.553, 118.603, 129.315, 137.033, 131.166, 120.917, 116.483, 121.64, 117.879, 127.372, 129.492, 128.522, 117.359, 111.59, 120.42, 127.236, 128.574, 125.422, 122.058, 118.122, 120.188, 122.951, 130.277, 132.718, 125.282, 132.667, 135.511, 132.122, 121.308, 117.26, 119.283, 124.492, 126.22, 128.319, 119.222, 111.998, 123.604, 125.011, 121.258, 123.165, 128.379, 118.993, 109.777, 119.836, 94.362, 111.184, 112.664, 108.984], "y": [10.197, 5.828, 2.923, 3.86, 6.477, 4.943, 5.465, 4.063, 4.891, 8.32, 3.72, 4.46, 6.558, 5.145, 3.85, 6.235, 4.09, 7.389, 13.533, 11.573, 11.623, 12.573, 6.139, 4.493, 4.462, 15.089, 15.689, 8.493, 11.799, 19.459, 8.238, 8.079, 11.295, 14.418, 4.875, 5.58, 5.47, 7.032, 6.426, 5.753, 4.985, 16.007, 12.928, 19.015, 21.422, 19.022, 7.032, 3.431, 3.991, 5.257, 7.758, 10.676, 12.727, 15.08, 12.233, 13.463, 5.994, 3.897, 4.346, 7.194, 7.513, 3.962, 5.803, 6.073, 5.46, 3.918, 3.524, 4.352, 5.281, 4.028, 9.222, 7.62, 9.018, 8.558, 4.168, 5.57, 5.987, 7.826, 5.967, 5.379, 4.17, 3.627, 3.851, 3.512, 4.588, 4.791, 3.735, 3.928, 4.865, 4.383, 4.426, 3.73, 5.413, 7.394, 8.975, 11.113, 12.853, 5.866, 3.679, 4.794, 3.217, 4.588, 5.19, 9.352, 12.807, 5.949, 3.064, 3.532, 5.111, 9.51, 6.082, 6.095, 4.225, 16.5, 5.34, 5.855, 3.458, 3.44, 3.644, 5.797, 8.283, 4.946, 4.668, 4.239, 5.488, 5.414, 6.928, 7.295, 6.584, 4.205, 4.641, 3.405, 5.037, 8.165, 10.077, 8.162, 12.882, 13.955, 8.67, 4.763, 7.63, 3.491, 4.78, 3.979], "type": "scatter"}, {"line": {"color": "#4B2E83", "width": 2}, "mode": "lines", "name": "Regression slope: +0.0181 \u00b5g/m\u00b3 per 1k veh", "x": [94.362, 107.243, 108.984, 109.777, 111.184, 111.59, 111.706, 111.998, 112.397, 112.664, 113.73, 113.923, 115.97, 116.451, 116.483, 117.26, 117.359, 117.432, 117.879, 118.044, 118.122, 118.284, 118.603, 118.993, 119.146, 119.222, 119.283, 119.553, 119.59, 119.618, 119.648, 119.836, 120.188, 120.335, 120.42, 120.424, 120.554, 120.917, 121.111, 121.258, 121.308, 121.64, 121.707, 121.733, 121.823, 122.058, 122.32, 122.635, 122.781, 122.854, 122.951, 122.976, 123.084, 123.152, 123.165, 123.3, 123.328, 123.358, 123.547, 123.604, 123.623, 123.727, 123.762, 124.02, 124.125, 124.166, 124.203, 124.314, 124.492, 124.822, 124.971, 125.011, 125.282, 125.317, 125.422, 125.684, 125.732, 126.022, 126.119, 126.22, 126.336, 126.354, 126.79, 126.949, 126.967, 127.236, 127.372, 127.439, 127.742, 128.16, 128.319, 128.379, 128.522, 128.574, 128.9, 128.958, 129.075, 129.315, 129.414, 129.48, 129.492, 129.517, 129.82, 130.183, 130.277, 130.455, 130.592, 130.803, 130.916, 131.047, 131.166, 131.544, 131.79, 132.122, 132.477, 132.667, 132.718, 132.806, 133.01, 133.189, 133.245, 133.255, 133.451, 133.531, 133.774, 134.003, 134.049, 134.272, 134.554, 135.204, 135.511, 135.705, 136.003, 136.728, 137.024, 137.033, 137.092, 137.121, 137.374, 138.591, 140.431, 140.505, 140.617, 142.638], "y": [6.565127726388887, 6.798273826388888, 6.8297859263888885, 6.844139226388888, 6.869605926388887, 6.876954526388888, 6.879054126388889, 6.884339326388888, 6.8915612263888875, 6.896393926388887, 6.915688526388887, 6.919181826388888, 6.956232526388888, 6.9649386263888875, 6.965517826388888, 6.979581526388888, 6.981373426388888, 6.982694726388887, 6.990785426388888, 6.993771926388888, 6.995183726388888, 6.998115926388888, 7.003889826388887, 7.010948826388889, 7.013718126388888, 7.015093726388889, 7.016197826388888, 7.021084826388888, 7.021754526388888, 7.022261326388888, 7.022804326388888, 7.026207126388888, 7.032578326388888, 7.035239026388888, 7.036777526388887, 7.0368499263888875, 7.039202926388889, 7.045773226388889, 7.0492846263888875, 7.051945326388887, 7.052850326388889, 7.058859526388888, 7.060072226388888, 7.060542826388888, 7.062171826388887, 7.066425326388888, 7.071167526388889, 7.076869026388888, 7.0795116263888875, 7.080832926388888, 7.082588626388889, 7.083041126388888, 7.084995926388888, 7.0862267263888885, 7.0864620263888884, 7.0889055263888885, 7.089412326388889, 7.089955326388887, 7.093376226388887, 7.094407926388888, 7.0947518263888885, 7.096634226388888, 7.097267726388887, 7.1019375263888875, 7.103838026388887, 7.104580126388887, 7.105249826388889, 7.107258926388887, 7.110480726388888, 7.1164537263888885, 7.119150626388889, 7.119874626388889, 7.124779726388889, 7.125413226388888, 7.127313726388888, 7.1320559263888885, 7.132924726388888, 7.138173726388889, 7.139929426388887, 7.141757526388888, 7.1438571263888875, 7.144182926388888, 7.152074526388889, 7.154952426388888, 7.155278226388889, 7.160147126388887, 7.162608726388887, 7.163821426388887, 7.169305726388888, 7.176871526388888, 7.179749426388888, 7.180835426388887, 7.183423726388888, 7.184364926388888, 7.190265526388888, 7.191315326388887, 7.193433026388888, 7.197777026388888, 7.1995689263888885, 7.200763526388888, 7.200980726388888, 7.201433226388888, 7.206917526388887, 7.213487826388887, 7.215189226388889, 7.218411026388887, 7.220890726388889, 7.224709826388887, 7.226755126388888, 7.229126226388887, 7.231280126388889, 7.238121926388889, 7.242574526388887, 7.248583726388889, 7.2550092263888875, 7.258448226388888, 7.259371326388887, 7.260964126388888, 7.2646565263888885, 7.267896426388889, 7.2689100263888875, 7.269091026388887, 7.272638626388888, 7.274086626388888, 7.278484926388888, 7.282629826388888, 7.283462426388889, 7.287498726388888, 7.292602926388888, 7.304367926388888, 7.309924626388888, 7.313436026388889, 7.318829826388887, 7.331952326388889, 7.337309926388889, 7.337472826388888, 7.338540726388889, 7.339065626388889, 7.3436449263888885, 7.365672626388887, 7.3989766263888885, 7.400316026388888, 7.402343226388888, 7.438923326388888], "type": "scatter"}],{"template": {"data": {"histogram2dcontour": [{"type": "histogram2dcontour", "colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}], "choropleth": [{"type": "choropleth", "colorbar": {"outlinewidth": 0, "ticks": ""}}], "histogram2d": [{"type": "histogram2d", "colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}], "heatmap": [{"type": "heatmap", "colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}], "contourcarpet": [{"type": "contourcarpet", "colorbar": {"outlinewidth": 0, "ticks": ""}}], "contour": [{"type": "contour", "colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}], "surface": [{"type": "surface", "colorbar": {"outlinewidth": 0, "ticks": ""}, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]]}], "mesh3d": [{"type": "mesh3d", "colorbar": {"outlinewidth": 0, "ticks": ""}}], "scatter": [{"fillpattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}, "type": "scatter"}], "parcoords": [{"type": "parcoords", "line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "scatterpolargl": [{"type": "scatterpolargl", "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "bar": [{"error_x": {"color": "#2a3f5f"}, "error_y": {"color": "#2a3f5f"}, "marker": {"line": {"color": "#E5ECF6", "width": 0.5}, "pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "bar"}], "scattergeo": [{"type": "scattergeo", "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "scatterpolar": [{"type": "scatterpolar", "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "histogram": [{"marker": {"pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "histogram"}], "scattergl": [{"type": "scattergl", "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "scatter3d": [{"type": "scatter3d", "line": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "scattermap": [{"type": "scattermap", "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "scatterternary": [{"type": "scatterternary", "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "scattercarpet": [{"type": "scattercarpet", "marker": {"colorbar": {"outlinewidth": 0, "ticks": ""}}}], "carpet": [{"aaxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "baxis": {"endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f"}, "type": "carpet"}], "table": [{"cells": {"fill": {"color": "#EBF0F8"}, "line": {"color": "white"}}, "header": {"fill": {"color": "#C8D4E3"}, "line": {"color": "white"}}, "type": "table"}], "barpolar": [{"marker": {"line": {"color": "#E5ECF6", "width": 0.5}, "pattern": {"fillmode": "overlay", "size": 10, "solidity": 0.2}}, "type": "barpolar"}], "pie": [{"automargin": true, "type": "pie"}]}, "layout": {"autotypenumbers": "strict", "colorway": ["#636efa", "#EF553B", "#00cc96", "#ab63fa", "#FFA15A", "#19d3f3", "#FF6692", "#B6E880", "#FF97FF", "#FECB52"], "font": {"color": "#2a3f5f"}, "hovermode": "closest", "hoverlabel": {"align": "left"}, "paper_bgcolor": "white", "plot_bgcolor": "#E5ECF6", "polar": {"bgcolor": "#E5ECF6", "angularaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "radialaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "ternary": {"bgcolor": "#E5ECF6", "aaxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "baxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}, "caxis": {"gridcolor": "white", "linecolor": "white", "ticks": ""}}, "coloraxis": {"colorbar": {"outlinewidth": 0, "ticks": ""}}, "colorscale": {"sequential": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "sequentialminus": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "diverging": [[0, "#8e0152"], [0.1, "#c51b7d"], [0.2, "#de77ae"], [0.3, "#f1b6da"], [0.4, "#fde0ef"], [0.5, "#f7f7f7"], [0.6, "#e6f5d0"], [0.7, "#b8e186"], [0.8, "#7fbc41"], [0.9, "#4d9221"], [1, "#276419"]]}, "xaxis": {"gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "automargin": true, "zerolinewidth": 2}, "yaxis": {"gridcolor": "white", "linecolor": "white", "ticks": "", "title": {"standoff": 15}, "zerolinecolor": "white", "automargin": true, "zerolinewidth": 2}, "scene": {"xaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white", "gridwidth": 2}, "yaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white", "gridwidth": 2}, "zaxis": {"backgroundcolor": "#E5ECF6", "gridcolor": "white", "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white", "gridwidth": 2}}, "shapedefaults": {"line": {"color": "#2a3f5f"}}, "annotationdefaults": {"arrowcolor": "#2a3f5f", "arrowhead": 0, "arrowwidth": 1}, "geo": {"bgcolor": "white", "landcolor": "#E5ECF6", "subunitcolor": "white", "showland": true, "showlakes": true, "lakecolor": "white"}, "title": {"x": 0.05}}}, "font": {"family": "Archivo, sans-serif", "color": "#2E312F"}, "title": {"text": "Mott Haven PM2.5 vs Throgs Neck Bridge daily volume (pre-toll 2022\u20132024)"}, "xaxis": {"title": {"text": "Throgs Neck Bridge (thousands of vehicles/day)"}}, "yaxis": {"title": {"text": "Mott Haven PM2.5 (\u00b5g/m\u00b3)"}}, "paper_bgcolor": "#FFFFFF", "plot_bgcolor": "#FFFFFF", "height": 380},{responsive:true});});</script>
   </div>
+<script>window.addEventListener("DOMContentLoaded",function(){
+const el5 = document.getElementById('rb-check5');
+if (!el5) return;
+Plotly.relayout('rb-check5', {
+  legend: {orientation: 'h', xanchor: 'left', x: 0, yanchor: 'bottom', y: 1.02,
+    font: {family: 'Archivo, sans-serif', size: 11}},
+  annotations: [{
+    x: 0.02, y: 0.97, xref: 'paper', yref: 'paper',
+    xanchor: 'left', yanchor: 'top',
+    text: 'Slope × residual: +0.0181 µg/m³ per 1k veh<br>× +2,041 veh/day (Throgs Neck post-toll residual)<br>= implied +0.04 µg/m³<br>Observed full-model β (Mott Haven): +0.30 µg/m³',
+    showarrow: false, bgcolor: 'rgba(255,255,255,0.88)',
+    bordercolor: '#888', borderwidth: 1, borderpad: 6,
+    font: {size: 10, family: 'Archivo, sans-serif'},
+    align: 'left',
+  }]
+});
+});</script>
+<p class="caption"><strong>How to read this:</strong> Each dot is one pre-toll day. A steep line would mean bridge traffic drives Mott Haven air. The line is nearly flat.</p>
   <div class="callout">In the pre-toll period (2022–2024), each additional 1,000 vehicles/day at Throgs Neck Bridge is associated with β=+0.0181 µg/m³ at Mott Haven (p=0.272, HAC SE, n=144). Multiplying by the post-toll Throgs Neck residual of +2041 veh/day implies +0.04 µg/m³ — about one-eighth of the observed ITS step-change of +0.30 µg/m³, so traffic diversion via Throgs Neck cannot account for most of the Mott Haven increase. However, consistency of magnitudes alone does not establish causation; unmeasured confounders could produce the same pattern.</div>
 
   <!-- ─ Check 6: Bronx NO2 ─ -->
@@ -281,7 +429,7 @@
     <h3>7. Model-free difference in differences (matched day-of-year)</h3>
     <p>For each site, the 2025 mean minus the 2024 mean on days matched by (month, day). The −VW and −QC columns subtract the same control's change on matching days. The 2026 columns use Jan 1–Sep 4, 2026 vs matched 2024 days. Units: µg/m³.</p>
   </div>
-  <div id="check7-table-wrap" style="overflow-x:auto;margin:1rem 0">
+  <div id="check7-table-wrap" style="overflow-x:auto;margin:1rem 0;position:relative">
     <div class="loading"><div class="spinner"></div>Loading…</div>
   </div>
   <div class="callout" id="check7-callout">Matched day-of-year DiD (2025 vs 2024). Van Wyck fell 0.48 µg/m³ and Queens College 0.24 µg/m³ on matched days vs 2024, so site-minus-control estimates shift by about 0.2 µg/m³ depending on which control is used. After removing the VW trend, the East River bridge sites (Manhattan −0.60, Williamsburg −0.81, Queensboro −0.14) all show improvement; the Bronx sites (Cross Bronx +0.97, Mott Haven +0.87) do not. The 2026 columns are shown for trend direction only; both controls also fell substantially from 2024 to 2026, which inflates site-minus-control improvements in that column.</div>
@@ -294,77 +442,78 @@
     change into a single permanent level shift. Same window (2024-02-22 to present),
     same covariates (QC, VW, seasonal terms, trend, covid). HAC SE, maxlags=30.</p>
   </div>
-  <div style="overflow-x:auto;margin:1rem 0">
+  <div style="overflow-x:auto;margin:1rem 0;position:relative">
   <table style="width:100%;border-collapse:collapse;font-size:0.82rem;font-family:inherit">
     <thead>
       <tr style="border-bottom:2px solid #2E312F">
-        <th style="text-align:left;padding:4px 8px">Site</th>
-        <th style="text-align:right;padding:4px 8px">Full β</th>
-        <th style="text-align:right;padding:4px 8px">Full p</th>
-        <th style="text-align:right;padding:4px 8px">Step β</th>
-        <th style="text-align:left;padding:4px 8px">Step 95% CI</th>
-        <th style="text-align:right;padding:4px 8px">Step p</th>
-        <th style="text-align:left;padding:4px 8px">Note</th>
+        <th style="text-align:left;padding:8px 12px;position:sticky;left:0;background:#fff;z-index:1">Site</th>
+        <th style="text-align:right;padding:8px 12px">Main model β</th>
+        <th style="text-align:right;padding:8px 12px">Main model p</th>
+        <th style="text-align:right;padding:8px 12px">Step-only β</th>
+        <th style="text-align:left;padding:8px 12px">Step-only 95% CI</th>
+        <th style="text-align:right;padding:8px 12px">Step-only p</th>
+        <th style="text-align:left;padding:8px 12px">Verdict</th>
       </tr>
     </thead>
     <tbody>
       <tr style="border-bottom:1px solid #eee">
-        <td style="padding:4px 8px">Cross Bronx Expy</td>
-        <td style="text-align:right;padding:4px 8px">−0.5226</td>
-        <td style="text-align:right;padding:4px 8px">0.210</td>
-        <td style="text-align:right;padding:4px 8px">−0.019</td>
-        <td style="padding:4px 8px">(−0.567, +0.529)</td>
-        <td style="text-align:right;padding:4px 8px">0.947</td>
-        <td style="padding:4px 8px"></td>
+        <td style="padding:8px 12px;position:sticky;left:0;background:#fff;z-index:1">Cross Bronx Expy</td>
+        <td style="text-align:right;padding:8px 12px">−0.5226</td>
+        <td style="text-align:right;padding:8px 12px">0.210</td>
+        <td style="text-align:right;padding:8px 12px">−0.019</td>
+        <td style="padding:8px 12px">(−0.567, +0.529)</td>
+        <td style="text-align:right;padding:8px 12px">0.947</td>
+        <td style="padding:8px 12px">Zero in both</td>
       </tr>
       <tr style="border-bottom:1px solid #eee">
-        <td style="padding:4px 8px">Mott Haven</td>
-        <td style="text-align:right;padding:4px 8px">+0.2957</td>
-        <td style="text-align:right;padding:4px 8px">0.608</td>
-        <td style="text-align:right;padding:4px 8px">−0.645</td>
-        <td style="padding:4px 8px">(−1.147, −0.143)</td>
-        <td style="text-align:right;padding:4px 8px">0.012</td>
-        <td style="padding:4px 8px">Sign reverses</td>
+        <td style="padding:8px 12px;position:sticky;left:0;background:#fff;z-index:1">Mott Haven</td>
+        <td style="text-align:right;padding:8px 12px">+0.2957</td>
+        <td style="text-align:right;padding:8px 12px">0.608</td>
+        <td style="text-align:right;padding:8px 12px">−0.645</td>
+        <td style="padding:8px 12px">(−1.147, −0.143)</td>
+        <td style="text-align:right;padding:8px 12px">0.012</td>
+        <td style="padding:8px 12px">Flips sign</td>
       </tr>
       <tr style="border-bottom:1px solid #eee">
-        <td style="padding:4px 8px">Manhattan Bridge</td>
-        <td style="text-align:right;padding:4px 8px">−1.3276</td>
-        <td style="text-align:right;padding:4px 8px">0.028</td>
-        <td style="text-align:right;padding:4px 8px">−0.858</td>
-        <td style="padding:4px 8px">(−1.417, −0.299)</td>
-        <td style="text-align:right;padding:4px 8px">0.003</td>
-        <td style="padding:4px 8px"></td>
+        <td style="padding:8px 12px;position:sticky;left:0;background:#fff;z-index:1">Manhattan Bridge</td>
+        <td style="text-align:right;padding:8px 12px">−1.3276</td>
+        <td style="text-align:right;padding:8px 12px">0.028</td>
+        <td style="text-align:right;padding:8px 12px">−0.858</td>
+        <td style="padding:8px 12px">(−1.417, −0.299)</td>
+        <td style="text-align:right;padding:8px 12px">0.003</td>
+        <td style="padding:8px 12px">Survives</td>
       </tr>
       <tr style="border-bottom:1px solid #eee">
-        <td style="padding:4px 8px">Williamsburg Bridge</td>
-        <td style="text-align:right;padding:4px 8px">−1.0352</td>
-        <td style="text-align:right;padding:4px 8px">0.026</td>
-        <td style="text-align:right;padding:4px 8px">−0.473</td>
-        <td style="padding:4px 8px">(−0.974, +0.029)</td>
-        <td style="text-align:right;padding:4px 8px">0.065</td>
-        <td style="padding:4px 8px"><strong>Model-dependent</strong></td>
+        <td style="padding:8px 12px;position:sticky;left:0;background:#fff;z-index:1">Williamsburg Bridge</td>
+        <td style="text-align:right;padding:8px 12px">−1.0352</td>
+        <td style="text-align:right;padding:8px 12px">0.026</td>
+        <td style="text-align:right;padding:8px 12px">−0.473</td>
+        <td style="padding:8px 12px">(−0.974, +0.029)</td>
+        <td style="text-align:right;padding:8px 12px">0.065</td>
+        <td style="padding:8px 12px">Borderline</td>
       </tr>
       <tr style="border-bottom:1px solid #eee">
-        <td style="padding:4px 8px">Queensboro Bridge</td>
-        <td style="text-align:right;padding:4px 8px">−1.0981</td>
-        <td style="text-align:right;padding:4px 8px">0.205</td>
-        <td style="text-align:right;padding:4px 8px">−0.767</td>
-        <td style="padding:4px 8px">(−1.443, −0.090)</td>
-        <td style="text-align:right;padding:4px 8px">0.026</td>
-        <td style="padding:4px 8px"></td>
+        <td style="padding:8px 12px;position:sticky;left:0;background:#fff;z-index:1">Queensboro Bridge</td>
+        <td style="text-align:right;padding:8px 12px">−1.0981</td>
+        <td style="text-align:right;padding:8px 12px">0.205</td>
+        <td style="text-align:right;padding:8px 12px">−0.767</td>
+        <td style="padding:8px 12px">(−1.443, −0.090)</td>
+        <td style="text-align:right;padding:8px 12px">0.026</td>
+        <td style="padding:8px 12px">Zero in both</td>
       </tr>
       <tr>
-        <td style="padding:4px 8px">Broadway 35th St</td>
-        <td style="text-align:right;padding:4px 8px">−2.6818</td>
-        <td style="text-align:right;padding:4px 8px">0.000</td>
-        <td style="text-align:right;padding:4px 8px">−1.595</td>
-        <td style="padding:4px 8px">(−2.734, −0.455)</td>
-        <td style="text-align:right;padding:4px 8px">0.006</td>
-        <td style="padding:4px 8px"></td>
+        <td style="padding:8px 12px;position:sticky;left:0;background:#fff;z-index:1">Broadway 35th St</td>
+        <td style="text-align:right;padding:8px 12px">−2.6818</td>
+        <td style="text-align:right;padding:8px 12px">0.000</td>
+        <td style="text-align:right;padding:8px 12px">−1.595</td>
+        <td style="padding:8px 12px">(−2.734, −0.455)</td>
+        <td style="text-align:right;padding:8px 12px">0.006</td>
+        <td style="padding:8px 12px">Survives</td>
       </tr>
     </tbody>
   </table>
   </div>
+<p class="caption"><strong>How to read this:</strong> Same sites, one model term removed. A result that keeps its sign and significance is sturdy; one that flips is not interpreted in either direction. Verdict: "Survives" = both p&lt;0.05, same sign; "Borderline" = same sign, step-only p 0.05–0.10; "Flips sign" = signs differ; "Zero in both" = main model p≥0.05.</p>
   <div class="callout">Manhattan Bridge remains significant in both specifications (full p=0.028, step-only p=0.003); the direction and approximate magnitude are stable. Williamsburg Bridge is significant in the full model (p=0.026) but not in the step-only model (p=0.065, 95% CI crosses zero): its result is <strong>model-dependent</strong>. Mott Haven shows a sign reversal (full β=+0.30, step-only β=−0.65): in the full model a positive drift term after the toll is capturing most of the post-period variation; removing it flips the sign. The direction of the Mott Haven result is therefore model-dependent: full β=+0.30 (p=0.61), step-only β=−0.65 (p=0.01). The sign depends on whether the post-toll drift term is included.</div>
 
   <!-- ─ Check 9: Outside-zone PurpleAir sensors ─ -->
@@ -379,11 +528,206 @@
   <!-- ─ South Bronx Unite comparison ─ -->
   <div class="section-header" style="margin-top:2.5rem">
     <h3>How this compares to the South Bronx Unite study</h3>
-    <p>The South Bronx Unite community network documented PM₂.₅ rising at 12–14 of 19 sensors between January 2024 and December 2025, averaging approximately +0.22 µg/m³ and reaching +1.29 µg/m³ near expressways (NYC Congestion Pricing Datathon brief). Our Check 7 matched-day raw changes at the two Bronx NYCCAS sites are in the same order of magnitude: Mott Haven +0.08 µg/m³, Cross Bronx −0.16 µg/m³ — small and mixed in sign (2025 vs. 2024).</p>
-    <p>The difference between the two studies is the counterfactual. South Bronx Unite reports raw year-over-year change. When we subtract a control monitor, the same upward shift appears at every outside-zone site regardless of borough or EJ status. In 2025, the three primary-set PurpleAir sensors each rose relative to Van Wyck: 89th &amp; Ridge Ave in Bay Ridge +0.85 µg/m³, RGBIV in Brooklyn Heights +1.26 µg/m³, FA_O5 in East Harlem +1.19 µg/m³ (Check 9). Their raw year-over-year changes (+0.25, +0.48, and +0.74 µg/m³) are close to the South Bronx Unite average.</p>
+    <p>The South Bronx Unite community network documented PM₂.₅ rising at 12–14 of 19 sensors between January 2024 and December 2025, averaging approximately +0.22 µg/m³ and reaching +1.29 µg/m³ near expressways (NYC Congestion Pricing Datathon brief). Our Check 7 matched-day raw changes at the two Bronx NYCCAS sites fall within the range South Bronx Unite reports: Mott Haven +0.08 µg/m³, Cross Bronx −0.16 µg/m³ — small and mixed in sign (2025 vs. 2024).</p>
+    <p>The difference between the two studies is the counterfactual. South Bronx Unite reports raw year-over-year change. When we subtract a control monitor, the same upward shift appears at every outside-zone site regardless of borough or EJ status. In 2025, the three primary-set PurpleAir sensors each rose relative to Van Wyck: 89th &amp; Ridge Ave in Bay Ridge +0.85 µg/m³, RGBIV in Brooklyn Heights +1.26 µg/m³, FA_O5 in East Harlem +1.19 µg/m³ (Check 9). Their raw year-over-year changes (+0.25, +0.48, and +0.74 µg/m³) fall within the range South Bronx Unite reports across its network.</p>
     <p>On the expressway question, our one expressway-adjacent peak-hour result points the same way. Cross Bronx Expressway, weekday peak hours (Check 2): β<sub>post</sub> = +0.90 µg/m³ (95% CI +0.04 to +1.75, p = 0.04) — values that fall within the range South Bronx Unite reports across its network. That is one significant result among the peak-hour tests — a hint, not a finding.</p>
   </div>
   <div class="callout"><strong>The two studies see the same underlying data.</strong> PM₂.₅ did not fall at outside-zone Bronx sites. The disagreement is about what to compare it to. Relative to the regional background (the control monitors), the Bronx moved the same way as Bay Ridge, Brooklyn Heights, and East Harlem. The organizing variable is inside versus outside the toll zone — not EJ status, not the Bronx.</div>
+
+  <!-- ─ Phase 2 Scorecard ─ -->
+  <div class="section-header" id="scorecard" style="margin-top:3rem">
+    <h3>Scorecard: every monitor, every check</h3>
+  </div>
+  <p id="sc-count" style="font-family:var(--font-head);font-size:0.875rem;color:var(--ink-muted);margin:0 0 0.75rem"></p>
+  <div style="font-family:var(--font-head);font-size:0.8125rem;margin-bottom:0.75rem;display:flex;gap:1.5rem;flex-wrap:wrap;align-items:center;border-bottom:1px solid var(--rule);padding-bottom:0.5rem">
+    <span><span style="display:inline-block;width:14px;height:14px;background:#DFEBE1;outline:1.5px solid #000000;outline-offset:-1px;vertical-align:middle;margin-right:4px"></span>Cleaner (negative)</span>
+    <span><span style="display:inline-block;width:14px;height:14px;background:#F6E4DD;outline:1.5px solid #000000;outline-offset:-1px;vertical-align:middle;margin-right:4px"></span>Dirtier (positive)</span>
+    <span><span style="display:inline-block;width:14px;height:14px;background:#F2F2F2;border:1px solid #BBBBBB;vertical-align:middle;margin-right:4px"></span>Near zero (|β|≤0.05)</span>
+    <span><b>bold + border</b> = that check significant (p&lt;0.05 or CI excludes zero)</span>
+    <span style="color:var(--ink-muted)">Columns 4–5 carry no inference; never bolded.</span>
+  </div>
+  <div style="overflow-x:auto;position:relative">
+    <div id="sc-wrap"><div class="loading"><div class="spinner"></div>Loading…</div></div>
+  </div>
+  <p class="caption" style="margin-top:0.75rem">Each cell is one check's estimate for one monitor. Green = cleaner, brick = dirtier. Bold outline = that check is significant on its own. The verdict uses the five level-change columns (main model, weather-adjusted, step-only, vs Van Wyck, vs Queens College); the panel and peak/overnight columns are shown for reference. Values within ±0.05 µg/m³ are treated as neutral and do not count toward agreement. Hover on a verdict cell to see which columns disagreed.</p>
+<script>
+window.addEventListener('DOMContentLoaded', function() {
+  const its = window.DATA_BUNDLE?.['../data/processed/its_results.json'];
+  const rob = window.DATA_BUNDLE?.['../data/processed/robustness.json'];
+  const wrap = document.getElementById('sc-wrap');
+  if (!its || !rob || !wrap) return;
+
+  const ITS_SET = new Set(['Cross_Bronx_Expy','Mott_Haven','Manhattan_Bridge','Williamsburg_Bridge','Queensboro_Bridge']);
+  const SHORT_SB = new Set(['Hamilton_Bridge','BQE','SI_Expwy']);
+
+  const STEP_ONLY_SC = {
+    Cross_Bronx_Expy:   {beta:-0.019, p:0.947},
+    Mott_Haven:         {beta:-0.645, p:0.012},
+    Manhattan_Bridge:   {beta:-0.858, p:0.003},
+    Williamsburg_Bridge:{beta:-0.473, p:0.065},
+    Queensboro_Bridge:  {beta:-0.767, p:0.026},
+  };
+
+  const GROUPS = [
+    {label:'Inside zone / boundary', sites:[
+      {key:'Midtown_DOT',         label:'Midtown DOT'},
+      {key:'Manhattan_Bridge',    label:'Manhattan Bridge'},
+      {key:'Williamsburg_Bridge', label:'Williamsburg Bridge'},
+      {key:'Broadway_35th_St',    label:'Broadway 35th St'},
+      {key:'Queensboro_Bridge',   label:'Queensboro Bridge'},
+      {key:'FDR',                 label:'FDR'},
+    ]},
+    {label:'Outside zone', sites:[
+      {key:'Cross_Bronx_Expy', label:'Cross Bronx Expy'},
+      {key:'Mott_Haven',       label:'Mott Haven'},
+      {key:'Hamilton_Bridge',  label:'Hamilton Bridge', short:true},
+      {key:'BQE',              label:'BQE',             short:true},
+      {key:'SI_Expwy',         label:'SI Expwy',        short:true},
+      {key:'89th_and_Ridge',   label:'89th & Ridge (Bay Ridge)', pa:true},
+      {key:'RGBIV',            label:'RGBIV (Brooklyn Heights)', pa:true},
+      {key:'FA_O5',            label:'FA_O5 (East Harlem)', pa:true, ej:true},
+    ]},
+  ];
+
+  function getSiteData(cfg) {
+    const k = cfg.key, pa = !!cfg.pa;
+    const c1s = pa ? null : ITS_SET.has(k) ? its.sites[k]?.full : rob.check1?.sites[k]?.original;
+    const c2s = pa ? null : rob.check1?.sites[k]?.weather;
+    const c3s = pa ? null : (STEP_ONLY_SC[k] || null);
+    const c45 = pa ? rob.check9?.check7_did?.[k] : rob.check7?.sites?.[k];
+    const c6s = (pa || k === 'BQE') ? null : rob.check4?.spec_a?.[k];
+    const c7s = pa ? null : rob.check2?.weekday_only?.[k];
+
+    const col1 = c1s?.beta_post ?? null;
+    const col1p = c1s ? (c1s.beta_post_p ?? c1s.p ?? null) : null;
+    const col1sig = c1s ? !!(c1s.significant ?? (col1p != null && col1p < 0.05)) : false;
+
+    const col2 = c2s?.beta_post ?? null;
+    const col2sig = c2s ? !!(c2s.significant ?? ((c2s.p ?? 1) < 0.05)) : false;
+
+    const col3 = c3s?.beta ?? null;
+    const col3sig = c3s ? c3s.p < 0.05 : false;
+
+    const col4 = c45?.minus_vw_25 ?? null;
+    const col5 = c45?.minus_qc_25 ?? null;
+
+    const col6 = c6s?.beta ?? null;
+    const col6sig = c6s ? (c6s.ci_low != null && c6s.ci_high != null && (c6s.ci_low > 0 || c6s.ci_high < 0)) : false;
+
+    const col7 = c7s?.beta_post ?? null;
+    const col7sig = c7s ? !!(c7s.significant ?? ((c7s.p ?? 1) < 0.05)) : false;
+
+    return {col1,col1sig, col2,col2sig, col3,col3sig, col4, col5, col6,col6sig, col7,col7sig};
+  }
+
+  const NEUTRAL_THRESH = 0.05;
+  function computeVerdict(cfg, d) {
+    if (cfg.short) return 'Short baseline';
+    const sig = v => v != null && Math.abs(v) >= NEUTRAL_THRESH;
+    if (cfg.pa) {
+      const vals = [d.col4, d.col5].filter(sig);
+      if (!vals.length) return '—';
+      if (vals.every(v => v < 0)) return 'Leans cleaner';
+      if (vals.every(v => v > 0)) return 'Leans worse';
+      return 'No direction';
+    }
+    if (d.col1 == null) return '—';
+    if (d.col1sig) return d.col1 < 0 ? 'Confirmed cleaner' : 'Confirmed worse';
+    const vals = [d.col1, d.col2, d.col3, d.col4, d.col5].filter(sig);
+    if (!vals.length) return '—';
+    if (vals.every(v => v < 0)) return 'Leans cleaner';
+    if (vals.every(v => v > 0)) return 'Leans worse';
+    return 'No direction';
+  }
+
+  const VORD = {'Confirmed cleaner':0,'Leans cleaner':1,'No direction':2,'—':3,'Short baseline':4,'Leans worse':5,'Confirmed worse':6};
+  const VSTYLE = {
+    'Confirmed cleaner':'color:#1B4A24;font-weight:700',
+    'Confirmed worse':  'color:#7A2510;font-weight:700',
+    'Leans cleaner':    'color:#2F6B3A;font-weight:600',
+    'Leans worse':      'color:#B4391B;font-weight:600',
+    'No direction':     'color:var(--ink-muted)',
+    'Short baseline':   'color:var(--ink-muted);font-style:italic',
+    '—':               'color:var(--rule-mid)',
+  };
+
+  function cell(val, sig, noInfer) {
+    if (val == null) return '<td style="text-align:right;padding:.5rem .75rem;color:var(--ink-muted)">—</td>';
+    const v = +val, sgn = v >= 0 ? '+' : '';
+    const bg   = v < -0.05 ? '#DFEBE1' : v > 0.05 ? '#F6E4DD' : '#F2F2F2';
+    const outl = (!noInfer && sig) ? ';outline:1.5px solid #000000;outline-offset:-1px' : '';
+    const fw   = (!noInfer && sig) ? 'font-weight:700;' : '';
+    return `<td style="${fw}text-align:right;padding:.5rem .75rem;background:${bg}${outl};white-space:nowrap">${sgn}${v.toFixed(2)}</td>`;
+  }
+
+  const STK = 'position:sticky;left:0;background:#FFFFFF;z-index:1;border-right:2px solid #000000;';
+
+  const rendered = GROUPS.map(grp => {
+    const rows = grp.sites.map(cfg => {
+      const d = getSiteData(cfg);
+      const v = computeVerdict(cfg, d);
+      return {cfg, d, v};
+    });
+    rows.sort((a,b) => {
+      const dv = (VORD[a.v]??99)-(VORD[b.v]??99);
+      return dv || ((a.d.col1??999)-(b.d.col1??999));
+    });
+    return {label:grp.label, rows};
+  });
+
+  const mkCount = rows => {
+    const c = {};
+    rows.forEach(r => { c[r.v]=(c[r.v]||0)+1; });
+    const p = [];
+    if (c['Confirmed cleaner']) p.push(`${c['Confirmed cleaner']} confirmed cleaner`);
+    if (c['Leans cleaner'])     p.push(`${c['Leans cleaner']} lean cleaner`);
+    if (c['No direction'])      p.push(`${c['No direction']} no direction`);
+    if (c['Leans worse'])       p.push(`${c['Leans worse']} lean worse`);
+    if (c['Confirmed worse'])   p.push(`${c['Confirmed worse']} confirmed worse`);
+    if (c['Short baseline'])    p.push(`${c['Short baseline']} short baseline`);
+    return p.join(', ');
+  };
+  const cntEl = document.getElementById('sc-count');
+  if (cntEl) cntEl.textContent = `Inside/boundary: ${mkCount(rendered[0].rows)}.  Outside: ${mkCount(rendered[1].rows)}.`;
+
+  const HDRS = ['Site','Main model β','Weather-adjusted β','Step-only β','vs Van Wyck 2025 (raw)','vs Queens College 2025 (raw)','Panel vs BQE','Peak vs overnight, weekdays','Verdict'];
+  let html = `<table style="min-width:900px">`;
+  html += `<thead><tr>`;
+  HDRS.forEach((h,i) => {
+    const sticky = i===0 ? `position:sticky;left:0;z-index:2;background:#FFFFFF;` : '';
+    const align  = i===0 ? '' : 'text-align:right;';
+    const minW   = i===0 ? 'min-width:160px;' : 'min-width:76px;';
+    html += `<th style="${sticky}${align}${minW}white-space:normal;padding:.55rem .75rem .55rem ${i===0?'0':'.75rem'}">${h}</th>`;
+  });
+  html += `</tr></thead><tbody>`;
+
+  rendered.forEach(grp => {
+    html += `<tr style="background:var(--haze)"><td colspan="9" style="padding:.35rem .75rem;font-weight:700;text-transform:uppercase;font-size:.75rem;letter-spacing:.06em;color:var(--ink-muted)">${grp.label}</td></tr>`;
+    grp.rows.forEach(({cfg,d,v}) => {
+      const {col1,col1sig,col2,col2sig,col3,col3sig,col4,col5,col6,col6sig,col7,col7sig} = d;
+      const fade = cfg.short ? 'opacity:0.45;' : '';
+      const infer = [[col1,'Main model'],[col2,'Weather-adj'],[col3,'Step-only'],[col4,'vs VW'],[col5,'vs QC']];
+      const pres = infer.filter(x=>x[0]!=null && Math.abs(x[0]) >= NEUTRAL_THRESH);
+      let hov = '';
+      if (pres.length >= 2) {
+        const neg = pres.filter(x=>x[0]<0), pos = pres.filter(x=>x[0]>0);
+        if (neg.length && pos.length) {
+          const minor = neg.length <= pos.length ? neg : pos;
+          hov = ` title="Signs disagree — ${minor.map(x=>`${x[1]} ${x[0]>=0?'+':''}${(+x[0]).toFixed(2)}`).join(', ')}"`;
+        }
+      }
+      html += `<tr style="${fade}">`;
+      html += `<td style="${STK}padding:.5rem .75rem .5rem 0">${cfg.label}${cfg.short?' <sup title="Fewer than 200 pre-toll days in VW window">†</sup>':''}</td>`;
+      html += cell(col1,col1sig,false)+cell(col2,col2sig,false)+cell(col3,col3sig,false);
+      html += cell(col4,false,true)+cell(col5,false,true);
+      html += cell(col6,col6sig,false)+cell(col7,col7sig,false);
+      html += `<td style="padding:.5rem .75rem;${VSTYLE[v]||''}"${hov}>${v}</td></tr>`;
+    });
+  });
+  html += `</tbody></table>`;
+  wrap.innerHTML = html;
+});
+</script>
 
 </section>
 
@@ -400,19 +744,20 @@
 
   <div class="map-wrap" style="margin-bottom:1.25rem">
     <div id="map-traffic" class="map-container" style="height:420px"></div>
-    <div class="map-legend">
+    <div class="map-legend" style="top:auto;bottom:12px;">
       <div class="legend-title">Volume change vs. forecast</div>
-      <div class="legend-row"><div class="legend-swatch" style="background:#7A2510"></div><span>&gt; +10% more traffic</span></div>
-      <div class="legend-row"><div class="legend-swatch" style="background:#B4391B"></div><span>+3% to +10%</span></div>
-      <div class="legend-row"><div class="legend-swatch" style="background:#fff;border:1px solid #ccc"></div><span>−3% to +3%</span></div>
-      <div class="legend-row"><div class="legend-swatch" style="background:#2F6B3A"></div><span>−10% to −3%</span></div>
-      <div class="legend-row"><div class="legend-swatch" style="background:#1B4A24"></div><span>&lt; −10% less traffic</span></div>
+      <div class="legend-row"><div class="legend-swatch" style="background:#7A2510;border-radius:50%;width:12px;height:12px;border:none"></div><span>&gt; +10% more traffic</span></div>
+      <div class="legend-row"><div class="legend-swatch" style="background:#B4391B;border-radius:50%;width:12px;height:12px;border:none"></div><span>+3% to +10%</span></div>
+      <div class="legend-row"><div class="legend-swatch" style="background:#9A9A9A;border-radius:50%;width:12px;height:12px;border:none"></div><span>within ±3% (no change)</span></div>
+      <div class="legend-row"><div class="legend-swatch" style="background:#2F6B3A;border-radius:50%;width:12px;height:12px;border:none"></div><span>−10% to −3%</span></div>
+      <div class="legend-row"><div class="legend-swatch" style="background:#1B4A24;border-radius:50%;width:12px;height:12px;border:none"></div><span>&lt; −10% less traffic</span></div>
     </div>
   </div>
 
   <div id="chart-traffic-container">
     <div class="loading"><div class="spinner"></div>Loading…</div>
   </div>
+  <p class="caption">Residual = actual 2025 traffic minus what the pre-toll trend predicted. Raw pre/post averages aren't comparable because 2020–21 volumes were far below normal. Map shows all B&amp;T facilities at default zoom.</p>
 </section>
 
 <!-- ─── Section 7: CRZ entries ────────────────────────────────────────────── -->
@@ -466,7 +811,7 @@
   <div class="callout">
     <p><strong>311 idling complaints.</strong> Residents near these schools can file complaints through NYC's 311 system under <em>Noise - Vehicle / Engine Idling</em> or <em>Air Quality / Vehicle Idling</em> (n=25 total in the 400 m box, 2021–2026). Complaint volume reflects reporting behavior as much as actual idling. DEP Citizens Air Complaint Program filings are not in 311, so this undercounts idling complaints. The chart shows the community-reported record as an independent signal, not a pollution measure.</p>
   </div>
-  <div class="chart-wrap">
+  <div class="chart-wrap" id="sec8-chart-wrap">
     <p class="chart-title">Monthly idling complaints near Mott Haven schools (400 m buffer)</p>
     <p class="chart-sub" id="chart-idling-sub">311 "Engine Idling" (Noise - Vehicle) + "Air Quality / Vehicle Idling" reports. Source: NYC Open Data 311. Vertical line: toll launch Jan 5, 2025.</p>
     <div id="chart-idling-complaints" class="plotly-chart" style="min-height:260px"></div>
@@ -550,7 +895,7 @@ function divColor(v) {
 function trafficColor(pct) {
   if (pct < -10) return '#1B4A24';
   if (pct <  -3) return '#2F6B3A';
-  if (pct <   3) return '#FFFFFF';
+  if (pct <   3) return '#9A9A9A';
   if (pct <  10) return '#B4391B';
   return '#7A2510';
 }
@@ -587,6 +932,57 @@ const PATHS = {
 const MAP_STYLE = 'https://tiles.openfreemap.org/styles/positron';
 let mapAQI, mapTraffic;
 
+// Store for map popup access
+let _itsData = null;
+let _robustnessData = null;
+
+const STEP_ONLY = {
+  Cross_Bronx_Expy: {beta: -0.019, p: 0.947},
+  Mott_Haven: {beta: -0.645, p: 0.012},
+  Manhattan_Bridge: {beta: -0.858, p: 0.003},
+  Williamsburg_Bridge: {beta: -0.473, p: 0.065},
+  Queensboro_Bridge: {beta: -0.767, p: 0.026},
+};
+
+function computeMapVerdict(siteName, its, robustness) {
+  const siteData = its?.sites?.[siteName];
+  const spec = siteData?.full;
+  if (!spec) return '—';
+  const fp = spec.beta_post_p;
+  const fb = spec.beta_post;
+  const fn = spec.n;
+  if (fn < 200) return 'Short baseline — unreliable';
+  const step = STEP_ONLY[siteName];
+  const vw25 = robustness?.check7?.sites?.[siteName]?.minus_vw_25;
+  if (fp < 0.05 && fb < 0) return 'Confirmed improvement';
+  if (fp < 0.05 && fb > 0) return 'Confirmed worsening';
+  if (fp >= 0.05 && fb < 0 && step?.beta < 0 && vw25 != null && vw25 < 0) return 'Leans cleaner, not confirmed';
+  return 'No measurable change';
+}
+
+function flatCoords(geom) {
+  if (!geom) return [];
+  if (geom.type === 'Point') return [geom.coordinates];
+  if (geom.type === 'MultiPoint' || geom.type === 'LineString') return geom.coordinates;
+  if (geom.type === 'MultiLineString' || geom.type === 'Polygon') return geom.coordinates.flat(1);
+  if (geom.type === 'MultiPolygon') return geom.coordinates.flat(2);
+  return [];
+}
+
+function fitAQIBounds(map, stations, crz) {
+  const ITS = new Set(['Cross_Bronx_Expy','Mott_Haven','Manhattan_Bridge','Williamsburg_Bridge','Queensboro_Bridge']);
+  let w = Infinity, s = Infinity, e = -Infinity, n = -Infinity;
+  const expand = ([lng, lat]) => {
+    if (lng < w) w = lng; if (lng > e) e = lng;
+    if (lat < s) s = lat; if (lat > n) n = lat;
+  };
+  stations?.features?.forEach(f => {
+    if (ITS.has(f.properties?.name)) flatCoords(f.geometry).forEach(expand);
+  });
+  crz?.features?.forEach(f => flatCoords(f.geometry).forEach(expand));
+  if (w < Infinity) map.fitBounds([[w, s], [e, n]], { padding: 60, duration: 0 });
+}
+
 function initMapAQI() {
   mapAQI = new maplibregl.Map({
     container: 'map-aqi',
@@ -607,7 +1003,7 @@ function initMapTraffic() {
     container: 'map-traffic',
     style: MAP_STYLE,
     center: [-73.97, 40.73],
-    zoom: 10.5,
+    zoom: 10.0,
     attributionControl: false,
   });
   mapTraffic.addControl(new maplibregl.NavigationControl(), 'top-left');
@@ -635,6 +1031,7 @@ function addAQILayers(map, stations, crz, dac, raster) {
       id: 'raster-pm',
       type: 'circle',
       source: 'raster-src',
+      layout: { visibility: 'none' },
       paint: {
         'circle-radius': 4,
         'circle-color': [
@@ -659,8 +1056,8 @@ function addAQILayers(map, stations, crz, dac, raster) {
       source: 'dac-src',
       filter: ['==', ['get', 'dac_designation'], 'Designated as DAC'],
       paint: {
-        'fill-color': '#000',
-        'fill-opacity': 0.08,
+        'fill-color': '#4B2E83',
+        'fill-opacity': 0.10,
       },
     });
     map.addLayer({
@@ -668,7 +1065,7 @@ function addAQILayers(map, stations, crz, dac, raster) {
       type: 'line',
       source: 'dac-src',
       filter: ['==', ['get', 'dac_designation'], 'Designated as DAC'],
-      paint: { 'line-color': '#000', 'line-width': 0.75, 'line-opacity': 1 },
+      paint: { 'line-color': '#BBBBBB', 'line-width': 0.5, 'line-opacity': 1 },
     });
   }
 
@@ -702,15 +1099,18 @@ function addAQILayers(map, stations, crz, dac, raster) {
         ],
         'circle-color': [
           'case',
-          ['==', ['get', 'beta_post'], null], '#FFFFFF',
-          ['<', ['get', 'beta_post'], -0.5], '#1B4A24',
-          ['<', ['get', 'beta_post'], -0.1], '#2F6B3A',
-          ['<', ['get', 'beta_post'],  0.1], '#FFFFFF',
-          ['<', ['get', 'beta_post'],  0.5], '#B4391B',
-          '#7A2510'
+          ['!', ['has', 'beta_post']], '#888888',
+          ['all', ['get', 'significant'], ['<', ['get', 'beta_post'], 0]], '#2F6B3A',
+          ['all', ['get', 'significant'], ['>', ['get', 'beta_post'], 0]], '#B4391B',
+          'rgba(0,0,0,0)'
         ],
-        'circle-stroke-width': 1.5,
-        'circle-stroke-color': '#000',
+        'circle-stroke-width': 2.5,
+        'circle-stroke-color': [
+          'case',
+          ['<', ['get', 'beta_post'], 0], '#2F6B3A',
+          ['>', ['get', 'beta_post'], 0], '#B4391B',
+          '#888888'
+        ],
       },
     });
 
@@ -720,12 +1120,31 @@ function addAQILayers(map, stations, crz, dac, raster) {
       type: 'symbol',
       source: 'stations-src',
       layout: {
-        'text-field': ['get', 'name'],
+        'text-field': ['match', ['get', 'name'],
+          'Cross_Bronx_Expy',    'Cross Bronx Expy',
+          'Mott_Haven',          'Mott Haven',
+          'Manhattan_Bridge',    'Manhattan Bridge',
+          'Williamsburg_Bridge', 'Williamsburg Bridge',
+          'Queensboro_Bridge',   'Queensboro Bridge\n(boundary)',
+          'Broadway_35th_St',    'Broadway 35th St',
+          'Hamilton_Bridge',     'Hamilton Bridge',
+          'SI_Expwy',            'SI Expwy',
+          'Midtown_DOT',         'Midtown DOT',
+          ['get', 'name']
+        ],
         'text-font': ['Open Sans Bold', 'Arial Unicode MS Bold'],
         'text-size': 11,
-        'text-anchor': 'top',
-        'text-offset': [0, 1],
-        'text-max-width': 8,
+        'text-anchor': ['match', ['get', 'name'],
+          'Manhattan_Bridge',    'top-right',
+          'Williamsburg_Bridge', 'top-left',
+          'top'
+        ],
+        'text-offset': ['match', ['get', 'name'],
+          'Manhattan_Bridge',    ['literal', [-0.5, 1]],
+          'Williamsburg_Bridge', ['literal', [0.5, 1]],
+          ['literal', [0, 1]]
+        ],
+        'text-max-width': 10,
       },
       paint: {
         'text-color': '#000',
@@ -735,24 +1154,32 @@ function addAQILayers(map, stations, crz, dac, raster) {
     });
 
     // Popup on click
-    const popup = new maplibregl.Popup({ closeButton: false, maxWidth: '260px' });
+    const popup = new maplibregl.Popup({ closeButton: false, maxWidth: '300px' });
     map.on('click', 'stations-circle', (e) => {
       const p = e.features[0].properties;
+      const siteName = p.name;
       const beta = p.beta_post != null ? `${sign(p.beta_post)}${Number(p.beta_post).toFixed(3)}` : 'n/a';
       const pval = p.p_value != null ? Number(p.p_value).toFixed(3) : 'n/a';
       const sig  = p.significant ? '✓ p<0.05' : 'n.s.';
+      const step = STEP_ONLY[siteName];
+      const stepBeta = step ? `${sign(step.beta)}${step.beta.toFixed(3)}` : '—';
+      const stepP = step ? step.p.toFixed(3) : '—';
+      const vw25 = _robustnessData?.check7?.sites?.[siteName]?.minus_vw_25;
+      const vw25Str = vw25 != null ? `${sign(vw25)}${vw25.toFixed(2)} µg/m³` : '—';
+      const verdict = computeMapVerdict(siteName, _itsData, _robustnessData);
+      const displayName = siteName === 'Queensboro_Bridge' ? 'Queensboro Bridge (on the zone boundary)' : (p.name||siteName).replace(/_/g,' ');
       popup.setLngLat(e.lngLat).setHTML(`
-        <div class="popup-title">${p.name.replace(/_/g,' ')}</div>
-        <div class="popup-row"><span class="popup-key">β_post</span>
-          <span class="popup-val">${beta} µg/m³</span></div>
-        <div class="popup-row"><span class="popup-key">p-value</span>
-          <span class="popup-val">${pval} (${sig})</span></div>
-        <div class="popup-row"><span class="popup-key">Pre-mean</span>
-          <span class="popup-val">${p.pre_mean != null ? Number(p.pre_mean).toFixed(2) : '—'} µg/m³</span></div>
+        <div class="popup-title">${displayName}</div>
+        <div class="popup-row"><span class="popup-key">Full model β</span>
+          <span class="popup-val">${beta} µg/m³ (p=${pval}, ${sig})</span></div>
+        <div class="popup-row"><span class="popup-key">Step-only β</span>
+          <span class="popup-val">${stepBeta} µg/m³ (p=${stepP})</span></div>
+        <div class="popup-row"><span class="popup-key">vs Van Wyck 2025</span>
+          <span class="popup-val">${vw25Str}</span></div>
+        <div class="popup-row"><span class="popup-key">Verdict</span>
+          <span class="popup-val" style="font-weight:600">${verdict}</span></div>
         <div class="popup-row"><span class="popup-key">EJ-designated</span>
           <span class="popup-val">${p.ej_designated ? 'Yes' : 'No'}</span></div>
-        <div class="popup-row"><span class="popup-key">Spec</span>
-          <span class="popup-val" style="font-size:.75rem;font-weight:400">${p.label||'—'}</span></div>
       `).addTo(map);
     });
     map.on('mouseenter', 'stations-circle', () => { map.getCanvas().style.cursor = 'pointer'; });
@@ -760,7 +1187,17 @@ function addAQILayers(map, stations, crz, dac, raster) {
   }
 }
 
-function addTrafficLayers(map, btGeo, crz) {
+function addTrafficLayers(map, btGeo, crz, traffic) {
+  // Build forecast avg lookup
+  const forecastAvg = {};
+  if (traffic?.facilities) {
+    for (const [name, fac] of Object.entries(traffic.facilities)) {
+      const fc = fac?.series?.forecast;
+      if (fc && fc.length > 0) {
+        forecastAvg[name] = Math.round(fc.reduce((a,b) => a+b, 0) / fc.length);
+      }
+    }
+  }
   if (crz) {
     map.addSource('crz-traffic', { type: 'geojson', data: crz });
     map.addLayer({ id: 'crz-traffic-fill', type: 'fill', source: 'crz-traffic',
@@ -781,7 +1218,7 @@ function addTrafficLayers(map, btGeo, crz) {
           'case',
           ['<', ['get', 'diversion_pct'], -10], '#1B4A24',
           ['<', ['get', 'diversion_pct'],  -3], '#2F6B3A',
-          ['<', ['get', 'diversion_pct'],   3], '#000',
+          ['<', ['get', 'diversion_pct'],   3], '#9A9A9A',
           ['<', ['get', 'diversion_pct'],  10], '#B4391B',
           '#7A2510'
         ],
@@ -796,14 +1233,14 @@ function addTrafficLayers(map, btGeo, crz) {
       layout: {
         'text-field': [
           'concat',
-          ['slice', ['get', 'name'], 0, 12],
+          ['get', 'name'],
           '\n',
           ['case', ['>=', ['get', 'diversion_pct'], 0], '+', ''],
           ['to-string', ['round', ['get', 'diversion_pct']]],
           '%'
         ],
         'text-font': ['Open Sans Bold', 'Arial Unicode MS Bold'],
-        'text-size': 10,
+        'text-size': 12,
         'text-anchor': 'top',
         'text-offset': [0, 1.2],
       },
@@ -815,14 +1252,16 @@ function addTrafficLayers(map, btGeo, crz) {
       const p = e.features[0].properties;
       popup2.setLngLat(e.lngLat).setHTML(`
         <div class="popup-title">${p.name}</div>
-        <div class="popup-row"><span class="popup-key">Avg residual</span>
-          <span class="popup-val">${sign(p.diversion_residual)}${Math.round(p.diversion_residual)} veh/day</span></div>
-        <div class="popup-row"><span class="popup-key">% vs forecast</span>
-          <span class="popup-val">${sign(p.diversion_pct)}${Number(p.diversion_pct).toFixed(1)}%</span></div>
-        <div class="popup-row"><span class="popup-key">Pre-toll avg</span>
+        <div class="popup-row" style="min-width:220px"><span class="popup-key">2019–2024 avg (incl. COVID years)</span>
           <span class="popup-val">${Number(p.pre_avg).toLocaleString()} veh/day</span></div>
+        <div class="popup-row"><span class="popup-key">Forecast avg</span>
+          <span class="popup-val">${forecastAvg[p.name] != null ? forecastAvg[p.name].toLocaleString() + ' veh/day' : '—'}</span></div>
         <div class="popup-row"><span class="popup-key">Post-toll avg</span>
           <span class="popup-val">${Number(p.post_avg).toLocaleString()} veh/day</span></div>
+        <div class="popup-row"><span class="popup-key">Actual vs forecast</span>
+          <span class="popup-val">${sign(p.diversion_pct)}${Number(p.diversion_pct).toFixed(1)}%</span></div>
+        <div class="popup-row"><span class="popup-key">Avg residual</span>
+          <span class="popup-val">${sign(p.diversion_residual)}${Math.round(p.diversion_residual)} veh/day</span></div>
         <div class="popup-row"><span class="popup-key">Bronx-relevant</span>
           <span class="popup-val">${p.bronx_relevant ? '⚠ Yes' : 'No'}</span></div>
       `).addTo(map);
@@ -959,7 +1398,21 @@ function buildITSCharts(its) {
 }
 
 // ─── ITS coefficient table ─────────────────────────────────────────────── //
-function buildITSTable(its) {
+function computeVerdictITS(site, spec, robustness) {
+  if (!spec) return '—';
+  const fp = spec.beta_post_p;
+  const fb = spec.beta_post;
+  const fn = spec.n;
+  if (fn < 200) return 'Short baseline';
+  const step = STEP_ONLY[site];
+  const vw25 = robustness?.check7?.sites?.[site]?.minus_vw_25;
+  if (fp < 0.05 && fb < 0) return 'Confirmed improvement';
+  if (fp < 0.05 && fb > 0) return 'Confirmed worsening';
+  if (fp >= 0.05 && fb < 0 && step?.beta < 0 && vw25 != null && vw25 < 0) return 'Leans cleaner, not confirmed';
+  return 'No measurable change';
+}
+
+function buildITSTable(its, robustness) {
   const wrap = document.getElementById('its-table-wrap');
   const sites = Object.keys(its.sites);
   let html = `
@@ -976,6 +1429,7 @@ function buildITSTable(its) {
         <th class="num">R²</th>
         <th class="num">n</th>
         <th>EJ?</th>
+        <th>Verdict</th>
       </tr></thead><tbody>`;
 
   for (const site of sites) {
@@ -986,6 +1440,7 @@ function buildITSTable(its) {
       if (!spec) continue;
       const sig = spec.significant;
       const beta = spec.beta_post;
+      const verdict = key === 'full' ? computeVerdictITS(site, spec, robustness) : '—';
       html += `<tr>
         <td>${siteLabel}</td>
         <td class="pos">${key === 'full' ? 'QC+VW' : 'QC only'}</td>
@@ -997,11 +1452,12 @@ function buildITSTable(its) {
         <td class="num">${spec.r2.toFixed(3)}</td>
         <td class="num">${spec.n}</td>
         <td>${ejFlag ? '<span class="tag">EJ</span>' : '—'}</td>
+        <td>${verdict}</td>
       </tr>`;
     }
   }
   html += `</tbody></table>
-    <p class="caption">* p&lt;0.05. γ<sub>VW</sub> reported only for Full (QC+VW) specs. HAC standard errors (Newey-West, maxlags=30).</p></div>`;
+    <p class="caption" style="margin-top:0.5rem">Read each row in three steps: sign of beta (negative = cleaner), whether the 95% range includes zero, and p below 0.05. Use the QC+VW row; the QC-only row is a sensitivity check shown to be unstable in Check 3. * p&lt;0.05. HAC standard errors (Newey-West, maxlags=30).</p></div>`;
   wrap.innerHTML = html;
 }
 
@@ -1052,11 +1508,11 @@ function buildEquityChart(its, robustness) {
   div.className = 'chart-wrap';
   div.innerHTML = `
     <div class="chart-title">Site PM₂.₅ change vs. baseline level, by EJ designation (5 ITS sites, corrected spatial-join flags)</div>
-    <div class="chart-sub">Cross-sectional OLS: ${panelNote}<br>
-      Hunts Point excluded (monitor offline Sept 2023–March 2025). Circle = outside CRZ; Square = inside CRZ.
+    <div class="chart-sub">Panel estimates of EJ gap (site + date FE, 11 sites): −0.38 to +0.02 µg/m³, none significant (p = 0.65–0.96).<br>
+      Color = EJ flag (brick = EJ-designated, green = non-EJ). Marker shape = zone status (circle = outside CRZ; square = inside CRZ).
     </div>
     <div id="chart-equity" class="plotly-chart"></div>
-    <p class="caption" style="margin-top:.5rem">No site-level regression line is shown; with five points a cross-sectional line is not informative.</p>`;
+    <p class="caption" style="margin-top:.5rem">Four of five monitors are in designated tracts, so EJ and zone status overlap; the picture cannot separate them. Panel estimate in subtitle.</p>`;
   container.innerHTML = '';
   container.appendChild(div);
 
@@ -1067,7 +1523,8 @@ function buildEquityChart(its, robustness) {
     yaxis: { title: 'ITS β_post (µg/m³)', titlefont: { color: TICK_CLR, family: FONT_FAM }, zeroline: true, zerolinecolor: '#000', gridcolor: GRID_CLR, tickfont: { size: 11, color: TICK_CLR, family: FONT_FAM }, color: TICK_CLR, showline: true, linecolor: '#000', ticks: 'outside' },
     shapes: [{ type: 'line', x0: 0, x1: 1, xref: 'paper', y0: 0, y1: 0,
       line: { color: '#6B706C', width: 1, dash: 'dot' } }],
-    legend: { x: 0.01, y: 0.99, bgcolor: 'transparent', bordercolor: GRID_CLR, borderwidth: 1, font: { color: TICK_CLR, family: FONT_FAM, size: 11 } },
+    legend: { orientation: 'h', xanchor: 'left', x: 0, yanchor: 'bottom', y: 1.02, bgcolor: 'transparent', bordercolor: GRID_CLR, borderwidth: 1, font: { color: TICK_CLR, family: FONT_FAM, size: 11 } },
+    margin: { t: 80, b: 60, l: 70, r: 30 },
     plot_bgcolor: PLOT_BG, paper_bgcolor: PLOT_BG,
     hoverlabel: { bgcolor: '#FFFFFF', bordercolor: '#000', font: { family: FONT_FAM, color: '#000' } },
   }, { responsive: true, displayModeBar: false });
@@ -1088,39 +1545,51 @@ function buildCheck7Table(robustness) {
     Cross_Bronx_Expy:'Cross Bronx Expy', Mott_Haven:'Mott Haven',
   };
   const fmt = v => v === null || v === undefined ? '—' : (v >= 0 ? '+' : '') + v.toFixed(2);
-  const ORDER = ['Manhattan_Bridge','Williamsburg_Bridge','Queensboro_Bridge','FDR','Broadway_35th_St','Cross_Bronx_Expy','Mott_Haven'];
-  let rows = ORDER.map(site => {
-    const d = c7.sites[site];
-    if (!d) return '';
-    return `<tr style="border-bottom:1px solid #eee">
-      <td style="padding:4px 8px">${LABEL[site]||site}</td>
-      <td style="text-align:right;padding:4px 8px">${fmt(d.raw_delta_25)}</td>
-      <td style="text-align:right;padding:4px 8px">${fmt(d.minus_vw_25)}</td>
-      <td style="text-align:right;padding:4px 8px">${fmt(d.minus_vw_26)}</td>
-      <td style="text-align:right;padding:4px 8px">${fmt(d.minus_qc_25)}</td>
-      <td style="text-align:right;padding:4px 8px">${fmt(d.minus_qc_26)}</td>
-    </tr>`;
-  }).join('');
+  const INSIDE_BOUNDARY = ['Manhattan_Bridge','Williamsburg_Bridge','Queensboro_Bridge','FDR','Broadway_35th_St'];
+  const OUTSIDE = ['Cross_Bronx_Expy','Mott_Haven'];
+
+  const stickyFirst = 'position:sticky;left:0;background:#fff;z-index:1;';
+  const rowHtml = (site, d) => `<tr style="border-bottom:1px solid #eee">
+    <td style="${stickyFirst}padding:8px 12px">${LABEL[site]||site}</td>
+    <td style="text-align:right;padding:8px 12px">${fmt(d.raw_delta_25)}</td>
+    <td style="text-align:right;padding:8px 12px">${fmt(d.minus_vw_25)}</td>
+    <td style="text-align:right;padding:8px 12px">${fmt(d.minus_vw_26)}</td>
+    <td style="text-align:right;padding:8px 12px">${fmt(d.minus_qc_25)}</td>
+    <td style="text-align:right;padding:8px 12px">${fmt(d.minus_qc_26)}</td>
+  </tr>`;
+
+  const insideRows = INSIDE_BOUNDARY.map(site => { const d = c7.sites[site]; if (!d) return ''; return rowHtml(site, d); }).join('');
+  const outsideRows = OUTSIDE.map(site => { const d = c7.sites[site]; if (!d) return ''; return rowHtml(site, d); }).join('');
+
+  const groupHead = label => `<tr style="background:#f4f0ec;border-top:2px solid #888"><td colspan="6" style="padding:8px 12px;font-size:var(--caption);font-weight:700;letter-spacing:0.03em;text-transform:uppercase;color:#444">${label}</td></tr>`;
+
   const cc = c7.control_changes || {};
   wrap.innerHTML = `<table style="width:100%;border-collapse:collapse;font-size:0.82rem;font-family:inherit">
     <thead><tr style="border-bottom:2px solid #2E312F">
-      <th style="text-align:left;padding:4px 8px">Site</th>
-      <th style="text-align:right;padding:4px 8px">raw Δ 2025</th>
-      <th style="text-align:right;padding:4px 8px">−VW 2025</th>
-      <th style="text-align:right;padding:4px 8px">−VW 2026</th>
-      <th style="text-align:right;padding:4px 8px">−QC 2025</th>
-      <th style="text-align:right;padding:4px 8px">−QC 2026</th>
+      <th style="text-align:left;padding:8px 12px;${stickyFirst}">Site</th>
+      <th style="text-align:right;padding:8px 12px" title="2025 minus 2024 on matched calendar days">Raw change vs 2024</th>
+      <th style="text-align:right;padding:8px 12px" title="raw minus Van Wyck control">vs Van Wyck 2025</th>
+      <th style="text-align:right;padding:8px 12px">vs Van Wyck 2026</th>
+      <th style="text-align:right;padding:8px 12px">vs Queens College 2025</th>
+      <th style="text-align:right;padding:8px 12px">vs Queens College 2026</th>
     </tr>
     <tr style="border-bottom:1px solid #ccc;font-style:italic;color:#555">
-      <td style="padding:4px 8px">Van Wyck (control baseline)</td>
-      <td style="text-align:right;padding:4px 8px">${fmt(cc.vw_delta_25)}</td><td colspan="4" style="padding:4px 8px;color:#888;font-size:0.85em">change vs matched 2024 days</td>
+      <td style="${stickyFirst}padding:8px 12px">Van Wyck (control baseline)</td>
+      <td style="text-align:right;padding:8px 12px">${fmt(cc.vw_delta_25)}</td><td colspan="4" style="padding:8px 12px;color:#888;font-size:0.85em">change vs matched 2024 days</td>
     </tr>
     <tr style="border-bottom:1px solid #ccc;font-style:italic;color:#555">
-      <td style="padding:4px 8px">Queens College (control baseline)</td>
-      <td style="text-align:right;padding:4px 8px">${fmt(cc.qc_delta_25)}</td><td colspan="4"></td>
+      <td style="${stickyFirst}padding:8px 12px">Queens College (control baseline)</td>
+      <td style="text-align:right;padding:8px 12px">${fmt(cc.qc_delta_25)}</td><td colspan="4"></td>
     </tr></thead>
-    <tbody>${rows}</tbody>
-  </table>`;
+    <tbody>
+      ${groupHead('Inside zone / boundary')}
+      ${insideRows}
+      ${groupHead('Outside zone')}
+      ${outsideRows}
+    </tbody>
+  </table>
+  <p class="caption"><strong>Column key:</strong> raw = 2025 minus 2024 on matched calendar days; −VW and −QC = that change minus the control's change. Negative = improved relative to the control.</p>
+  <p class="caption" style="margin-top:4px">The two Bronx sites read +0.9 against Van Wyck and roughly flat against Queens College; the safe reading is 'no improvement', not 'worse'.</p>`;
 }
 
 // ─── Check 9: Outside-zone PurpleAir sensors ────────────────────────── //
@@ -1150,10 +1619,10 @@ function buildCheck9(robustness) {
     const p  = (sup || d.p_bootstrap == null)
       ? '<em style="color:#888">—</em>'
       : d.p_bootstrap.toFixed(4);
-    return `<td style="text-align:right;padding:4px 8px">${b}</td>`
-         + `<td style="text-align:right;padding:4px 8px">${se}</td>`
-         + `<td style="text-align:right;padding:4px 8px">${p}</td>`
-         + `<td style="padding:4px 8px;font-size:0.75rem">[${lo}, ${hi}]</td>`;
+    return `<td style="text-align:right;padding:8px 12px">${b}</td>`
+         + `<td style="text-align:right;padding:8px 12px">${se}</td>`
+         + `<td style="text-align:right;padding:8px 12px">${p}</td>`
+         + `<td style="padding:8px 12px;font-size:0.75rem">[${lo}, ${hi}]</td>`;
   };
 
   const NBHD = {
@@ -1180,11 +1649,11 @@ function buildCheck9(robustness) {
     const qr   = qct[s.name];
     const cov  = qr ? qr.cov_pct.toFixed(1) + '%' : '—';
     return `<tr style="border-bottom:1px solid #eee">
-      <td style="padding:4px 8px">${PRETTY(s.name)}</td>
-      <td style="padding:4px 8px${s.ej ? ';font-weight:600' : ''}">${cell}</td>
-      <td style="padding:4px 8px">${NBHD[s.name] || s.borough}</td>
-      <td style="text-align:right;padding:4px 8px">${cov}</td>
-      <td style="padding:4px 8px;font-size:0.8rem;color:#555">${set}</td>
+      <td style="padding:8px 12px">${PRETTY(s.name)}</td>
+      <td style="padding:8px 12px${s.ej ? ';font-weight:600' : ''}">${cell}</td>
+      <td style="padding:8px 12px">${NBHD[s.name] || s.borough}</td>
+      <td style="text-align:right;padding:8px 12px">${cov}</td>
+      <td style="padding:8px 12px;font-size:0.8rem;color:#555">${set}</td>
     </tr>`;
   }).join('');
 
@@ -1193,11 +1662,11 @@ function buildCheck9(robustness) {
     <strong>${(p70.sensors||[]).length}</strong> at ≥70% (sensitivity). All require ≥200 pre-toll days.</p>
   <table style="width:100%;border-collapse:collapse;font-size:0.82rem;font-family:inherit">
     <thead><tr style="border-bottom:2px solid #2E312F">
-      <th style="text-align:left;padding:4px 8px">Sensor</th>
-      <th style="text-align:left;padding:4px 8px">Cell</th>
-      <th style="text-align:left;padding:4px 8px">Neighborhood</th>
-      <th style="text-align:right;padding:4px 8px">Coverage</th>
-      <th style="text-align:left;padding:4px 8px">Set</th>
+      <th style="text-align:left;padding:8px 12px">Sensor</th>
+      <th style="text-align:left;padding:8px 12px">EJ designation</th>
+      <th style="text-align:left;padding:8px 12px">Neighborhood</th>
+      <th style="text-align:right;padding:8px 12px">Coverage</th>
+      <th style="text-align:left;padding:8px 12px">Quality set</th>
     </tr></thead>
     <tbody>${sensorRows}</tbody>
   </table>`;
@@ -1222,8 +1691,8 @@ function buildCheck9(robustness) {
   const specRows = specDefs.map(([lbl, nc, d, sup], i) => {
     const sep = (i === 3 || i === 6) ? 'border-top:2px solid #ccc;' : '';
     return `<tr style="${sep}border-bottom:1px solid #eee">
-      <td style="padding:4px 8px">${lbl}</td>
-      <td style="text-align:right;padding:4px 8px">${nc ?? '—'}</td>
+      <td style="padding:8px 12px">${lbl}</td>
+      <td style="text-align:right;padding:8px 12px">${nc ?? '—'}</td>
       ${fmtB(d, sup)}
     </tr>`;
   }).join('');
@@ -1236,12 +1705,12 @@ function buildCheck9(robustness) {
     Spec B — β<sub>EJ</sub> (wild bootstrap B=9999, Webb weights, cluster by site):</p>
   <table style="width:100%;border-collapse:collapse;font-size:0.82rem;font-family:inherit">
     <thead><tr style="border-bottom:2px solid #2E312F">
-      <th style="text-align:left;padding:4px 8px">Specification</th>
-      <th style="text-align:right;padding:4px 8px">Clusters</th>
-      <th style="text-align:right;padding:4px 8px">β<sub>EJ</sub></th>
-      <th style="text-align:right;padding:4px 8px">SE</th>
-      <th style="text-align:right;padding:4px 8px">p (boot)</th>
-      <th style="text-align:left;padding:4px 8px">95% CI</th>
+      <th style="text-align:left;padding:8px 12px">Specification</th>
+      <th style="text-align:right;padding:8px 12px">Clusters</th>
+      <th style="text-align:right;padding:8px 12px">β<sub>EJ</sub></th>
+      <th style="text-align:right;padding:8px 12px">SE</th>
+      <th style="text-align:right;padding:8px 12px">p (bootstrap)</th>
+      <th style="text-align:left;padding:8px 12px">95% CI</th>
     </tr></thead>
     <tbody>${specRows}${supNote}</tbody>
   </table>`;
@@ -1253,14 +1722,14 @@ function buildCheck9(robustness) {
     const d  = c7[site] || {};
     const ej_s = ej[site]?.ej_point ? 'Y' : 'N';
     return `<tr style="border-bottom:1px solid #eee;font-style:italic;color:#555">
-      <td style="padding:4px 8px">${REF_LABEL[site]}</td>
-      <td style="text-align:center;padding:4px 8px">${ej_s}</td>
-      <td style="padding:4px 8px;font-size:0.75rem;color:#777">NYCCAS/EJ</td>
-      <td style="text-align:right;padding:4px 8px">${fmt(d.raw_delta_25)}</td>
-      <td style="text-align:right;padding:4px 8px">${fmt(d.minus_vw_25)}</td>
-      <td style="text-align:right;padding:4px 8px">${fmt(d.minus_vw_26)}</td>
-      <td style="text-align:right;padding:4px 8px">${fmt(d.minus_qc_25)}</td>
-      <td style="text-align:right;padding:4px 8px">${fmt(d.minus_qc_26)}</td>
+      <td style="padding:8px 12px">${REF_LABEL[site]}</td>
+      <td style="text-align:center;padding:8px 12px">${ej_s}</td>
+      <td style="padding:8px 12px;font-size:0.75rem;color:#777">NYCCAS/EJ</td>
+      <td style="text-align:right;padding:8px 12px">${fmt(d.raw_delta_25)}</td>
+      <td style="text-align:right;padding:8px 12px">${fmt(d.minus_vw_25)}</td>
+      <td style="text-align:right;padding:8px 12px">${fmt(d.minus_vw_26)}</td>
+      <td style="text-align:right;padding:8px 12px">${fmt(d.minus_qc_25)}</td>
+      <td style="text-align:right;padding:8px 12px">${fmt(d.minus_qc_26)}</td>
     </tr>`;
   }).join('');
 
@@ -1271,15 +1740,15 @@ function buildCheck9(robustness) {
     const s = meta[name]; if (!s) return '';
     const set = (d.pass_set === 'primary' || d.pass_set === 'primary+sensitivity') ? '[80%]' : '[70%]';
     return `<tr style="border-bottom:1px solid #eee">
-      <td style="padding:4px 8px">${PRETTY(name)}</td>
-      <td style="text-align:center;padding:4px 8px${s.ej ? ';font-weight:600' : ''}">${s.ej ? 'Y' : 'N'}</td>
-      <td style="padding:4px 8px;font-size:0.75rem;color:#777">${s.ej ? 'PA/EJ' : 'PA/non-EJ'}
+      <td style="padding:8px 12px">${PRETTY(name)}</td>
+      <td style="text-align:center;padding:8px 12px${s.ej ? ';font-weight:600' : ''}">${s.ej ? 'Y' : 'N'}</td>
+      <td style="padding:8px 12px;font-size:0.75rem;color:#777">${s.ej ? 'PA/EJ' : 'PA/non-EJ'}
         <span style="${set==='[70%]'?'color:#aaa':''}">${set}</span></td>
-      <td style="text-align:right;padding:4px 8px">${fmt(d.raw_delta_25)}</td>
-      <td style="text-align:right;padding:4px 8px">${fmt(d.minus_vw_25)}</td>
-      <td style="text-align:right;padding:4px 8px">${fmt(d.minus_vw_26)}</td>
-      <td style="text-align:right;padding:4px 8px">${fmt(d.minus_qc_25)}</td>
-      <td style="text-align:right;padding:4px 8px">${fmt(d.minus_qc_26)}</td>
+      <td style="text-align:right;padding:8px 12px">${fmt(d.raw_delta_25)}</td>
+      <td style="text-align:right;padding:8px 12px">${fmt(d.minus_vw_25)}</td>
+      <td style="text-align:right;padding:8px 12px">${fmt(d.minus_vw_26)}</td>
+      <td style="text-align:right;padding:8px 12px">${fmt(d.minus_qc_25)}</td>
+      <td style="text-align:right;padding:8px 12px">${fmt(d.minus_qc_26)}</td>
     </tr>`;
   }).join('');
 
@@ -1288,18 +1757,18 @@ function buildCheck9(robustness) {
     NYCCAS reference sites in <em>italics</em>; PurpleAir sensors below separator.</p>
   <table style="width:100%;border-collapse:collapse;font-size:0.82rem;font-family:inherit">
     <thead><tr style="border-bottom:2px solid #2E312F">
-      <th style="text-align:left;padding:4px 8px">Sensor</th>
-      <th style="text-align:center;padding:4px 8px">EJ</th>
-      <th style="text-align:left;padding:4px 8px">Type</th>
-      <th style="text-align:right;padding:4px 8px">raw Δ 2025</th>
-      <th style="text-align:right;padding:4px 8px">−VW 2025</th>
-      <th style="text-align:right;padding:4px 8px">−VW 2026</th>
-      <th style="text-align:right;padding:4px 8px">−QC 2025</th>
-      <th style="text-align:right;padding:4px 8px">−QC 2026</th>
+      <th style="text-align:left;padding:8px 12px">Sensor</th>
+      <th style="text-align:center;padding:8px 12px">EJ</th>
+      <th style="text-align:left;padding:8px 12px">Type</th>
+      <th style="text-align:right;padding:8px 12px">Raw change vs 2024</th>
+      <th style="text-align:right;padding:8px 12px">vs Van Wyck 2025</th>
+      <th style="text-align:right;padding:8px 12px">vs Van Wyck 2026</th>
+      <th style="text-align:right;padding:8px 12px">vs Queens College 2025</th>
+      <th style="text-align:right;padding:8px 12px">vs Queens College 2026</th>
     </tr></thead>
     <tbody>
       ${refRows}
-      <tr><td colspan="8" style="padding:2px 8px;font-size:0.75rem;color:#888;background:#f8f8f8">
+      <tr><td colspan="8" style="padding:6px 12px;font-size:0.75rem;color:#888;background:#f8f8f8;font-weight:600;text-transform:uppercase;letter-spacing:0.03em">
         PurpleAir volunteer sensors — outside CRZ</td></tr>
       ${paRows}
     </tbody>
@@ -1411,6 +1880,48 @@ function buildCRZChart(crz) {
     line: { color: '#000', width: 2 },
   });
 
+  // Compute 2025 mean and MTA baseline
+  const vals2025 = crz.dates.map((d,i) => d.startsWith('2025') ? crz.total[i] : null).filter(v => v != null);
+  const mean2025 = Math.round(vals2025.reduce((a,b) => a+b, 0) / vals2025.length);
+  const mtaBaseline = mean2025 + 73000;
+
+  // Add MTA baseline trace
+  traces.push({
+    x: [crz.dates[0], crz.dates[crz.dates.length-1]],
+    y: [mtaBaseline, mtaBaseline],
+    mode: 'lines',
+    name: 'pre-toll baseline, MTA estimate (~11% higher)',
+    line: {color: '#888', width: 1.5, dash: 'dash'},
+    hoverinfo: 'skip',
+  });
+
+  // Storm dates annotations
+  const STORM_DATES = {
+    '2026-01-25': 'Jan 25, 2026 — winter storm',
+    '2026-01-26': 'Jan 26, 2026 — winter storm',
+    '2026-02-22': 'Feb 22, 2026',
+    '2026-02-23': 'Feb 23, 2026 — winter storm',
+  };
+
+  const annotations = [{
+    x: crz.dates[0], y: mtaBaseline, xanchor: 'left', yanchor: 'bottom',
+    text: 'pre-toll baseline, MTA est. (~11% higher)',
+    showarrow: false, font: {size: 9, color: '#888'},
+    bgcolor: 'rgba(255,255,255,0.7)', borderpad: 2,
+  }];
+
+  for (const [date, label] of Object.entries(STORM_DATES)) {
+    const idx = crz.dates.indexOf(date);
+    if (idx < 0) continue;
+    const val = crz.total[idx];
+    annotations.push({
+      x: date, y: val, xanchor: 'center', yanchor: 'top',
+      text: label, showarrow: true, arrowhead: 2,
+      arrowcolor: '#555', font: {size: 9, color: '#555'},
+      bgcolor: 'rgba(255,255,255,0.85)', borderpad: 2,
+    });
+  }
+
   Plotly.newPlot('chart-crz', traces, {
     height: 300, margin: { t: 10, b: 50, l: 70, r: 20 },
     xaxis: { title: '', gridcolor: GRID_CLR, tickfont: { size: 10, color: TICK_CLR, family: FONT_FAM }, color: TICK_CLR, showline: true, linecolor: '#000', ticks: 'outside', zerolinecolor: '#000' },
@@ -1419,8 +1930,18 @@ function buildCRZChart(crz) {
     plot_bgcolor: PLOT_BG, paper_bgcolor: PLOT_BG,
     shapes: [{ type: 'line', x0: '2025-01-05', x1: '2025-01-05', y0: 0, y1: 1,
       yref: 'paper', line: { color: '#4B2E83', width: 2 } }],
+    annotations,
     hoverlabel: { bgcolor: '#FFFFFF', bordercolor: '#000', font: { family: FONT_FAM, color: '#000' } },
   }, { responsive: true, displayModeBar: false });
+
+  // Add caption below chart
+  const captionEl = document.getElementById('chart-crz');
+  if (captionEl && captionEl.parentElement) {
+    const cap = document.createElement('p');
+    cap.className = 'caption';
+    cap.innerHTML = '<strong>How to read this:</strong> The toll cut entries by roughly 11% (MTA/Governor\'s office estimate). Dips are storms and holidays, not toll effects. Dashed line = MTA\'s pre-toll baseline estimate (2025 average + 73,000 vehicles/day; source: <a href="https://www.governor.ny.gov/news/governor-hochul-announces-congestion-pricing-will-launch-january-5-2025" target="_blank" rel="noopener">Governor\'s office, Dec 2024</a>).';
+    captionEl.parentElement.insertBefore(cap, captionEl.nextSibling);
+  }
 }
 
 // ─── Headline stats ────────────────────────────────────────────────────── //
@@ -1520,6 +2041,12 @@ function buildIdlingChart(schoolZone) {
     annotations: [{ x: TOLL_DATE_STR, y: 1, yref: 'paper', xanchor: 'left', text: 'Toll begins', showarrow: false, font: { color: '#4B2E83', size: 11, family: FONT_FAM, weight: 600 }, xshift: 4 }],
     hoverlabel: { bgcolor: '#FFFFFF', bordercolor: '#000', font: { family: FONT_FAM, color: '#000' } },
   }, { responsive: true, displayModeBar: false });
+
+  // Add caption below chart
+  const capDiv = document.createElement('p');
+  capDiv.className = 'caption';
+  capDiv.textContent = `Total ${total} complaints (2021–2026) in the 400 m buffer. DEP's separate idling-complaint program is not in 311; this undercounts. Too few records to show a trend.`;
+  el.parentElement.insertBefore(capDiv, el.nextSibling);
 }
 
 // ─── Bootstrap ────────────────────────────────────────────────────────── //
@@ -1548,15 +2075,19 @@ async function main() {
 
   mAQI.on('load', () => {
     addAQILayers(mAQI, stations, crz_bnd, dac, raster);
+    fitAQIBounds(mAQI, stations, crz_bnd);
   });
 
   mTraffic.on('load', () => {
-    addTrafficLayers(mTraffic, bt_geo, crz_bnd);
+    addTrafficLayers(mTraffic, bt_geo, crz_bnd, traffic);
   });
+
+  _itsData = its;
+  _robustnessData = robustness;
 
   if (its) {
     buildITSCharts(its);
-    buildITSTable(its);
+    buildITSTable(its, robustness);
     buildEquityChart(its, robustness);
     buildCheck7Table(robustness);
     buildCheck9(robustness);
